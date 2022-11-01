@@ -5,7 +5,6 @@ namespace UserManagementService.Core.Entities;
 public enum PrivilegesNames
 {
     CanManageEverything = 1,
-    CanViewEmployeeList,
     CanViewEmployeePage
 }
 

@@ -12,8 +12,7 @@ namespace UserManagementService.DataAccess.Mapping
                 .HasConversion<string>();
 
             builder.HasData(new Privilege(1, PrivilegesNames.CanManageEverything),
-                            new Privilege(2, PrivilegesNames.CanViewEmployeeList),
-                            new Privilege(3, PrivilegesNames.CanViewEmployeePage));
+                            new Privilege(2, PrivilegesNames.CanViewEmployeePage));
         }
     }
 }
