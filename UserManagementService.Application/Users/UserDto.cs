@@ -8,15 +8,11 @@ namespace UserManagementService.Application.Users
     {
         public UserDto(
             long id,
-            string name,
-            string surname,
             string email,
             string roleName,
             IEnumerable<string> privileges)
         {
             Id = id;
-            Name = name;
-            Surname = surname;
             Email = email;
             RoleName = roleName;
             Privileges = privileges;
@@ -24,23 +20,15 @@ namespace UserManagementService.Application.Users
 
         public UserDto(
             long id,
-            string name,
-            string surname,
             string email,
             string roleName)
         {
             Id = id;
-            Name = name;
-            Surname = surname;
             Email = email;
             RoleName = roleName;
         }
 
         public long Id { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string Surname { get; private set; }
 
         public string Email { get; private set; }
 

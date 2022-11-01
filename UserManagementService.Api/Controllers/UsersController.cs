@@ -65,7 +65,7 @@ namespace UserManagementService.Api.Controllers
         }
 
         [HttpDelete("delete")]
-        public Task Delete([FromQuery] DeleteUserCommand deleteUserCommand)
+        public Task Delete([FromBody] DeleteUserCommand deleteUserCommand)
         {
             return _deleteUserCommandHandler.Handle(deleteUserCommand);
         }

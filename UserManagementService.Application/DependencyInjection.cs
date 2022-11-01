@@ -6,6 +6,7 @@ using NodaTime;
 using UserManagementService.Application.Roles.Queries;
 using UserManagementService.Application.Users.Commands;
 using UserManagementService.Application.Users.Queries;
+using UserManagementService.Application.Services;
 
 namespace UserManagementService.Application
 {
