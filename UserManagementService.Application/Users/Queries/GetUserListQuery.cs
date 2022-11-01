@@ -24,10 +24,8 @@ namespace UserManagementService.Application.Users.Queries
             var userEntities = await _userRepository.GetAllAsync();
             return userEntities.Select(x => new UserDto(
                 x.Id,
-                x.Name,
-                x.Surname,
                 x.Email,
-                x.Role.Name.ToString()
+                x.RoleId
                 )
             );
         }
