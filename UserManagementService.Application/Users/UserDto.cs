@@ -9,30 +9,30 @@ namespace UserManagementService.Application.Users
         public UserDto(
             long id,
             string email,
-            string roleName,
+            long roleId,
             IEnumerable<string> privileges)
         {
             Id = id;
             Email = email;
-            RoleName = roleName;
+            RoleId = roleId;
             Privileges = privileges;
         }
 
         public UserDto(
             long id,
             string email,
-            string roleName)
+            long roleId)
         {
             Id = id;
             Email = email;
-            RoleName = roleName;
+            RoleId = roleId;
         }
 
         public long Id { get; private set; }
 
         public string Email { get; private set; }
 
-        public string RoleName { get; private set; }
+        public long RoleId { get; private set; }
         
         public IEnumerable<string> Privileges { get; private set; }
     }

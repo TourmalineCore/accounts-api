@@ -25,7 +25,7 @@ namespace UserManagementService.Application.Users.Queries
             return userEntities.Select(x => new UserDto(
                 x.Id,
                 x.Email,
-                x.Role.Name.ToString()
+                x.RoleId
                 )
             );
         }
