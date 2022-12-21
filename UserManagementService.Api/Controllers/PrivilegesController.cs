@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using UserManagementService.Application.Privileges;
 using UserManagementService.Application.Privileges.Commands;
 using UserManagementService.Application.Privileges.Queries;
-using UserManagementService.Application.Users.Commands;
-using UserManagementService.Application.Users.Queries;
 
 namespace UserManagementService.Api.Controllers
 {
@@ -13,15 +11,18 @@ namespace UserManagementService.Api.Controllers
         private readonly GetPrivilegeListQueryHandler _getPrivilegeListQueryHandler;
         private readonly GetPrivilegeByIdQueryHandler _getPrivilegeByIdQueryHandler;
         private readonly DeletePrivilegeCommandHandler _deletePrivilegeCommandHandler;
+        private readonly GetPrivilegesByAccountIdQueryHandler _getPrivilegesByAccountIdQueryHandler;
 
         public PrivilegesController(
             GetPrivilegeListQueryHandler getPrivilegeListQueryHandler,
             DeletePrivilegeCommandHandler deletePrivilegeCommandHandler,
-            GetPrivilegeByIdQueryHandler getPrivilegeByIdQueryHandler)
+            GetPrivilegeByIdQueryHandler getPrivilegeByIdQueryHandler,
+            GetPrivilegesByAccountIdQueryHandler getPrivilegesByAccountIdQueryHandler)
         {
             _getPrivilegeListQueryHandler = getPrivilegeListQueryHandler;
             _deletePrivilegeCommandHandler = deletePrivilegeCommandHandler;
             _getPrivilegeByIdQueryHandler = getPrivilegeByIdQueryHandler;
+            _getPrivilegesByAccountIdQueryHandler = getPrivilegesByAccountIdQueryHandler;
         }
 
         [HttpGet("all")]
@@ -34,6 +35,12 @@ namespace UserManagementService.Api.Controllers
         public Task<PrivilegeDto> FindById([FromRoute] GetPrivilegeByIdQuery getPrivilegeByIdQuery)
         {
             return _getPrivilegeByIdQueryHandler.Handle(getPrivilegeByIdQuery);
+        }
+
+        [HttpGet("getByAccountId/{accountId}")]
+        public Task<IEnumerable<PrivilegeDto>> FindByAccountId([FromRoute] long accountId)
+        {
+            return _getPrivilegesByAccountIdQueryHandler.Handle(accountId);
         }
 
         [HttpDelete("delete")]
