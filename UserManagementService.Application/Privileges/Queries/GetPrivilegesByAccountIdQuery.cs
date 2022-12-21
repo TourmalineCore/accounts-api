@@ -17,11 +17,10 @@ namespace UserManagementService.Application.Privileges.Queries
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<PrivilegeDto>> Handle(long accountId)
+        public async Task<IEnumerable<string>> Handle(long accountId)
         {
             var user = await _userRepository.FindByIdAsync(accountId);
-
-            return user.Role.Privileges.Select(x => new PrivilegeDto(x.Id, x.Name.ToString()));
+            return user.Role.Privileges.Select(x => x.Name.ToString());
         }
     }
 }

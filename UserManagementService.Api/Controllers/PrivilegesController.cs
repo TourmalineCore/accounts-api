@@ -38,7 +38,7 @@ namespace UserManagementService.Api.Controllers
         }
 
         [HttpGet("getByAccountId/{accountId}")]
-        public Task<IEnumerable<PrivilegeDto>> FindByAccountId([FromRoute] long accountId)
+        public Task<IEnumerable<string>> FindByAccountId([FromRoute] long accountId)
         {
             return _getPrivilegesByAccountIdQueryHandler.Handle(accountId);
         }

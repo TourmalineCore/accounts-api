@@ -4,9 +4,10 @@ namespace UserManagementService.Core.Entities
 {
     public enum RoleNames
     {
-        Admin,
-        Employee,
-        Seo
+        Admin = 1,
+        CEO,
+        Manager,
+        Employee
     }
 
     public class Role : IIdentityEntity
