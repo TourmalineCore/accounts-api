@@ -30,6 +30,7 @@ namespace UserManagementService.Application
 
             services.AddTransient<GetPrivilegeListQueryHandler>();
             services.AddTransient<GetPrivilegeByIdQueryHandler>();
+            services.AddTransient<GetPrivilegesByAccountIdQueryHandler>();
             services.AddTransient<DeletePrivilegeCommandHandler>();
 
             services.AddTransient<IClock, Clock>();

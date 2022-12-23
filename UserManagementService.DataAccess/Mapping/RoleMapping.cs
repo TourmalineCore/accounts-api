@@ -21,15 +21,18 @@ namespace UserManagementService.DataAccess.Mapping
                         je.HasData(
                             new { PrivilegesId = 1L, RolesId = 1L },
                             new { PrivilegesId = 1L, RolesId = 2L },
-                            new { PrivilegesId = 2L, RolesId = 3L });
+                            new { PrivilegesId = 2L, RolesId = 2L },
+                            new { PrivilegesId = 3L, RolesId = 2L },
+                            new { PrivilegesId = 1L, RolesId = 3L });
                     });
 
             builder.Property(x => x.Name)
                 .HasConversion<string>();
 
             builder.HasData(new Role(1, RoleNames.Admin), 
-                            new Role(2, RoleNames.Seo), 
-                            new Role(3, RoleNames.Employee));
+                            new Role(2, RoleNames.CEO), 
+                            new Role(3, RoleNames.Manager), 
+                            new Role(4, RoleNames.Employee));
             
         }
     }
