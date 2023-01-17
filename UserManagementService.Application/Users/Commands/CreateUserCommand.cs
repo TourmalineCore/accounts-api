@@ -7,7 +7,8 @@ namespace UserManagementService.Application.Users.Commands
 {
     public class CreateUserCommand
     {
-        public string Email { get; set; }
+        public string CorporateEmail { get; set; }
+        public int RoleId { get; set; }
     }
 
     public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, long>
@@ -22,8 +23,8 @@ namespace UserManagementService.Application.Users.Commands
         public async Task<long> Handle(CreateUserCommand command)
         {
             var user = new User(
-                command.Email,
-                4
+                command.CorporateEmail,
+                command.RoleId
                 );
 
             return await _userRepository.CreateAsync(user);
