@@ -5,7 +5,7 @@ using UserManagementService.Application.Users.Queries;
 
 namespace UserManagementService.Api.Controllers
 {
-    [Route("api/users")]
+    [Route("api/accounts")]
     public class UsersController : Controller
     {
         private readonly GetUserListQueryHandler _getUserListQueryHandler;
