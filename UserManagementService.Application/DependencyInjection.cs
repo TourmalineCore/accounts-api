@@ -7,6 +7,8 @@ using UserManagementService.Application.Roles.Queries;
 using UserManagementService.Application.Users.Commands;
 using UserManagementService.Application.Users.Queries;
 using UserManagementService.Application.Services;
+using FluentValidation;
+using UserManagementService.Application.Validators;
 
 namespace UserManagementService.Application
 {
@@ -32,6 +34,8 @@ namespace UserManagementService.Application
             services.AddTransient<GetPrivilegeByIdQueryHandler>();
             services.AddTransient<GetPrivilegesByAccountIdQueryHandler>();
             services.AddTransient<DeletePrivilegeCommandHandler>();
+
+            services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
 
             services.AddTransient<IClock, Clock>();
 
