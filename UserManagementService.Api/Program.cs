@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
 using UserManagementService.Application;
+using UserManagementService.Application.HttpClients;
 using UserManagementService.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +75,9 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
     }
         );
 });
+
+var httpUrls = configuration.GetSection("HttpUrls");
+builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
 
 var app = builder.Build();
 
