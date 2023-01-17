@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace UserManagementService.Application.HttpClients
 {
-    public class AccountHttpClient
+    public class AccountHttpClient : IHttpClient
     {
         private readonly HttpClient _client;
         private readonly HttpUrls _urls;

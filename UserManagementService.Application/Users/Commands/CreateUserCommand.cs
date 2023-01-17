@@ -1,6 +1,7 @@
 using FluentValidation;
 using System.Threading.Tasks;
 using UserManagementService.Application.Contracts;
+using UserManagementService.Application.HttpClients;
 using UserManagementService.Core.Contracts;
 using UserManagementService.Core.Entities;
 
@@ -15,12 +16,14 @@ namespace UserManagementService.Application.Users.Commands
     public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, long>
     {
         private readonly IUserRepository _userRepository;
-        private IValidator<CreateUserCommand> _validator;
+        private readonly IValidator<CreateUserCommand> _validator;
+        private readonly IHttpClient _httpClient;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IValidator<CreateUserCommand> validator)
+        public CreateUserCommandHandler(IUserRepository userRepository, IValidator<CreateUserCommand> validator, IHttpClient httpClient)
         {
             _userRepository = userRepository;
             _validator = validator;
+            _httpClient = httpClient;
         }
 
         public async Task<long> Handle(CreateUserCommand command)
@@ -37,7 +40,11 @@ namespace UserManagementService.Application.Users.Commands
                 command.RoleId
                 );
 
-            return await _userRepository.CreateAsync(user);
+            var id = await _userRepository.CreateAsync(user);
+
+            await _httpClient.SendDataAuthApi(id, user.Email);
+
+            return id;
         }
     }
 }

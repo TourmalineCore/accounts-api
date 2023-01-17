@@ -9,6 +9,7 @@ using UserManagementService.Application.Users.Queries;
 using UserManagementService.Application.Services;
 using FluentValidation;
 using UserManagementService.Application.Validators;
+using UserManagementService.Application.HttpClients;
 
 namespace UserManagementService.Application
 {
@@ -36,6 +37,7 @@ namespace UserManagementService.Application
             services.AddTransient<DeletePrivilegeCommandHandler>();
 
             services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
+            services.AddTransient<IHttpClient, AccountHttpClient>();
 
             services.AddTransient<IClock, Clock>();
 
