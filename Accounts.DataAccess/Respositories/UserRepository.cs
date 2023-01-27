@@ -1,29 +1,34 @@
+using Accounts.Core.Contracts;
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Core.Contracts;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess.Respositories
+namespace Accounts.DataAccess.Respositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UsersDbContext _usersDbContext;
+        private readonly AccountsDbContext _usersDbContext;
 
-        public UserRepository(UsersDbContext usersDbContext)
+        public UserRepository(AccountsDbContext usersDbContext)
         {
             _usersDbContext = usersDbContext;
         }
 
-        public Task AddRoleAsync(User user, Role role)
+        public Task AddRoleAsync(Account user, Role role)
         {
-            user.AddRole(role);
-            
+            var accountRole = new AccountRole
+            {
+                Role = role,
+            };
+
+            user.AddRole(accountRole);
+
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public async Task<long> CreateAsync(User user)
+        public async Task<long> CreateAsync(Account user)
         {
             await _usersDbContext.AddAsync(user);
             await _usersDbContext.SaveChangesAsync();
@@ -31,40 +36,42 @@ namespace UserManagementService.DataAccess.Respositories
             return user.Id;
         }
 
-        public Task<User?> FindByEmailAsync(string email)
+        public Task<Account?> FindByEmailAsync(string email)
         {
             return _usersDbContext
-                    .Queryable<User>()
-                    .Include(x => x.Role)
+                    .Queryable<Account>()
+                    .Include(x => x.AccountRoles)
+                    .ThenInclude(x => x.Role)
                     .ThenInclude(x => x.Privileges)
                     .SingleOrDefaultAsync(x => x.Email == email && x.DeletedAtUtc == null);
         }
 
-        public Task<User> FindByIdAsync(long id)
+        public Task<Account> FindByIdAsync(long id)
         {
             return _usersDbContext
-                    .Queryable<User>()
-                    .Include(x => x.Role)
+                    .Queryable<Account>()
+                    .Include(x => x.AccountRoles)
+                    .ThenInclude(x => x.Role)
                     .ThenInclude(x => x.Privileges)
                     .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<Account>> GetAllAsync()
         {
             return await _usersDbContext
-                .QueryableAsNoTracking<User>()
+                .QueryableAsNoTracking<Account>()
                 .Where(x => x.DeletedAtUtc == null)
                 .ToListAsync();
         }
 
-        public Task RemoveAsync(User user)
+        public Task RemoveAsync(Account user)
         {
             _usersDbContext.Remove(user);
 
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(User user)
+        public Task UpdateAsync(Account user)
         {
             _usersDbContext.Update(user);
 

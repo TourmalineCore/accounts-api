@@ -1,9 +1,9 @@
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Users.Queries
+namespace Accounts.Application.Users.Queries
 {
     public class GetUserByIdQuery
     {
@@ -21,9 +21,11 @@ namespace UserManagementService.Application.Users.Queries
         public async Task<UserDto> Handle(GetUserByIdQuery request)
         {
             var userEntity = await _userRepository.FindByIdAsync(request.Id);
-            var userPrivileges = userEntity.Role.Privileges.Select(x => x.Name).Select(n => n.ToString());
 
-            return new UserDto(userEntity.Id, userEntity.Email ,userEntity.RoleId, userPrivileges);
+            // ToDo получать привилегии из всех ролей
+            var userPrivileges = userEntity.Roles[0].Privileges.Select(x => x.Name).Select(n => n.ToString());
+
+            return new UserDto(userEntity.Id, userEntity.Email, userEntity.RoleId, userPrivileges);
         }
     }
 }

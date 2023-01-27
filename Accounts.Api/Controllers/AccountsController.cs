@@ -1,12 +1,12 @@
+using Accounts.Application.Users;
+using Accounts.Application.Users.Commands;
+using Accounts.Application.Users.Queries;
 using Microsoft.AspNetCore.Mvc;
-using UserManagementService.Application.Users;
-using UserManagementService.Application.Users.Commands;
-using UserManagementService.Application.Users.Queries;
 
-namespace UserManagementService.Api.Controllers
+namespace Accounts.Api.Controllers
 {
     [Route("api/accounts")]
-    public class UsersController : Controller
+    public class AccountsController : Controller
     {
         private readonly GetUserListQueryHandler _getUserListQueryHandler;
         private readonly GetUserByEmailQueryHandler _getUserByEmailQueryHandler;
@@ -16,7 +16,7 @@ namespace UserManagementService.Api.Controllers
         private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
         private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
 
-        public UsersController(
+        public AccountsController(
             GetUserListQueryHandler getUserListQueryHandler,
             GetUserByEmailQueryHandler getUserByEmailQueryHandler,
             CreateUserCommandHandler createUserCommandHandler,

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace UserManagementService.Application.Contracts
+namespace Accounts.Application.Contracts
 {
     public interface ICommandHandler<in Tin>
     {

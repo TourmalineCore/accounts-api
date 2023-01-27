@@ -1,10 +1,10 @@
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Users.Queries
+namespace Accounts.Application.Users.Queries
 {
     public partial class GetUserListQuery
     {

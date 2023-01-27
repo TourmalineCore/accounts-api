@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Accounts.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess
+namespace Accounts.DataAccess
 {
     public static class QueryableExtensions
     {

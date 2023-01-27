@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserManagementService.Application\UserManagementService.Application.csproj" />
+    <ProjectReference Include="..\Accounts.Application\Accounts.Application.csproj" />
+    <ProjectReference Include="..\Accounts.DataAccess\Accounts.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

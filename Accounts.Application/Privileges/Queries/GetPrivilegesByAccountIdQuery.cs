@@ -1,9 +1,9 @@
+using Accounts.Core.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Privileges.Queries
+namespace Accounts.Application.Privileges.Queries
 {
     public partial class GetPrivilegesByAccountIdQuery
     {
@@ -20,7 +20,11 @@ namespace UserManagementService.Application.Privileges.Queries
         public async Task<IEnumerable<string>> Handle(long accountId)
         {
             var user = await _userRepository.FindByIdAsync(accountId);
-            return user.Role.Privileges.Select(x => x.Name.ToString());
+
+            return user.AccountRoles
+                .Select(x => x.Role)
+                .SelectMany(x => x.Privileges)
+                .Select(x => x.Name.ToString());
         }
     }
 }

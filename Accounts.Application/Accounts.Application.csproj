@@ -7,11 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="NodaTime" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserManagementService.Core\UserManagementService.Core.csproj" />
-    <ProjectReference Include="..\UserManagementService.DataAccess\UserManagementService.DataAccess.csproj" />
+    <ProjectReference Include="..\Accounts.Core\Accounts.Core.csproj" />
   </ItemGroup>
 
 </Project>

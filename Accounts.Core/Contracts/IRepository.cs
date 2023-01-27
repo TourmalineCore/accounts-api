@@ -1,8 +1,8 @@
+using Accounts.Core.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.Core.Contracts
+namespace Accounts.Core.Contracts
 {
     public interface IRepository<TEntity> where TEntity : IIdentityEntity
     {

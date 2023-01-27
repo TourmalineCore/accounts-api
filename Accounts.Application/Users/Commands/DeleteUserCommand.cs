@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 using NodaTime;
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 
-namespace UserManagementService.Application.Users.Commands
+namespace Accounts.Application.Users.Commands
 {
     public class DeleteUserCommand
     {
@@ -32,5 +32,5 @@ namespace UserManagementService.Application.Users.Commands
             await _userRepository.UpdateAsync(user);
         }
     }
-    
+
 }

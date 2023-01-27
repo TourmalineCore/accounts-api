@@ -1,13 +1,13 @@
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Users.Commands
+namespace Accounts.Application.Users.Commands
 {
     public class UpdateUserCommand
     {
         public long Id { get; set; }
-        
+
         public string Email { get; set; }
 
         public long RoleId { get; set; }
@@ -24,7 +24,7 @@ namespace UserManagementService.Application.Users.Commands
 
         public async Task Handle(UpdateUserCommand request)
         {
-            
+
             var user = await _userRepository.FindByIdAsync(request.Id);
 
             user.Update(

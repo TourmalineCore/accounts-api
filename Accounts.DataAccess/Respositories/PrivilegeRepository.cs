@@ -1,20 +1,16 @@
+using Accounts.Core.Contracts;
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UserManagementService.Core.Contracts;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess.Respositories
+namespace Accounts.DataAccess.Respositories
 {
     public class PrivilegeRepository : IPrivilegeRepository
     {
-        private readonly UsersDbContext _usersDbContext;
+        private readonly AccountsDbContext _usersDbContext;
 
-        public PrivilegeRepository(UsersDbContext usersDbContext)
+        public PrivilegeRepository(AccountsDbContext usersDbContext)
         {
             _usersDbContext = usersDbContext;
         }

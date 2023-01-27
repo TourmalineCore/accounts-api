@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserManagementService.Core.Entities;
+using Accounts.Core.Entities;
 
-namespace UserManagementService.Core.Contracts
+namespace Accounts.Core.Contracts
 {
     public interface IPrivilegeRepository : IRepository<Privilege>
     {

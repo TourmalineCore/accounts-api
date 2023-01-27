@@ -1,17 +1,17 @@
 using Microsoft.Extensions.DependencyInjection;
-using UserManagementService.Application.Privileges.Commands;
-using UserManagementService.Application.Privileges.Queries;
-using UserManagementService.Application.Roles.Commands;
-using NodaTime;
-using UserManagementService.Application.Roles.Queries;
-using UserManagementService.Application.Users.Commands;
-using UserManagementService.Application.Users.Queries;
-using UserManagementService.Application.Services;
 using FluentValidation;
-using UserManagementService.Application.Validators;
-using UserManagementService.Application.HttpClients;
+using Accounts.Application.Users.Commands;
+using Accounts.Application.Users.Queries;
+using Accounts.Application.Privileges.Queries;
+using Accounts.Application.Roles.Commands;
+using Accounts.Application.Privileges.Commands;
+using Accounts.Application.Roles.Queries;
+using Accounts.Application.HttpClients;
+using Accounts.Application.Validators;
+using Accounts.Application.Services;
+using NodaTime;
 
-namespace UserManagementService.Application
+namespace Accounts.Application
 {
     public static class DependencyInjection
     {
@@ -40,7 +40,6 @@ namespace UserManagementService.Application
             services.AddTransient<IHttpClient, AccountHttpClient>();
 
             services.AddTransient<IClock, Clock>();
-
 
             return services;
         }

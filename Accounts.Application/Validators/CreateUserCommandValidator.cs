@@ -1,24 +1,21 @@
+using Accounts.Application.Users.Commands;
+using Accounts.Core.Entities;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserManagementService.Application.Users.Commands;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.Application.Validators
+namespace Accounts.Application.Validators
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         public CreateUserCommandValidator()
         {
             RuleFor(el => el.CorporateEmail).NotNull().EmailAddress().NotEmpty();
-            RuleFor(el => el.RoleId).NotNull().NotEmpty().Must(CompareRole);
+            RuleFor(el => el.RoleIds).NotNull().NotEmpty().Must(CompareRole);
         }
-        private bool CompareRole(int roleId)
+        private bool CompareRole(int[] roleIds)
         {
-            return Enum.IsDefined(typeof(RoleNames), roleId);
+            // ToDo добавить норм валидацию
+            return Enum.IsDefined(typeof(RoleNames), roleIds);
         }
     }
 }

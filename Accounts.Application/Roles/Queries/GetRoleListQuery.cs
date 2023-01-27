@@ -1,10 +1,10 @@
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Roles.Queries
+namespace Accounts.Application.Roles.Queries
 {
     public class GetRoleListQuery
     {

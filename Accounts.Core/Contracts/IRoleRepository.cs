@@ -1,11 +1,13 @@
+using Accounts.Core.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.Core.Contracts
+namespace Accounts.Core.Contracts
 {
     public interface IRoleRepository : IRepository<Role>
     {
         public Task UpdateRoleAsync(Role role, List<Privilege> privilege);
+
+        public Task<List<Role>> FindListAsync(List<long> ids);
     }
 }

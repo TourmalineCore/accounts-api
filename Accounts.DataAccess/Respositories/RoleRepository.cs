@@ -1,16 +1,17 @@
+using Accounts.Core.Contracts;
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using UserManagementService.Core.Contracts;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess.Respositories
+namespace Accounts.DataAccess.Respositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly UsersDbContext _usersDbContext;
+        private readonly AccountsDbContext _usersDbContext;
 
-        public RoleRepository(UsersDbContext usersDbContext)
+        public RoleRepository(AccountsDbContext usersDbContext)
         {
             _usersDbContext = usersDbContext;
         }
@@ -61,6 +62,19 @@ namespace UserManagementService.DataAccess.Respositories
             _usersDbContext.Update(role);
 
             return _usersDbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Role>> FindListAsync(List<long> roleIds)
+        {
+            var roles = new List<Role>();
+                  
+            foreach(var id in roleIds)
+            {
+                var role = await FindOneAsync(id);
+                roles.Add(role);
+            }
+
+            return roles;
         }
     }
 }

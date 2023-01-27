@@ -1,11 +1,14 @@
+using Accounts.Core.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.Application.Users
+namespace Accounts.Application.Users
 {
     public class UserDto
     {
+        public UserDto()
+        {
+        }
+
         public UserDto(
             long id,
             string email,
@@ -33,7 +36,7 @@ namespace UserManagementService.Application.Users
         public string Email { get; private set; }
 
         public long RoleId { get; private set; }
-        
+
         public IEnumerable<string> Privileges { get; private set; }
     }
 }

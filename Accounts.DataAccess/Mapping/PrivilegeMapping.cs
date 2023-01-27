@@ -1,8 +1,8 @@
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess.Mapping
+namespace Accounts.DataAccess.Mapping
 {
     public class PrivilegeMapping : IEntityTypeConfiguration<Privilege>
     {

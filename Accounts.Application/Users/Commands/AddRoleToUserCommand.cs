@@ -1,8 +1,8 @@
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Users.Commands
+namespace Accounts.Application.Users.Commands
 {
     public class AddRoleToUserCommand
     {
@@ -17,7 +17,7 @@ namespace UserManagementService.Application.Users.Commands
         private readonly IRoleRepository _roleRepository;
 
         public AddRoleToUserCommandHandler(
-            IUserRepository userRepository, 
+            IUserRepository userRepository,
             IRoleRepository roleRepository)
         {
             _userRepository = userRepository;

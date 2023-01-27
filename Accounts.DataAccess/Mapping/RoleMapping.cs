@@ -1,9 +1,9 @@
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess.Mapping
+namespace Accounts.DataAccess.Mapping
 {
     public class RoleMapping : IEntityTypeConfiguration<Role>
     {
@@ -29,11 +29,11 @@ namespace UserManagementService.DataAccess.Mapping
             builder.Property(x => x.Name)
                 .HasConversion<string>();
 
-            builder.HasData(new Role(1, RoleNames.Admin), 
-                            new Role(2, RoleNames.CEO), 
-                            new Role(3, RoleNames.Manager), 
+            builder.HasData(new Role(1, RoleNames.Admin),
+                            new Role(2, RoleNames.CEO),
+                            new Role(3, RoleNames.Manager),
                             new Role(4, RoleNames.Employee));
-            
+
         }
     }
 }

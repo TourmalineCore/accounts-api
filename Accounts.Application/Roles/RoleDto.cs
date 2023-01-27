@@ -1,6 +1,6 @@
-using UserManagementService.Core.Entities;
+using Accounts.Core.Entities;
 
-namespace UserManagementService.Application.Roles
+namespace Accounts.Application.Roles
 {
     public class RoleDto
     {

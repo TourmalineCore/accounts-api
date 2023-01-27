@@ -1,9 +1,9 @@
+using Accounts.Application.Privileges;
+using Accounts.Application.Privileges.Commands;
+using Accounts.Application.Privileges.Queries;
 using Microsoft.AspNetCore.Mvc;
-using UserManagementService.Application.Privileges;
-using UserManagementService.Application.Privileges.Commands;
-using UserManagementService.Application.Privileges.Queries;
 
-namespace UserManagementService.Api.Controllers
+namespace Accounts.Api.Controllers
 {
     [Route("api/privileges")]
     public class PrivilegesController : Controller

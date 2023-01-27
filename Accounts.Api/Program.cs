@@ -1,30 +1,22 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Accounts.Application;
+using Accounts.Application.HttpClients;
+using Accounts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
-using UserManagementService.Application;
-using UserManagementService.Application.HttpClients;
-using UserManagementService.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var configuration = builder.Configuration;
-var environment = builder.Environment;
-
-builder.Services.AddControllers();
-
-builder.Services.AddApplication();
-
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
     var env = hostingContext.HostingEnvironment;
-
     var reloadOnChange = hostingContext.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 
     config.AddJsonFile("appsettings.json", true, reloadOnChange)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reloadOnChange)
+        .AddJsonFile($"appsettings.Debug.json", true, reloadOnChange)
         .AddJsonFile("appsettings.Active.json", true, reloadOnChange);
 
     if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
@@ -42,7 +34,9 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
     }
 });
 
+var configuration = builder.Configuration;
 builder.Services.AddPersistence(configuration);
+builder.Services.AddApplication();
 
 builder.Host.ConfigureLogging((hostingContext, logging) =>
 {
@@ -81,14 +75,14 @@ builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
 
 var app = builder.Build();
 
-if (environment.IsDevelopment())
+if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
 using (var serviceScope = app.Services.CreateScope())
 {
-    var context = serviceScope.ServiceProvider.GetRequiredService<UsersDbContext>();
+    var context = serviceScope.ServiceProvider.GetRequiredService<AccountsDbContext>();
     await context.Database.MigrateAsync();
 }
 

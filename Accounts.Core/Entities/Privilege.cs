@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UserManagementService.Core.Entities;
+namespace Accounts.Core.Entities;
 
 public enum PrivilegesNames
 {

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Roles.Commands
+namespace Accounts.Application.Roles.Commands
 {
     public class DeleteRoleCommand
     {

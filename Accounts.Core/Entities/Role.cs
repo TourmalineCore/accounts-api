@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UserManagementService.Core.Entities
+namespace Accounts.Core.Entities
 {
     public enum RoleNames
     {
@@ -17,6 +17,8 @@ namespace UserManagementService.Core.Entities
         public RoleNames Name { get; private set; }
 
         public string NormalizedName { get; private set; }
+
+        public List<AccountRole> AccountRoles { get; private set; }
 
         public List<Privilege> Privileges { get; private set; } = new List<Privilege>();
 

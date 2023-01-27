@@ -1,10 +1,9 @@
+using Accounts.Application.Roles;
+using Accounts.Application.Roles.Commands;
+using Accounts.Application.Roles.Queries;
 using Microsoft.AspNetCore.Mvc;
-using UserManagementService.Application.Roles;
-using UserManagementService.Application.Roles.Commands;
-using UserManagementService.Application.Roles.Queries;
-using UserManagementService.Application.Users.Commands;
 
-namespace UserManagementService.Api.Controllers
+namespace Accounts.Api.Controllers
 {
     [Route("api/roles")]
     public class RolesController : Controller
@@ -14,8 +13,8 @@ namespace UserManagementService.Api.Controllers
         private readonly DeleteRoleCommandHandler _deleteRoleCommandHandler;
         private readonly AddPrivilegeCommandHandler _addPrivilegeCommandhandler;
 
-        public RolesController (
-            GetRoleListQueryHandler getRoleListQueryHandler, 
+        public RolesController(
+            GetRoleListQueryHandler getRoleListQueryHandler,
             GetRoleByIdQueryHandler getRoleByIdQueryHandler,
             DeleteRoleCommandHandler deleteRoleCommandHandler,
             AddPrivilegeCommandHandler addPrivilegeCommandHandler)

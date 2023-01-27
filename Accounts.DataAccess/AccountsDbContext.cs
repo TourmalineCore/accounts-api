@@ -1,17 +1,19 @@
+using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using UserManagementService.Core.Entities;
 
-namespace UserManagementService.DataAccess
+namespace Accounts.DataAccess
 {
     //Use next command in Package Manager Console to update Dev env DB
     //PM> $env:ASPNETCORE_ENVIRONMENT = 'Debug'; Update-Database
-    public class UsersDbContext : DbContext
+    public class AccountsDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<Account> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
 
-        public UsersDbContext(DbContextOptions<UsersDbContext> options) : base(options)
+        public DbSet<AccountRole> AccountRoles { get; set; }
+
+        public AccountsDbContext(DbContextOptions<AccountsDbContext> options) : base(options)
         {
         }
 
@@ -19,7 +21,7 @@ namespace UserManagementService.DataAccess
         {
 
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-            
+
             base.OnModelCreating(modelBuilder);
         }
     }

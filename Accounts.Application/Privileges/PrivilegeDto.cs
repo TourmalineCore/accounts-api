@@ -1,4 +1,4 @@
-namespace UserManagementService.Application.Privileges
+namespace Accounts.Application.Privileges
 {
     public class PrivilegeDto
     {

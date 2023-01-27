@@ -1,13 +1,10 @@
-using System;
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UserManagementService.Application.Contracts;
-using UserManagementService.Application.Roles;
-using UserManagementService.Core.Contracts;
 
-namespace UserManagementService.Application.Privileges.Queries
+namespace Accounts.Application.Privileges.Queries
 {
     public class GetPrivilegeListQuery
     {
@@ -28,6 +25,6 @@ namespace UserManagementService.Application.Privileges.Queries
 
             return privilegeEntities.Select(x => new PrivilegeDto(x.Id, x.Name.ToString()));
         }
-        
+
     }
 }

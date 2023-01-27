@@ -1,11 +1,11 @@
+using Accounts.Core.Contracts;
+using Accounts.DataAccess.Respositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NodaTime;
-using UserManagementService.Core.Contracts;
-using UserManagementService.DataAccess.Respositories;
+using System;
 
-namespace UserManagementService.DataAccess
+namespace Accounts.DataAccess
 {
     public static class DependencyInjection
     {
@@ -13,13 +13,13 @@ namespace UserManagementService.DataAccess
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<UsersDbContext>(options =>
+            services.AddDbContext<AccountsDbContext>(options =>
             {
                 options.UseNpgsql(connectionString,
                                 o => o.UseNodaTime());
             });
 
-            services.AddScoped<UsersDbContext>();
+            services.AddScoped<AccountsDbContext>();
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
