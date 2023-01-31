@@ -20,9 +20,9 @@ namespace Accounts.Application.Roles.Queries
 
         public async Task<RoleDto> Handle(GetRoleByIdQuery request)
         {
-            var roleEntity = await _roleRepository.FindByIdAsync(request.Id);
+            var role = await _roleRepository.FindByIdAsync(request.Id);
 
-            return new RoleDto(roleEntity.Id, roleEntity.Name.ToString());
+            return new RoleDto(role);
         }
     }
 }

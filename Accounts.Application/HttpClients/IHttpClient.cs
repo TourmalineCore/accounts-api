@@ -4,6 +4,6 @@ namespace Accounts.Application.HttpClients
 {
     public interface IHttpClient
     {
-        Task SendDataAuthApi(long accountId, string corporateEmail);
+        Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail);
     }
 }

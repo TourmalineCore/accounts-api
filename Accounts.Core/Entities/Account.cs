@@ -8,27 +8,32 @@ namespace Accounts.Core.Entities
     {
         public long Id { get; private set; }
 
-        public string Email { get; private set; }
+        public string CorporateEmail { get; private set; }
 
-        public List<AccountRole> AccountRoles { get; private set; } = new List<AccountRole>();
+        public string FirstName { get; private set; }
 
-        public Instant? DeletedAtUtc { get; private set; } = null;
+        public string LastName { get; private set; }
 
-        // For DB Context
-        private Account() { }
+        public Instant CreatedAt { get; init; }
 
-        public Account(string email, List<Role> roles)
+        public List<AccountRole> AccountRoles { get; private set; } = new();
+
+        public Instant? DeletedAtUtc { get; private set; }
+
+        public Account(string corporateEmail, string firstName, string lastName, IEnumerable<Role> roles)
         {
-            Email = email;
-            AccountRoles = roles.Select(role => new AccountRole
-            {
-              Role = role
-            }).ToList();
+            CorporateEmail = corporateEmail;
+            FirstName = firstName;
+            LastName = lastName;
+            CreatedAt = SystemClock.Instance.GetCurrentInstant();
+            AccountRoles = roles
+                .Select(role => new AccountRole { RoleId = role.Id })
+                .ToList();
         }
 
         public void Update(string email, List<AccountRole> accountRoles)
         {
-            Email = email;
+            CorporateEmail = email;
             AccountRoles = accountRoles;
         }
 
@@ -41,5 +46,8 @@ namespace Accounts.Core.Entities
         {
             DeletedAtUtc = deletedAtUtc;
         }
+
+        // For DB Context
+        private Account() { }
     }
 }

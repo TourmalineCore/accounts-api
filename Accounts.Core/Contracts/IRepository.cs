@@ -6,7 +6,7 @@ namespace Accounts.Core.Contracts
 {
     public interface IRepository<TEntity> where TEntity : IIdentityEntity
     {
-        public Task<long> CreateAsync(TEntity role);
+        public Task<long> CreateAsync(TEntity account);
 
         public Task<TEntity> FindByIdAsync(long id);
 

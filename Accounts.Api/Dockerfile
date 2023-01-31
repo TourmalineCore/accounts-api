@@ -6,19 +6,19 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["UserManagementService.Api/UserManagementService.Api.csproj", "UserManagementService.Api/"]
-COPY ["UserManagementService.Application/UserManagementService.Application.csproj", "UserManagementService.Application/"]
-COPY ["UserManagementService.Core/UserManagementService.Core.csproj", "UserManagementService.Core/"]
-COPY ["UserManagementService.DataAccess/UserManagementService.DataAccess.csproj", "UserManagementService.DataAccess/"]
-RUN dotnet restore "UserManagementService.Api/UserManagementService.Api.csproj"
+COPY ["Accounts.Api/Accounts.Api.csproj", "Accounts.Api/"]
+COPY ["Accounts.Application/Accounts.Application.csproj", "Accounts.Application/"]
+COPY ["Accounts.Core/Accounts.Core.csproj", "Accounts.Core/"]
+COPY ["Accounts.DataAccess/Accounts.DataAccess.csproj", "Accounts.DataAccess/"]
+RUN dotnet restore "Accounts.Api/Accounts.Api.csproj"
 COPY . .
-WORKDIR "/src/UserManagementService.Api"
-RUN dotnet build "UserManagementService.Api.csproj" -c Release -o /app/build
+WORKDIR "/src/Accounts.Api"
+RUN dotnet build "Accounts.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "UserManagementService.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Accounts.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserManagementService.Api.dll"]
+ENTRYPOINT ["dotnet", "Accounts.Api.dll"]

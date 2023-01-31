@@ -14,9 +14,9 @@ namespace Accounts.Application.HttpClients
             _client = new HttpClient();
             _urls = urls.Value;
         }
-        public async Task SendDataAuthApi(long accountId, string corporateEmail)
+        public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail)
         {
-            string url = $"{_urls.AuthServiceUrl}api/auth/register";
+            var url = $"{_urls.AuthServiceUrl}/api/auth/register";
 
             await _client.PostAsJsonAsync(url,
                 new

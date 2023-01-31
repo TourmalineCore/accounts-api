@@ -12,24 +12,25 @@ namespace Accounts.Application.Users.Commands
 
     public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IClock _clock;
 
         public DeleteUserCommandHandler(
-            IUserRepository userRepository,
+            IAccountRepository accountRepository,
             IClock clock)
         {
-            _userRepository = userRepository;
+            _accountRepository = accountRepository;
             _clock = clock;
         }
 
         public async Task Handle(DeleteUserCommand request)
         {
-            var user = await _userRepository.FindByIdAsync(request.Id);
-
-            user.Delete(_clock.GetCurrentInstant());
-
-            await _userRepository.UpdateAsync(user);
+            //TODO: #861ma1b6p - temporary disabled until we get prototypes
+            // var user = await _accountRepository.FindByIdAsync(request.Id);
+            //
+            // user.Delete(_clock.GetCurrentInstant());
+            //
+            // await _accountRepository.UpdateAsync(user);
         }
     }
 

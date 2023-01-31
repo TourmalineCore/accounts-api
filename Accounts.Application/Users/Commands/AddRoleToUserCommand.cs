@@ -13,23 +13,24 @@ namespace Accounts.Application.Users.Commands
 
     public class AddRoleToUserCommandHandler : ICommandHandler<AddRoleToUserCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IRoleRepository _roleRepository;
 
         public AddRoleToUserCommandHandler(
-            IUserRepository userRepository,
+            IAccountRepository accountRepository,
             IRoleRepository roleRepository)
         {
-            _userRepository = userRepository;
+            _accountRepository = accountRepository;
             _roleRepository = roleRepository;
         }
 
         public async Task Handle(AddRoleToUserCommand command)
         {
-            var user = await _userRepository.FindByIdAsync(command.UserId);
-            var role = await _roleRepository.FindByIdAsync(command.RoleId);
-
-            await _userRepository.AddRoleAsync(user, role);
+            //TODO: #861ma1b6p - temporary disabled until we get prototypes
+            // var user = await _accountRepository.FindByIdAsync(command.UserId);
+            // var role = await _roleRepository.FindByIdAsync(command.RoleId);
+            //
+            // await _accountRepository.AddRoleAsync(user, role);
         }
     }
 }

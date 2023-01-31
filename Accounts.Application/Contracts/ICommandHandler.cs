@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Accounts.Application.Contracts
 {
@@ -9,6 +9,6 @@ namespace Accounts.Application.Contracts
 
     public interface ICommandHandler<in Tin, Tout>
     {
-        Task<Tout> Handle(Tin command);
+        Task<Tout> HandleAsync(Tin command);
     }
 }

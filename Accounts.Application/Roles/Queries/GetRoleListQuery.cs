@@ -23,7 +23,7 @@ namespace Accounts.Application.Roles.Queries
         {
             var roleEntities = await _roleRepository.GetAllAsync();
 
-            return roleEntities.Select(x => new RoleDto(x.Id, x.Name.ToString()));
+            return roleEntities.Select(role => new RoleDto(role));
         }
     }
 }

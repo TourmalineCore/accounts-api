@@ -17,6 +17,12 @@ namespace Accounts.DataAccess.Mapping
             builder.HasOne(x => x.Role)
              .WithMany(x => x.AccountRoles)
              .HasForeignKey(x => x.RoleId);
+
+            builder.HasData(new
+            {
+                AccountId = 1L,
+                RoleId = 2L
+            });
         }
     }
 }

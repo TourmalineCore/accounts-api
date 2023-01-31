@@ -10,16 +10,16 @@ namespace Accounts.Application.Privileges.Queries
     }
     public class GetPrivilegesByAccountIdQueryHandler
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public GetPrivilegesByAccountIdQueryHandler(IUserRepository userRepository)
+        public GetPrivilegesByAccountIdQueryHandler(IAccountRepository accountRepository)
         {
-            _userRepository = userRepository;
+            _accountRepository = accountRepository;
         }
 
         public async Task<IEnumerable<string>> Handle(long accountId)
         {
-            var user = await _userRepository.FindByIdAsync(accountId);
+            var user = await _accountRepository.FindByIdAsync(accountId);
 
             return user.AccountRoles
                 .Select(x => x.Role)

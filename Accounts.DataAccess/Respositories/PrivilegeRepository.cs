@@ -15,12 +15,12 @@ namespace Accounts.DataAccess.Respositories
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Privilege privilege)
+        public async Task<long> CreateAsync(Privilege account)
         {
-            await _usersDbContext.AddAsync(privilege);
+            await _usersDbContext.AddAsync(account);
             await _usersDbContext.SaveChangesAsync();
 
-            return privilege.Id;
+            return account.Id;
         }
 
         public Task<Privilege> FindByIdAsync(long id)

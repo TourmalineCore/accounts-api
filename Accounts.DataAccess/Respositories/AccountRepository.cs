@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Accounts.DataAccess.Respositories
 {
-    public class UserRepository : IUserRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly AccountsDbContext _usersDbContext;
 
-        public UserRepository(AccountsDbContext usersDbContext)
+        public AccountRepository(AccountsDbContext usersDbContext)
         {
             _usersDbContext = usersDbContext;
         }
@@ -28,22 +28,21 @@ namespace Accounts.DataAccess.Respositories
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public async Task<long> CreateAsync(Account user)
+        public async Task<long> CreateAsync(Account account)
         {
-            await _usersDbContext.AddAsync(user);
+            await _usersDbContext.AddAsync(account);
             await _usersDbContext.SaveChangesAsync();
 
-            return user.Id;
+            return account.Id;
         }
 
-        public Task<Account?> FindByEmailAsync(string email)
+        public Task<Account?> FindByCorporateEmailAsync(string corporateEmail)
         {
             return _usersDbContext
                     .Queryable<Account>()
                     .Include(x => x.AccountRoles)
                     .ThenInclude(x => x.Role)
-                    .ThenInclude(x => x.Privileges)
-                    .SingleOrDefaultAsync(x => x.Email == email && x.DeletedAtUtc == null);
+                    .SingleOrDefaultAsync(x => x.CorporateEmail == corporateEmail && x.DeletedAtUtc == null);
         }
 
         public Task<Account> FindByIdAsync(long id)
@@ -52,7 +51,6 @@ namespace Accounts.DataAccess.Respositories
                     .Queryable<Account>()
                     .Include(x => x.AccountRoles)
                     .ThenInclude(x => x.Role)
-                    .ThenInclude(x => x.Privileges)
                     .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
         }
 
@@ -61,6 +59,8 @@ namespace Accounts.DataAccess.Respositories
             return await _usersDbContext
                 .QueryableAsNoTracking<Account>()
                 .Where(x => x.DeletedAtUtc == null)
+                .Include(x => x.AccountRoles)
+                .ThenInclude(x => x.Role)
                 .ToListAsync();
         }
 

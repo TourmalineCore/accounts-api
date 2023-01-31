@@ -15,24 +15,24 @@ namespace Accounts.Application.Users.Commands
 
     public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public UpdateUserCommandHandler(IUserRepository userRepository)
+        public UpdateUserCommandHandler(IAccountRepository accountRepository)
         {
-            _userRepository = userRepository;
+            _accountRepository = accountRepository;
         }
 
         public async Task Handle(UpdateUserCommand request)
         {
-
-            var user = await _userRepository.FindByIdAsync(request.Id);
-
-            user.Update(
-                request.Email,
-                request.RoleId
-            );
-
-            await _userRepository.UpdateAsync(user);
+            //TODO: #861ma1b6p - temporary disabled until we get prototypes
+            // var user = await _accountRepository.FindByIdAsync(request.Id);
+            //
+            // user.Update(
+            //     request.Email,
+            //     request.RoleId
+            // );
+            //
+            // await _accountRepository.UpdateAsync(user);
         }
     }
 }

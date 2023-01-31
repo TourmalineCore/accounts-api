@@ -1,7 +1,9 @@
 {
   "profiles": {
-    "Account.Api": {
+    "Account.Api - debug": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5006",
       "environmentVariables": {

@@ -21,7 +21,7 @@ namespace Accounts.DataAccess
 
             services.AddScoped<AccountsDbContext>();
 
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IPrivilegeRepository, PrivilegeRepository>();
 

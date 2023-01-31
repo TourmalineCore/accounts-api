@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace Accounts.Core.Contracts
 {
-    public interface IUserRepository : IRepository<Account>
+    public interface IAccountRepository : IRepository<Account>
     {
         public Task AddRoleAsync(Account user, Role role);
 
-        public Task<Account?> FindByEmailAsync(string email);
+        public Task<Account?> FindByCorporateEmailAsync(string corporateEmail);
     }
 }

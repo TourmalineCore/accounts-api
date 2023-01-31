@@ -3,6 +3,7 @@ using System;
 using Accounts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace UserManagementService.DataAccess.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    partial class UsersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130114155_AddAccountRole")]
+    partial class AddAccountRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,16 +57,6 @@ namespace UserManagementService.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CorporateEmail = "ceo@tourmalinecore.com",
-                            CreatedAt = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
-                            FirstName = "Ceo",
-                            LastName = "Ceo"
-                        });
                 });
 
             modelBuilder.Entity("Accounts.Core.Entities.AccountRole", b =>
@@ -80,13 +72,6 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AccountRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            AccountId = 1L,
-                            RoleId = 2L
-                        });
                 });
 
             modelBuilder.Entity("Accounts.Core.Entities.Privilege", b =>

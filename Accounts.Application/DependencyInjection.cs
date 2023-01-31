@@ -17,14 +17,13 @@ namespace Accounts.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddTransient<CreateUserCommandHandler>();
+            services.AddTransient<AccountCreationCommandHandler>();
             services.AddTransient<UpdateUserCommandHandler>();
             services.AddTransient<DeleteUserCommandHandler>();
             services.AddTransient<AddRoleToUserCommandHandler>();
 
-            services.AddTransient<GetUserByEmailQueryHandler>();
-            services.AddTransient<GetUserListQueryHandler>();
-            services.AddTransient<GetUserByIdQueryHandler>();
+            services.AddTransient<GetAccountsQueryHandler>();
+            services.AddTransient<GetAccountByIdQueryHandler>();
 
             services.AddTransient<GetRoleListQueryHandler>();
             services.AddTransient<GetRoleByIdQueryHandler>();
@@ -36,7 +35,7 @@ namespace Accounts.Application
             services.AddTransient<GetPrivilegesByAccountIdQueryHandler>();
             services.AddTransient<DeletePrivilegeCommandHandler>();
 
-            services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
+            services.AddScoped<IValidator<AccountCreationCommand>, AccountCreationCommandValidator>();
             services.AddTransient<IHttpClient, AccountHttpClient>();
 
             services.AddTransient<IClock, Clock>();

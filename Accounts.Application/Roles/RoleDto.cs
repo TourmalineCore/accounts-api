@@ -2,21 +2,16 @@ using Accounts.Core.Entities;
 
 namespace Accounts.Application.Roles
 {
-    public class RoleDto
+    public readonly struct RoleDto
     {
-        public RoleDto(long id, string name)
+        public RoleDto(Role role)
         {
-            Id = id;
-            Name = name;
+            Id = role.Id;
+            Name = role.NormalizedName;
         }
 
-        public long Id { get; private set; }
+        public long Id { get; init; }
 
-        public string Name { get; private set; }
-
-        public static RoleDto MapFrom(Role roleEntity)
-        {
-            return new RoleDto(roleEntity.Id, roleEntity.Name.ToString());
-        }
+        public string Name { get; init; }
     }
 }

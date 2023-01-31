@@ -2,7 +2,6 @@ using Accounts.Core.Contracts;
 using Accounts.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Accounts.DataAccess.Respositories
@@ -16,13 +15,24 @@ namespace Accounts.DataAccess.Respositories
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Role role)
+        public async Task<long> CreateAsync(Role account)
         {
-            await _usersDbContext.AddAsync(role);
+            await _usersDbContext.AddAsync(account);
             await _usersDbContext.SaveChangesAsync();
 
-            return role.Id;
+            return account.Id;
         }
+
+        public async Task<IEnumerable<Role>> GetRolesAsync()
+        {
+            return await _usersDbContext
+                .Queryable<Role>()
+                .Include(x => x.AccountRoles)
+                .Include(x => x.Privileges)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task UpdateRoleAsync(Role role, List<Privilege> privileges)
         {
             role.UpdateRole(privileges);

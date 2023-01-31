@@ -10,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
     var env = hostingContext.HostingEnvironment;
@@ -78,6 +81,12 @@ var app = builder.Build();
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+}
+
+if (app.Environment.IsEnvironment("Debug"))
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 using (var serviceScope = app.Services.CreateScope())
