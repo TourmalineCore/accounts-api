@@ -1,17 +1,38 @@
 version: "3.8"
 
 services:
-  users-db-debug:
-    image: postgres:13
+  accounts-db-debug:
+    image: postgres:14.2-alpine
     restart: always
-    networks:
-      - users-backend
+    container_name: 'accounts-db-debug'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Users
+      POSTGRES_DB: Accounts
     ports:
       - 10001:5432
+    networks:
+      - accounts-deb
+
+  accounts-api:
+    container_name: 'accounts-api'
+    depends_on:
+      - "accounts-db-debug"
+    build:
+      dockerfile: Accounts.Api/Dockerfile
+      context: .
+    ports:
+      - 5015:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Debug
+      - LOGS_PATH=/var/log/dev-accounts-api
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db-debug;port=5432;Database=Accounts
+      - HttpUrls__AuthServiceUrl=http://auth-service-api:80
+    networks:
+      - accounts-deb
+      - ic-backend-deb
 
 networks:
-  users-backend: {}
+  accounts-deb: {}
+  ic-backend-deb:
+    external: true
