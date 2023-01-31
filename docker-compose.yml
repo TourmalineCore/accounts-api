@@ -15,6 +15,7 @@ services:
       - accounts-deb
 
   accounts-api:
+    container_name: 'accounts-api'
     depends_on:
       - "accounts-db-debug"
     build:
@@ -26,9 +27,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Debug
       - LOGS_PATH=/var/log/dev-accounts-api
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db-debug;port=5432;Database=Accounts
-      - HttpUrls__AuthServiceUrl=http://localhost:5002
+      - HttpUrls__AuthServiceUrl=http://auth-service-api:80
     networks:
       - accounts-deb
+      - ic-backend-deb
 
 networks:
   accounts-deb: {}
+  ic-backend-deb:
+    external: true
