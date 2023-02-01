@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.EventLog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -77,6 +78,14 @@ var httpUrls = configuration.GetSection("HttpUrls");
 builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
 
 var app = builder.Build();
+
+app.UseCors(
+    corsPolicyBuilder => corsPolicyBuilder
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(host => true)
+        .AllowAnyMethod()
+        .AllowAnyOrigin()
+);
 
 if (builder.Environment.IsDevelopment())
 {
