@@ -12,9 +12,10 @@ namespace Accounts.Api.Controllers
         private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
         private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
         private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
-        private readonly UpdateUserCommandHandler _updateUserCommandHandler;
-        private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
-        private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
+
+        //private readonly UpdateUserCommandHandler _updateUserCommandHandler;
+        //private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
+        //private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
 
         private const int CreatedStatusCode = (int)HttpStatusCode.Created;
         private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
@@ -22,16 +23,18 @@ namespace Accounts.Api.Controllers
         public AccountsController(
             GetAccountsQueryHandler getAccountsQueryHandler,
             AccountCreationCommandHandler accountCreationCommandHandler,
-            UpdateUserCommandHandler updateUserCommandHandler,
-            DeleteUserCommandHandler deleteUserCommandHandler,
-            AddRoleToUserCommandHandler addRoleToUserCommandHandler,
+
+            //UpdateUserCommandHandler updateUserCommandHandler,
+            //DeleteUserCommandHandler deleteUserCommandHandler,
+            //AddRoleToUserCommandHandler addRoleToUserCommandHandler,
             GetAccountByIdQueryHandler getAccountByIdQueryHandler)
         {
             _getAccountsQueryHandler = getAccountsQueryHandler;
             _accountCreationCommandHandler = accountCreationCommandHandler;
-            _updateUserCommandHandler = updateUserCommandHandler;
-            _deleteUserCommandHandler = deleteUserCommandHandler;
-            _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
+
+            //_updateUserCommandHandler = updateUserCommandHandler;
+            //_deleteUserCommandHandler = deleteUserCommandHandler;
+            //_addRoleToUserCommandHandler = addRoleToUserCommandHandler;
             _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
         }
 
