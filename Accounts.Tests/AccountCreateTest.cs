@@ -3,120 +3,201 @@ using Accounts.Application.HttpClients;
 using Accounts.Application.Users;
 using Accounts.Application.Users.Commands;
 using Accounts.Application.Users.Queries;
+using Accounts.Application.Validators;
 using Accounts.Core.Contracts;
 using Accounts.Core.Entities;
+using Accounts.DataAccess;
+using Accounts.DataAccess.Respositories;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using System.Diagnostics;
 using System.Net;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Accounts.Tests
 {
     public class AccountCreateTest
     {
-        private readonly List<Account> _accounts = new List<Account>()
+        private readonly AccountCreationCommandValidator iValidatorMock;
+        private readonly Mock<IAccountRepository> iAccountRepository;
+        private readonly Mock<IRoleRepository> iRoleRepository;
+        private readonly List<Account> accounts = new List<Account>()
         {
             new Account
             (
-                "one@turmalineinnercore.com",
-                "OneFirstName",
-                "OneLastName",
-                new List<Role>
+                "pavel@tourmalineinner.com",
+                "Павел",
+                "Павлович",
+                new List<Role>()
                 {
-                    new Role(RoleNames.Admin)
+                    new Role(RoleNames.Employee)
                 }
-            )
+            ),
+            new Account
+            (
+                "anton@tourmalineinner.com",
+                "Антон",
+                "Антонов",
+                new List<Role>()
+                {
+                    new Role(RoleNames.Employee)
+                }
+            ),
         };
-        private readonly AccountsController accountsController;
+        private readonly List<Role> roles = new List<Role>()
+        {
+            new Role(3, RoleNames.Manager),
+            new Role(4, RoleNames.Employee),
+            new Role(2, RoleNames.CEO),
+            new Role(1, RoleNames.Admin),
+        };
         public AccountCreateTest()
         {
-            var iAccountRepositoryMock = new Mock<IAccountRepository>();
-            var iRoleRepositoryMock = new Mock<IRoleRepository>();
-            var iValidatorMock = new Mock<IValidator<AccountCreationCommand>>();
-            var iHttpClientMock = new Mock<IHttpClient>();
-            var getAccountsQueryMock = new Mock<GetAccountsQuery>();
+            iRoleRepository = new Mock<IRoleRepository>();
+            iAccountRepository = new Mock<IAccountRepository>();
+            iAccountRepository.Setup(el => (el.GetAllAsync()).Result).Returns(accounts);
+            iRoleRepository.Setup(el => el.GetRolesAsync())
+                .ReturnsAsync(roles);
 
-
-            var getAccountsQueryHandlerMock = new GetAccountsQueryHandler(iAccountRepositoryMock.Object);
-            var getAccountByIdQueryHandlerMock = new GetAccountByIdQueryHandler(iAccountRepositoryMock.Object);
-            var accountCreationCommandHandlerMock = new AccountCreationCommandHandler(
-                iAccountRepositoryMock.Object,
-                iValidatorMock.Object,
-                iHttpClientMock.Object,
-                iRoleRepositoryMock.Object
-            );
-
-            accountsController = new AccountsController
+            iValidatorMock = new AccountCreationCommandValidator
             (
-                getAccountsQueryHandlerMock,
-                accountCreationCommandHandlerMock,
-                getAccountByIdQueryHandlerMock
+                iRoleRepository.Object,
+                iAccountRepository.Object
             );
         }
-
         [Fact]
-        public void Test1()
+        public void TestCompleted_GetAll()
         {
-
-            //var result = controller.FindAll(getAccountsQueryMock.Object);
-            //var viewResult = Assert.IsType<Task<IEnumerable<AccountDto>>>(result);
-            //var model = Assert.IsAssignableFrom<IEnumerable<AccountDto>>(viewResult.Result);
-            //Assert.Equal(GetAccounts().Result.Count(), model.Count());
+            var res = iAccountRepository.Object.GetAllAsync();
+            Assert.Equal(accounts.Count, res.Result.Count());
         }
         [Fact]
-        public void TestCompletedCreating()
+        public void TestCompleted_GetByCorporateEmailAsync()
         {
-            var account = new AccountCreationCommand
+            var account = new Account
+            (
+                "anton@tourmalineinner.com",
+                "Антон",
+                "Антонов",
+                new List<Role>()
+                {
+                    new Role(RoleNames.Employee)
+                }
+            );
+
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.Single(el => el.CorporateEmail == account.CorporateEmail));
+
+            var res = iAccountRepository.Object.FindByCorporateEmailAsync("pavel@tourmalineinner.com");
+
+            Assert.Equal(account.CorporateEmail, res.Result.CorporateEmail);
+            Assert.Equal(account.FirstName, res.Result.FirstName);
+            Assert.Equal(account.LastName, res.Result.LastName);
+        }
+        [Fact]
+        public void TestCompleted_CreateAccount()
+        {
+            var accountCreate = new AccountCreationCommand
             {
-                FirstName = "Павел",
-                LastName = "Павлович",
-                CorporateEmail = "pavel@tourmalineinnercore.com",
+                FirstName = "Костя",
+                LastName = "Костянов",
+                CorporateEmail = "kostya@mail.ru",
                 RoleIds = new List<long>() { 1 }
             };
 
-            var result = accountsController.CreateAsync(account).Result;
-            Assert.NotEqual(0, result.Value);
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
+
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.Equal(true, validationResult.Result.IsValid);
         }
         [Fact]
-        public void TestFaildEmptyFieldsCreating()
+        public void TestField_CreateAccountTwiceSameEmail()
         {
-            var account = new AccountCreationCommand
+            var accountCreate = new AccountCreationCommand
+            {
+                FirstName = "Антон",
+                LastName = "Антонов",
+                CorporateEmail = "pavel@tourmalineinner.com",
+                RoleIds = new List<long>() { 1 }
+            };
+
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
+
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.NotEqual(true, validationResult.Result.IsValid);
+        }
+        [Fact]
+        public void TestField_CreateAccountEmptyFields()
+        {
+            var accountCreate = new AccountCreationCommand
             {
                 FirstName = "",
                 LastName = "",
                 CorporateEmail = "",
-                RoleIds = new List<long>()
+                RoleIds = new List<long>() { 1 }
             };
 
-            var result = accountsController.CreateAsync(account).Result;
-            var viewResult = Assert.IsType<ActionResult<long>>(result);
-            var model = Assert.IsAssignableFrom<ActionResult<long>>(viewResult);
-            Assert.Equal(0, model.Value);
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
 
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.NotEqual(true, validationResult.Result.IsValid);
         }
         [Fact]
-        public void TestFaildCreatExistingEmail()
+        public void TestField_CreateAccountIncorrectEmailFormat()
         {
-            var accountOne = new AccountCreationCommand
+            var accountCreate = new AccountCreationCommand
             {
-                FirstName = "Павел",
-                LastName = "Павлович",
-                CorporateEmail = "pavel@tourmalineinnercore.com",
-                RoleIds = new List<long>() { 1 }
-            };
-            var accountTwo = new AccountCreationCommand
-            {
-                FirstName = "Павел",
-                LastName = "Павлович",
-                CorporateEmail = "pavel@tourmalineinnercore.com",
+                FirstName = "Антон",
+                LastName = "Антонов",
+                CorporateEmail = "trolmail.ru",
                 RoleIds = new List<long>() { 1 }
             };
 
-            var result = accountsController.CreateAsync(accountTwo).Result;
-            var viewResult = Assert.IsType<ActionResult<long>>(result);
-            var model = Assert.IsAssignableFrom<ActionResult<long>>(viewResult);
-            Assert.Equal(0, model.Value);
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
+
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.NotEqual(true, validationResult.Result.IsValid);
+        }
+        [Fact]
+        public void TestField_CreateUserRoleIdDoesNotExist()
+        {
+            var accountCreate = new AccountCreationCommand
+            {
+                FirstName = "Костя",
+                LastName = "Костянов",
+                CorporateEmail = "kostya@mail.ru",
+                RoleIds = new List<long>() { -1 }
+            };
+
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
+
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.NotEqual(true, validationResult.Result.IsValid);
+        }
+        [Fact]
+        public void TestField_CreateUserNegativeRoleId()
+        {
+            var accountCreate = new AccountCreationCommand
+            {
+                FirstName = "Костя",
+                LastName = "Костянов",
+                CorporateEmail = "kostya@mail.ru",
+                RoleIds = new List<long>() { 1, 1, 1, 1 }
+            };
+
+            iAccountRepository.Setup(el => el.FindByCorporateEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(accounts.SingleOrDefault(el => el.CorporateEmail == accountCreate.CorporateEmail));
+
+            var validationResult = iValidatorMock.ValidateAsync(accountCreate);
+            Assert.NotEqual(true, validationResult.Result.IsValid);
         }
     }
 }
