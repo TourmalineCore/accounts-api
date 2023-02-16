@@ -14,7 +14,7 @@ namespace Accounts.Application.Validators
                 .NotNull()
                 .NotEmpty()
                 .EmailAddress()
-                .Must(CheckCorporateEmail)
+                .Must(IsCorporateEmail)
                 .MustAsync(
                     async (corporateEmail, _) =>
                     {
@@ -26,7 +26,7 @@ namespace Accounts.Application.Validators
             RuleFor(x => x.RoleIds)
                 .NotNull()
                 .NotEmpty()
-                .Must(CheckDublicate)
+                .Must(IsRoleIdsUnique)
                 .MustAsync(
                     async (accountRoleIds, _) =>
                     {
@@ -37,17 +37,18 @@ namespace Accounts.Application.Validators
                     })
                 .WithMessage("Incorrect role ids. Probably you tried to set unavailable role id");
         }
-        private bool CheckDublicate(List<long> roleIds)
+
+        private bool IsRoleIdsUnique(List<long> roleIds)
         {
-            return roleIds.GroupBy(x => x)
-                 .Where(y => y.Count() > 1)
-                 .Select(z => z.Key)
-                 .ToList().Count == 0;
+            var uniqueRoleIds = roleIds.Distinct().ToList();
+            return roleIds.Count == uniqueRoleIds.Count;
         }
-        private bool CheckCorporateEmail(string corporateEmail)
+
+        private bool IsCorporateEmail(string corporateEmail)
         {
-            var correctEmail = "@tourmalineinner.com";
-            return corporateEmail.Contains(correctEmail);
+            // add to options
+            const string validCorporateEmailDomain = "@tourmalinecore.com";
+            return corporateEmail.Contains(validCorporateEmailDomain);
         }
     }
 }
