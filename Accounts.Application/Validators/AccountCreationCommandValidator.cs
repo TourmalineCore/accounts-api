@@ -14,6 +14,7 @@ namespace Accounts.Application.Validators
                 .NotNull()
                 .NotEmpty()
                 .EmailAddress()
+                .Must(CheckCorporateEmail)
                 .MustAsync(
                     async (corporateEmail, _) =>
                     {
@@ -42,6 +43,11 @@ namespace Accounts.Application.Validators
                  .Where(y => y.Count() > 1)
                  .Select(z => z.Key)
                  .ToList().Count == 0;
+        }
+        private bool CheckCorporateEmail(string corporateEmail)
+        {
+            var correctEmail = "@tourmalineinner.com";
+            return corporateEmail.Contains(correctEmail);
         }
     }
 }
