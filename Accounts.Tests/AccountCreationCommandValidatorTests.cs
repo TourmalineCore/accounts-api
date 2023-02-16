@@ -1,7 +1,9 @@
+using Accounts.Application.Options;
 using Accounts.Application.Users.Commands;
 using Accounts.Application.Validators;
 using Accounts.Core.Contracts;
 using Accounts.Core.Entities;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Accounts.Tests
@@ -21,6 +23,8 @@ namespace Accounts.Tests
 
         public AccountCreationCommandValidatorTests()
         {
+            var accountValidOptionsMock = new Mock<IOptions<AccountValidOptions>>();
+            accountValidOptionsMock.Setup(x => x.Value).Returns(new AccountValidOptions { ValidCorporateEmailDomain = "@tourmalinecore.com" });
             var roleRepositoryMock = new Mock<IRoleRepository>();
             _accountRepositoryMock = new Mock<IAccountRepository>();
 
@@ -31,7 +35,8 @@ namespace Accounts.Tests
             _validator = new AccountCreationCommandValidator
             (
                 roleRepositoryMock.Object,
-                _accountRepositoryMock.Object
+                _accountRepositoryMock.Object,
+                accountValidOptionsMock.Object
             );
         }
 

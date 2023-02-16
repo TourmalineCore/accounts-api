@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
+using Accounts.Application.Options;
 using Accounts.Application.Users.Commands;
 using Accounts.Core.Contracts;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace Accounts.Application.Validators
 {
     public class AccountCreationCommandValidator : AbstractValidator<AccountCreationCommand>
     {
-        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository)
+        private readonly AccountValidOptions _accountValidOptions;
+        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository, IOptions<AccountValidOptions> accountValidOptions)
         {
+            _accountValidOptions = accountValidOptions.Value;
+
             RuleFor(x => x.CorporateEmail)
                 .NotNull()
                 .NotEmpty()
@@ -46,9 +51,7 @@ namespace Accounts.Application.Validators
 
         private bool IsCorporateEmail(string corporateEmail)
         {
-            // add to options
-            const string validCorporateEmailDomain = "@tourmalinecore.com";
-            return corporateEmail.Contains(validCorporateEmailDomain);
+            return corporateEmail.Contains(_accountValidOptions.ValidCorporateEmailDomain);
         }
     }
 }
