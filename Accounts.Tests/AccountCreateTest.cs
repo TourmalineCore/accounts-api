@@ -69,6 +69,37 @@ namespace Accounts.Tests
             );
         }
         [Fact]
+        public void TestCompleted_ValidationIsEnabled()
+        {
+            var accountCreate = new AccountCreationCommand
+            {
+                FirstName = "Антон",
+                LastName = "Антонов",
+                CorporateEmail = "",
+                RoleIds = new List<long>() { -1 }
+            };
+
+            var iHttpClientMock = new Mock<IHttpClient>();
+
+            var accountCreationCommandHandler = new AccountCreationCommandHandler(
+                iAccountRepository.Object,
+                iValidatorMock,
+                iHttpClientMock.Object,
+                iRoleRepository.Object
+            );
+
+            var res = accountCreationCommandHandler.HandleAsync(accountCreate).Exception;
+            try
+            {
+                Assert.Contains("Corporate Email", res.Message);
+            }
+            catch(NullReferenceException ex)
+            {
+                throw new InvalidOperationException("Validation is not enabled");
+            }
+
+        }
+        [Fact]
         public void TestCompleted_GetAll()
         {
             var res = iAccountRepository.Object.GetAllAsync();
@@ -104,7 +135,7 @@ namespace Accounts.Tests
             {
                 FirstName = "Костя",
                 LastName = "Костянов",
-                CorporateEmail = "kostya@mail.ru",
+                CorporateEmail = "kostya@tourmalineinner.com",
                 RoleIds = new List<long>() { 1 }
             };
 
