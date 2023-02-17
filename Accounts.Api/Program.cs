@@ -77,9 +77,8 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
 
 var httpUrls = configuration.GetSection("HttpUrls");
 builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
-builder.Services.Configure<AccountValidationOptions>(
-    u => configuration.GetSection(nameof(AccountValidationOptions)).Bind(u)
-);
+
+builder.Services.Configure<AccountValidationOptions>(builder.Configuration.GetSection(nameof(AccountValidationOptions)));
 
 var app = builder.Build();
 
