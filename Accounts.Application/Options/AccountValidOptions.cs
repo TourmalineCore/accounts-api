@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Accounts.Application.Options
 {
-    public class AccountValidOptions
+    public class AccountValidationOptions
     {
-        public string ValidCorporateEmailDomain { get; set; }
+        public string CorporateEmailDomain { get; set; }
     }
 }

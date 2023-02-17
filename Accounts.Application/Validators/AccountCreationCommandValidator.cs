@@ -10,8 +10,8 @@ namespace Accounts.Application.Validators
 {
     public class AccountCreationCommandValidator : AbstractValidator<AccountCreationCommand>
     {
-        private readonly AccountValidOptions _accountValidOptions;
-        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository, IOptions<AccountValidOptions> accountValidOptions)
+        private readonly AccountValidationOptions _accountValidOptions;
+        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository, IOptions<AccountValidationOptions> accountValidOptions)
         {
             _accountValidOptions = accountValidOptions.Value;
 
@@ -51,7 +51,7 @@ namespace Accounts.Application.Validators
 
         private bool IsCorporateEmail(string corporateEmail)
         {
-            return corporateEmail.Contains(_accountValidOptions.ValidCorporateEmailDomain);
+            return corporateEmail.Contains(_accountValidOptions.CorporateEmailDomain);
         }
     }
 }

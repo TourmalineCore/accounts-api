@@ -23,8 +23,8 @@ namespace Accounts.Tests
 
         public AccountCreationCommandValidatorTests()
         {
-            var accountValidOptionsMock = new Mock<IOptions<AccountValidOptions>>();
-            accountValidOptionsMock.Setup(x => x.Value).Returns(new AccountValidOptions { ValidCorporateEmailDomain = "@tourmalinecore.com" });
+            var accountValidOptionsMock = new Mock<IOptions<AccountValidationOptions>>();
+            accountValidOptionsMock.Setup(x => x.Value).Returns(new AccountValidationOptions { CorporateEmailDomain = "@tourmalinecore.com" });
             var roleRepositoryMock = new Mock<IRoleRepository>();
             _accountRepositoryMock = new Mock<IAccountRepository>();
 
