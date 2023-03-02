@@ -1,18 +1,25 @@
+using System.Collections.Generic;
 using System.Linq;
+using Accounts.Application.Options;
 using Accounts.Application.Users.Commands;
 using Accounts.Core.Contracts;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace Accounts.Application.Validators
 {
     public class AccountCreationCommandValidator : AbstractValidator<AccountCreationCommand>
     {
-        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository)
+        private readonly AccountValidationOptions _accountValidOptions;
+        public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository, IOptions<AccountValidationOptions> accountValidOptions)
         {
+            _accountValidOptions = accountValidOptions.Value;
+
             RuleFor(x => x.CorporateEmail)
                 .NotNull()
                 .NotEmpty()
                 .EmailAddress()
+                .Must(IsCorporateEmail)
                 .MustAsync(
                     async (corporateEmail, _) =>
                     {
@@ -24,6 +31,7 @@ namespace Accounts.Application.Validators
             RuleFor(x => x.RoleIds)
                 .NotNull()
                 .NotEmpty()
+                .Must(IsRoleIdsUnique)
                 .MustAsync(
                     async (accountRoleIds, _) =>
                     {
@@ -33,6 +41,17 @@ namespace Accounts.Application.Validators
                         return accountRoleIds.All(x => roleIds.Contains(x));
                     })
                 .WithMessage("Incorrect role ids. Probably you tried to set unavailable role id");
+        }
+
+        private bool IsRoleIdsUnique(List<long> roleIds)
+        {
+            var uniqueRoleIds = roleIds.Distinct().ToList();
+            return roleIds.Count == uniqueRoleIds.Count;
+        }
+
+        private bool IsCorporateEmail(string corporateEmail)
+        {
+            return corporateEmail.Contains(_accountValidOptions.CorporateEmailDomain);
         }
     }
 }

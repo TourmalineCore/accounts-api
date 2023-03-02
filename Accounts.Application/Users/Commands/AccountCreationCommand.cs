@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Accounts.Application.Contracts;
 using Accounts.Application.HttpClients;
+using Accounts.Application.Validators;
 using Accounts.Core.Contracts;
 using Accounts.Core.Entities;
 using FluentValidation;
@@ -24,12 +25,12 @@ namespace Accounts.Application.Users.Commands
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IRoleRepository _roleRepository;
-        private readonly IValidator<AccountCreationCommand> _validator;
+        private readonly AccountCreationCommandValidator _validator;
         private readonly IHttpClient _httpClient;
 
         public AccountCreationCommandHandler(
             IAccountRepository accountRepository,
-            IValidator<AccountCreationCommand> validator,
+            AccountCreationCommandValidator validator,
             IHttpClient httpClient,
             IRoleRepository roleRepository)
         {

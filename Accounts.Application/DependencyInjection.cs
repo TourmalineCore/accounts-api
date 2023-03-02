@@ -35,7 +35,7 @@ namespace Accounts.Application
             services.AddTransient<GetPrivilegesByAccountIdQueryHandler>();
             services.AddTransient<DeletePrivilegeCommandHandler>();
 
-            services.AddScoped<IValidator<AccountCreationCommand>, AccountCreationCommandValidator>();
+            services.AddScoped<AccountCreationCommandValidator>();
             services.AddTransient<IHttpClient, AccountHttpClient>();
 
             services.AddTransient<IClock, Clock>();
