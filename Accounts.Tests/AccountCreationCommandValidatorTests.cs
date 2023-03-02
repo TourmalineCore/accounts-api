@@ -41,7 +41,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task ShouldSuccessfullyValidateNewAccountIfAllParamsIsValid()
+        public async Task AllParamsAreValid_ReturnTrue()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -56,7 +56,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task CantCreateAccountWithExistingCorporateEmail()
+        public async Task CorporateEmailAlreadyExists_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -75,7 +75,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task CantCreateAccountWithEmptyFields()
+        public async Task ParamsAreEmpty_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -89,7 +89,7 @@ namespace Accounts.Tests
             Assert.False(validationResult.IsValid);
         }
         [Fact]
-        public async Task CantCreateAccountIfCorporateEmailIsInvalid()
+        public async Task CorporateEmailIsInvalid_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -104,7 +104,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task CantCreateAccountWithNegativeRoleId()
+        public async Task RoleIdIsNegative_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -119,7 +119,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task CantCreateAccountWithNonExistingRoleId()
+        public async Task RoleIdIsNotExist_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
@@ -134,7 +134,7 @@ namespace Accounts.Tests
         }
 
         [Fact]
-        public async Task CantCreateAccountIfRoleIdsHaveDuplicates()
+        public async Task RoleIdsHaveDuplicates_ReturnFalse()
         {
             var accountCreationCommand = new AccountCreationCommand
             {
