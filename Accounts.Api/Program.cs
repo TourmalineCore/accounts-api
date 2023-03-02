@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Accounts.Application;
 using Accounts.Application.HttpClients;
+using Accounts.Application.Options;
 using Accounts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
@@ -76,6 +77,8 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
 
 var httpUrls = configuration.GetSection(nameof(HttpUrls));
 builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
+
+builder.Services.Configure<AccountValidationOptions>(builder.Configuration.GetSection(nameof(AccountValidationOptions)));
 
 var app = builder.Build();
 

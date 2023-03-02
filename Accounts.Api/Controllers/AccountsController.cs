@@ -12,6 +12,7 @@ namespace Accounts.Api.Controllers
         private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
         private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
         private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
+
         private readonly UpdateUserCommandHandler _updateUserCommandHandler;
         private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
         private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
@@ -29,6 +30,7 @@ namespace Accounts.Api.Controllers
         {
             _getAccountsQueryHandler = getAccountsQueryHandler;
             _accountCreationCommandHandler = accountCreationCommandHandler;
+
             _updateUserCommandHandler = updateUserCommandHandler;
             _deleteUserCommandHandler = deleteUserCommandHandler;
             _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
