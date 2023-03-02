@@ -74,7 +74,7 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
         );
 });
 
-var httpUrls = configuration.GetSection("HttpUrls");
+var httpUrls = configuration.GetSection(nameof(HttpUrls));
 builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
 
 var app = builder.Build();

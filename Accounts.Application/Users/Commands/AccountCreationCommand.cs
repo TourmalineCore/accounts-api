@@ -15,6 +15,8 @@ namespace Accounts.Application.Users.Commands
 
         public string LastName { get; init; }
 
+        public string MiddleName { get; init; }
+
         public string CorporateEmail { get; init; }
 
         public List<long> RoleIds { get; init; }
@@ -51,11 +53,13 @@ namespace Accounts.Application.Users.Commands
             var roles = await _roleRepository.GetAllAsync();
             var newAccountRoles = roles.Where(x => command.RoleIds.Contains(x.Id));
 
-            var account = new Account(command.CorporateEmail, command.FirstName, command.LastName, newAccountRoles);
+            var account = new Account(command.CorporateEmail, command.FirstName, command.LastName, command.MiddleName, newAccountRoles);
 
             var accountId = await _accountRepository.CreateAsync(account);
 
             await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail);
+            await _httpClient.SendRequestToCreateNewEmployeeAsync(command.CorporateEmail, command.FirstName,
+                command.LastName, command.MiddleName);
 
             return accountId;
         }
