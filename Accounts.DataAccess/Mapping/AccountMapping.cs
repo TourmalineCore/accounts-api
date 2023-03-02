@@ -21,6 +21,7 @@ namespace Accounts.DataAccess.Mapping
                 CorporateEmail = "ceo@tourmalinecore.com",
                 FirstName = "Ceo",
                 LastName = "Ceo",
+                MiddleName = "Ceo",
                 CreatedAt = Instant.FromDateTimeUtc(ceoCreatedAtUtc),
             });
         }

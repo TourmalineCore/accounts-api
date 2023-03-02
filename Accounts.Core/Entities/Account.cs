@@ -14,17 +14,20 @@ namespace Accounts.Core.Entities
 
         public string LastName { get; private set; }
 
+        public string MiddleName { get; private set; }
+
         public Instant CreatedAt { get; init; }
 
         public List<AccountRole> AccountRoles { get; private set; } = new();
 
         public Instant? DeletedAtUtc { get; private set; }
 
-        public Account(string corporateEmail, string firstName, string lastName, IEnumerable<Role> roles)
+        public Account(string corporateEmail, string firstName, string lastName, string middleName, IEnumerable<Role> roles)
         {
             CorporateEmail = corporateEmail;
             FirstName = firstName;
             LastName = lastName;
+            MiddleName = middleName;
             CreatedAt = SystemClock.Instance.GetCurrentInstant();
             AccountRoles = roles
                 .Select(role => new AccountRole { RoleId = role.Id })

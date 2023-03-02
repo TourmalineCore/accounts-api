@@ -68,7 +68,7 @@ namespace Accounts.Tests
 
             _accountRepositoryMock
                 .Setup(x => x.FindByCorporateEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Account("ivan@tourmalinecore.com", "Ivan", "Smith", new List<Role> { new(RoleNames.Employee) }));
+                .ReturnsAsync(new Account("ivan@tourmalinecore.com", "Ivan", "Smith", "Alexandrovich", new List<Role> { new(RoleNames.Employee) }));
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
             Assert.False(validationResult.IsValid);

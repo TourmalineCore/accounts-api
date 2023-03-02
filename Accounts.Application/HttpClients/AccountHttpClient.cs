@@ -26,5 +26,19 @@ namespace Accounts.Application.HttpClients
                 });
 
         }
+
+        public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string middleName)
+        {
+            var url = $"{_urls.EmployeeServiceUrl}/internal/create-employee";
+
+            await _client.PostAsJsonAsync(url,
+                new
+                {
+                    CorporateEmail = corporateEmail,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    MiddleName = middleName,
+                });
+        }
     }
 }
