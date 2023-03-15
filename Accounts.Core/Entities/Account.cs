@@ -14,7 +14,7 @@ namespace Accounts.Core.Entities
 
         public string LastName { get; private set; }
 
-        public string MiddleName { get; private set; }
+        public string? MiddleName { get; private set; }
 
         public Instant CreatedAt { get; init; }
 
@@ -22,7 +22,7 @@ namespace Accounts.Core.Entities
 
         public Instant? DeletedAtUtc { get; private set; }
 
-        public Account(string corporateEmail, string firstName, string lastName, string middleName, IEnumerable<Role> roles)
+        public Account(string corporateEmail, string firstName, string lastName, string? middleName, IEnumerable<Role> roles)
         {
             CorporateEmail = corporateEmail;
             FirstName = firstName;
