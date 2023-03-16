@@ -34,11 +34,15 @@ namespace Accounts.Core.Entities
                 .ToList();
         }
 
-        public void Update(string email, List<AccountRole> accountRoles)
+        public void Update(string firstName, string lastName, string? middleName, IEnumerable<Role> roles)
         {
-            CorporateEmail = email;
-            AccountRoles = accountRoles;
-        }
+            FirstName = firstName;
+            LastName=lastName;
+            MiddleName=middleName;
+            AccountRoles = roles
+                .Select(role => new AccountRole { RoleId = role.Id })
+                .ToList();
+        } 
 
         public void AddRole(AccountRole role)
         {
