@@ -21,7 +21,7 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
     var reloadOnChange = hostingContext.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 
     config.AddJsonFile("appsettings.json", true, reloadOnChange)
-        .AddJsonFile($"appsettings.Debug.json", true, reloadOnChange)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reloadOnChange)
         .AddJsonFile("appsettings.Active.json", true, reloadOnChange);
 
     if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
