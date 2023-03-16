@@ -63,12 +63,13 @@ namespace Accounts.Api.Controllers
             }
         }
 
+        [HttpPut("update")]
+        public Task Update([FromBody] UpdateUserCommand updateUserCommand)
+        {
+            return _updateUserCommandHandler.Handle(updateUserCommand);
+        }
+
         //TODO: #861ma1b6p - temporary disabled until we get prototypes
-        // [HttpPut("update")]
-        // public Task Update([FromBody] UpdateUserCommand updateUserCommand)
-        // {
-        //     return _updateUserCommandHandler.Handle(updateUserCommand);
-        // }
         //
         // [HttpDelete("delete")]
         // public Task Delete([FromBody] DeleteUserCommand deleteUserCommand)
