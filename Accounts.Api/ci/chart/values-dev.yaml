@@ -2,7 +2,7 @@
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
 ingress:
-  host: 
+  host:
 
 # Environment name
 aspnetcoreEnvironment: "Development"
@@ -10,6 +10,4 @@ aspnetcoreEnvironment: "Development"
 deployment:
   appsettings:
     ConnectionStrings:
-      DefaultConnection:
-        "" # fill with your dev connection
-    
+      DefaultConnection: "" # fill with your dev connection

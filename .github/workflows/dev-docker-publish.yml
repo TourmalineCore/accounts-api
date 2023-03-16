@@ -1,43 +1,51 @@
-  name: deploy service to dev k8s
+name: deploy service to dev k8s
 
-  on:
-    push:
-      branches:
-        - develop
+on:
+  push:
+    branches:
+      - develop
 
-      tags:
-        - v*
+    tags:
+      - v*
 
-    pull_request:
+  pull_request:
 
-  env:
-    GUTHUB_REGISTRY: ghcr.io
+env:
+  GITHUB_REGISTRY: ghcr.io
 
-  jobs:
-    deploy-to-dev-k8s:
-      name: Deploy service to k8s for development environment
-      if: github.event_name == 'push'
-      runs-on: ubuntu-18.04
+jobs:
+  deploy-to-dev-k8s:
+    name: Deploy service to k8s for development environment
+    if: github.event_name == 'push'
+    runs-on: ubuntu-22.04
 
-      steps:
-        - name: checkout 
-          uses: actions/checkout@v1
-        - name: Build and push image
-          run: |
-              docker login ${{ env.GUTHUB_REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GH_REGISTRY_TOKEN }}
-              docker build -t $GUTHUB_REGISTRY/tourmalinecore/inner-circle/dev-accounts-api:latest -t $GUTHUB_REGISTRY/tourmalinecore/inner-circle/dev-accounts-api:${{ github.sha }} -f UserManagementService.Api/Dockerfile .
-              docker push $GUTHUB_REGISTRY/tourmalinecore/inner-circle/dev-accounts-api:latest
-              docker push $GUTHUB_REGISTRY/tourmalinecore/inner-circle/dev-accounts-api:${{ github.sha }}
-        - name: Deploy
-          uses: WyriHaximus/github-action-helm3@v2
-          with:
-            exec: helm upgrade --namespace dev-inner-circle --create-namespace --install dev-accounts-api 
-                    --set "aspnetcoreEnvironment=Development"
-                    --set "ingress.host"=${{ secrets.DEV_HOST }}
-                    --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQLCONNECTIONSTRING }}"
-                    --set "imageCredentials.username=${{ github.actor }}" 
-                    --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}" 
-                    --set "image.tag=${{ github.sha }}"
-                    --set "image.pullPolicy=Always"
-                    ./UserManagementService.Api/ci/chart
-            kubeconfig: '${{ secrets.DEV_KUBECONFIG }}'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: Build and push image
+        run: |
+          docker login ${{ env.GITHUB_REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GH_REGISTRY_TOKEN }}
+          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:${{ github.sha }} -f Accounts.Api/Dockerfile .
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:latest
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:${{ github.sha }}
+      - name: Deploy
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec:
+            helm upgrade --namespace dev-inner-circle --create-namespace --install dev-account-management-api
+            --set "aspnetcoreEnvironment=Development"
+            --set "ingress.host"=${{ secrets.DEV_HOST }}
+            --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}"
+            --set "deployment.appsettings.HttpUrls.AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}"
+            --set "deployment.appsettings.HttpUrls.EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}"
+            --set "deployment.appsettings.AccountValidationOptions.CorporateEmailDomain=${{ secrets.DEV_CORPORATE_EMAIL_DOMAIN }}"
+            --set "resources.limits.cpu=${{ secrets.DEV_APP_CPU_LIMIT }}"
+            --set "resources.limits.memory=${{ secrets.DEV_APP_MEMORY_LIMIT }}"
+            --set "resources.requests.cpu=${{ secrets.DEV_APP_CPU_REQUESTS }}"
+            --set "resources.requests.memory=${{ secrets.DEV_APP_MEMORY_REQUESTS }}"
+            --set "imageCredentials.username=${{ github.actor }}"
+            --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}"
+            --set "image.tag=${{ github.sha }}"
+            --set "image.pullPolicy=Always"
+            ./Accounts.Api/ci/chart
+          kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
