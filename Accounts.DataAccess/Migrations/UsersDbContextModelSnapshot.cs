@@ -50,7 +50,6 @@ namespace UserManagementService.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
