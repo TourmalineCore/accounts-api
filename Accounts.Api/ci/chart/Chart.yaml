@@ -1,5 +1,0 @@
-apiVersion: v1
-name: innercircle-account-management-api
-description: A Helm chart for innercircle account management api
-type: application
-version: 1.0.0

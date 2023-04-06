@@ -4,48 +4,49 @@ on:
   push:
     branches:
       - develop
-
-    tags:
-      - v*
-
   pull_request:
 
 env:
   GITHUB_REGISTRY: ghcr.io
 
 jobs:
-  deploy-to-dev-k8s:
-    name: Deploy service to k8s for development environment
-    if: github.event_name == 'push'
+  build-image:
+    name: Build and push service image  
     runs-on: ubuntu-22.04
-
     steps:
       - name: checkout
         uses: actions/checkout@v1
       - name: Build and push image
         run: |
-          docker login ${{ env.GITHUB_REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GH_REGISTRY_TOKEN }}
-          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:${{ github.sha }} -f Accounts.Api/Dockerfile .
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:latest
-          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/dev-account-management-api:${{ github.sha }}
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+          docker build -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/account-management-api:latest -t $GITHUB_REGISTRY/tourmalinecore/inner-circle/account-management-api:${{ github.sha }} -f Accounts.Api/Dockerfile .
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/account-management-api:latest
+          docker push $GITHUB_REGISTRY/tourmalinecore/inner-circle/account-management-api:${{ github.sha }}
+
+  deploy-to-dev-k8s:
+    needs: build-image
+    name: Deploy service to k8s for development environment  
+    if: github.event_name == 'push'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
       - name: Deploy
-        uses: WyriHaximus/github-action-helm3@v2
+        uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec:
-            helm upgrade --namespace dev-inner-circle --create-namespace --install dev-account-management-api
-            --set "aspnetcoreEnvironment=Development"
-            --set "ingress.host"=${{ secrets.DEV_HOST }}
-            --set "deployment.appsettings.ConnectionStrings.DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}"
-            --set "deployment.appsettings.HttpUrls.AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}"
-            --set "deployment.appsettings.HttpUrls.EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}"
-            --set "deployment.appsettings.AccountValidationOptions.CorporateEmailDomain=${{ secrets.DEV_CORPORATE_EMAIL_DOMAIN }}"
-            --set "resources.limits.cpu=${{ secrets.DEV_APP_CPU_LIMIT }}"
-            --set "resources.limits.memory=${{ secrets.DEV_APP_MEMORY_LIMIT }}"
-            --set "resources.requests.cpu=${{ secrets.DEV_APP_CPU_REQUESTS }}"
-            --set "resources.requests.memory=${{ secrets.DEV_APP_MEMORY_REQUESTS }}"
-            --set "imageCredentials.username=${{ github.actor }}"
-            --set "imageCredentials.password=${{ secrets.GH_REGISTRY_TOKEN }}"
-            --set "image.tag=${{ github.sha }}"
-            --set "image.pullPolicy=Always"
-            ./Accounts.Api/ci/chart
+          exec: |
+            RELEASE_NAME=account-management-api
+            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm upgrade --install --namespace dev-inner-circle --create-namespace --values ./Accounts.Api/ci/values-custom.yaml \
+            --set "image.tag=${{ github.sha }}" \
+            --set "ingress.enabled=false" \
+            --set "ingress.hostname=${{ secrets.DEV_HOST }}" \
+            --set "extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}" \
+            --set "extraSecretEnvVars.HttpUrls__AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}" \
+            --set "extraSecretEnvVars.HttpUrls__EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}" \
+            --set "extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain=${{ secrets.DEV_CORPORATE_EMAIL_DOMAIN }}" \
+            "${RELEASE_NAME}" \
+            bitnami/aspnet-core
           kubeconfig: "${{ secrets.DEV_KUBECONFIG }}"
+
+
