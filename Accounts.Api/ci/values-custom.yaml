@@ -67,7 +67,7 @@ extraSecretEnvVarsEncoded: |
   {{ $k }}: {{ $v | b64enc | quote}}
   {{- end}}
   {{- end }}
-  
+
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: "{{ include \"common.names.fullname\" . }}"
@@ -225,7 +225,7 @@ extraDeploy:
       {{- if .Values.extraSecretEnvVarsEncoded }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.extraSecretEnvVarsEncoded "context" $ ) | trim | nindent 6 }}
       {{- end }}
-    {{ - end }}
+    {{- end }}
   - |
     {{ $docker_secret_name := printf "%s%s" ( include "common.names.fullname" .) "-docker-secret" }}
     {{- if has $docker_secret_name .Values.image.pullSecrets }}
