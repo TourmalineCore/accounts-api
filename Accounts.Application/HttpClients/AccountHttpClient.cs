@@ -16,7 +16,7 @@ namespace Accounts.Application.HttpClients
         }
         public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail)
         {
-            var url = $"{_urls.AuthServiceUrl}/api/auth/register";
+            var url = $"{_urls.AuthServiceUrl}/register";
 
             await _client.PostAsJsonAsync(url,
                 new
