@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Accounts.DataAccess.Respositories
+namespace Accounts.DataAccess.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
@@ -51,7 +51,7 @@ namespace Accounts.DataAccess.Respositories
                     .Queryable<Account>()
                     .Include(x => x.AccountRoles)
                     .ThenInclude(x => x.Role)
-                    .ThenInclude(x => x.Privileges)
+                    .ThenInclude(x => x.Permissions)
                     .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
         }
 

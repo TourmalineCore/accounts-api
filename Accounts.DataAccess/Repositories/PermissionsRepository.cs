@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Accounts.DataAccess.Respositories
+namespace Accounts.DataAccess.Repositories
 {
-    public class PrivilegeRepository : IPrivilegeRepository
+    public class PermissionsRepository : IPermissionsRepository
     {
         private readonly AccountsDbContext _usersDbContext;
 
-        public PrivilegeRepository(AccountsDbContext usersDbContext)
+        public PermissionsRepository(AccountsDbContext usersDbContext)
         {
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Privilege account)
+        public async Task<long> CreateAsync(Permission account)
         {
             await _usersDbContext.AddAsync(account);
             await _usersDbContext.SaveChangesAsync();
@@ -23,30 +23,30 @@ namespace Accounts.DataAccess.Respositories
             return account.Id;
         }
 
-        public Task<Privilege> FindByIdAsync(long id)
+        public Task<Permission> FindByIdAsync(long id)
         {
             return _usersDbContext
-                   .Queryable<Privilege>()
+                   .Queryable<Permission>()
                    .GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Privilege>> GetAllAsync()
+        public async Task<IEnumerable<Permission>> GetAllAsync()
         {
             return await _usersDbContext
-                .QueryableAsNoTracking<Privilege>()
+                .QueryableAsNoTracking<Permission>()
                 .ToListAsync();
         }
 
-        public Task RemoveAsync(Privilege privilege)
+        public Task RemoveAsync(Permission permission)
         {
-            _usersDbContext.Remove(privilege);
+            _usersDbContext.Remove(permission);
 
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Privilege privilege)
+        public Task UpdateAsync(Permission permission)
         {
-            _usersDbContext.Update(privilege);
+            _usersDbContext.Update(permission);
 
             return _usersDbContext.SaveChangesAsync();
         }

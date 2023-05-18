@@ -2,7 +2,7 @@ using Accounts.Core.Entities;
 
 namespace Accounts.Core.Contracts
 {
-    public interface IPrivilegeRepository : IRepository<Privilege>
+    public interface IPermissionsRepository : IRepository<Permission>
     {
     }
 }

@@ -10,7 +10,7 @@ public struct RoleDto
     {
         Id = role.Id;
         Name = role.NormalizedName;
-        Permissions = role.Privileges.Select(x => x.Name).ToList();
+        Permissions = role.Permissions.Select(x => x.Name).ToList();
     }
 
     public long Id { get; }

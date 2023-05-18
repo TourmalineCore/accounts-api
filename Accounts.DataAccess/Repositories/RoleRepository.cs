@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Accounts.DataAccess.Respositories
+namespace Accounts.DataAccess.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
@@ -28,14 +28,14 @@ namespace Accounts.DataAccess.Respositories
             return await _usersDbContext
                 .Queryable<Role>()
                 .Include(x => x.AccountRoles)
-                .Include(x => x.Privileges)
+                .Include(x => x.Permissions)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task UpdateRoleAsync(Role role, List<Privilege> privileges)
+        public async Task UpdateRoleAsync(Role role, List<Permission> permission)
         {
-            role.UpdateRole(privileges);
+            role.UpdateRole(permission);
             await _usersDbContext.SaveChangesAsync();
         }
 
@@ -57,7 +57,7 @@ namespace Accounts.DataAccess.Respositories
         {
             return await _usersDbContext
                 .QueryableAsNoTracking<Role>()
-                .Include(x => x.Privileges)
+                .Include(x => x.Permissions)
                 .ToListAsync();
         }
 
@@ -78,8 +78,8 @@ namespace Accounts.DataAccess.Respositories
         public async Task<List<Role>> FindListAsync(List<long> roleIds)
         {
             var roles = new List<Role>();
-                  
-            foreach(var id in roleIds)
+
+            foreach (var id in roleIds)
             {
                 var role = await FindOneAsync(id);
                 roles.Add(role);

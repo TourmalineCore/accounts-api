@@ -20,7 +20,7 @@ namespace Accounts.Core.Entities
 
         public List<AccountRole> AccountRoles { get; private set; }
 
-        public List<Privilege> Privileges { get; private set; } = new List<Privilege>();
+        public List<Permission> Permissions { get; private set; } = new List<Permission>();
 
         // For Db Context
         private Role() { }
@@ -44,9 +44,9 @@ namespace Accounts.Core.Entities
             Name = name;
             NormalizedName = name.ToString().Normalize();
         }
-        public void UpdateRole(List<Privilege> privileges)
+        public void UpdateRole(List<Permission> permissions)
         {
-            Privileges = privileges;
+            Permissions = permissions;
         }
     }
 }

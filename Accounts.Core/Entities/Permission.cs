@@ -5,34 +5,27 @@ using System.Reflection;
 
 namespace Accounts.Core.Entities;
 
-public enum PrivilegesNames
-{
-    CanManageEmployees = 1,
-    CanViewAnalytic,
-    CanViewFinanceForPayroll
-}
-
-public static class PrivilegeNames
+public static class PermissionNames
 {
     public const string CanManageEmployees = "CanManageEmployees";
     public const string CanViewAnalytic = "CanViewAnalytic";
     public const string CanViewFinanceForPayroll = "CanViewFinanceForPayroll";
 
-    public static bool IsAvailablePrivilegeName(string privilegeName)
+    public static bool IsAvailablePermissionName(string permissionName)
     {
-        var privilegeNames = GetFieldNames();
-        return privilegeNames.Contains(privilegeName);
+        var permissionNames = GetFieldNames();
+        return permissionNames.Contains(permissionName);
     }
 
     private static IEnumerable<string> GetFieldNames()
     {
-        return typeof(PrivilegeNames)
+        return typeof(PermissionNames)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Select(x => x.Name);
     }
 }
 
-public class Privilege : IIdentityEntity
+public class Permission : IIdentityEntity
 {
     public long Id { get; private set; }
 
@@ -40,11 +33,11 @@ public class Privilege : IIdentityEntity
 
     public List<Role> Roles { get; private set; }
 
-    public Privilege(long id, string name)
+    public Permission(long id, string name)
     {
-        if (!PrivilegeNames.IsAvailablePrivilegeName(name))
+        if (!PermissionNames.IsAvailablePermissionName(name))
         {
-            throw new ArgumentException("Incorrect privilege name");
+            throw new ArgumentException("Incorrect permission name");
         }
 
         Id = id;
@@ -52,7 +45,7 @@ public class Privilege : IIdentityEntity
     }
 
     // To Db Context
-    private Privilege()
+    private Permission()
     {
     }
 }

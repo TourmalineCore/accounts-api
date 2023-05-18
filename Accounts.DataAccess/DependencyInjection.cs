@@ -1,5 +1,5 @@
 using Accounts.Core.Contracts;
-using Accounts.DataAccess.Respositories;
+using Accounts.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +23,7 @@ namespace Accounts.DataAccess
 
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
-            services.AddTransient<IPrivilegeRepository, PrivilegeRepository>();
+            services.AddTransient<IPermissionsRepository, PermissionsRepository>();
 
             return services;
         }

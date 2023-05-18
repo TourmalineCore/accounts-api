@@ -11,18 +11,18 @@ public class RolesController : Controller
     private readonly GetRoleListQueryHandler _getRoleListQueryHandler;
     private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
     private readonly DeleteRoleCommandHandler _deleteRoleCommandHandler;
-    private readonly AddPrivilegeCommandHandler _addPrivilegeCommandhandler;
+    private readonly AddPermissionCommandHandler _addPermissionCommandhandler;
 
     public RolesController(
         GetRoleListQueryHandler getRoleListQueryHandler,
         GetRoleByIdQueryHandler getRoleByIdQueryHandler,
         DeleteRoleCommandHandler deleteRoleCommandHandler,
-        AddPrivilegeCommandHandler addPrivilegeCommandHandler)
+        AddPermissionCommandHandler addPermissionCommandHandler)
     {
         _getRoleListQueryHandler = getRoleListQueryHandler;
         _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
         _deleteRoleCommandHandler = deleteRoleCommandHandler;
-        _addPrivilegeCommandhandler = addPrivilegeCommandHandler;
+        _addPermissionCommandhandler = addPermissionCommandHandler;
     }
 
     [HttpGet]
@@ -43,9 +43,9 @@ public class RolesController : Controller
         return _deleteRoleCommandHandler.Handle(deleteRoleCommand);
     }
 
-    [HttpPost("add-privilege")]
-    public Task AddPrivilege([FromBody] AddPrivilegeCommand addPrivilegeCommand)
+    [HttpPost("add-permission")]
+    public Task AddPermissionAsync([FromBody] AddPermissionCommand addPermissionCommand)
     {
-        return _addPrivilegeCommandhandler.Handle(addPrivilegeCommand);
+        return _addPermissionCommandhandler.Handle(addPermissionCommand);
     }
 }

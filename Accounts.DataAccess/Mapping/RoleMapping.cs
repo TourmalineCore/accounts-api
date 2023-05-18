@@ -9,21 +9,21 @@ namespace Accounts.DataAccess.Mapping
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasMany(p => p.Privileges)
+            builder.HasMany(p => p.Permissions)
                 .WithMany(p => p.Roles)
                 .UsingEntity<Dictionary<string, object>>(
-                    "RolePrivileges",
-                    r => r.HasOne<Privilege>().WithMany().HasForeignKey("PrivilegesId"),
-                    l => l.HasOne<Role>().WithMany().HasForeignKey("RolesId"),
+                    "RolesPermissions",
+                    r => r.HasOne<Permission>().WithMany().HasForeignKey("PermissionId"),
+                    l => l.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
                     je =>
                     {
-                        je.HasKey("PrivilegesId", "RolesId");
+                        je.HasKey("PermissionId", "RoleId");
                         je.HasData(
-                            new { PrivilegesId = 1L, RolesId = 1L },
-                            new { PrivilegesId = 1L, RolesId = 2L },
-                            new { PrivilegesId = 2L, RolesId = 2L },
-                            new { PrivilegesId = 3L, RolesId = 2L },
-                            new { PrivilegesId = 1L, RolesId = 3L });
+                            new { PermissionId = 1L, RoleId = 1L },
+                            new { PermissionId = 1L, RoleId = 2L },
+                            new { PermissionId = 2L, RoleId = 2L },
+                            new { PermissionId = 3L, RoleId = 2L },
+                            new { PermissionId = 1L, RoleId = 3L });
                     });
 
             builder.Property(x => x.Name)
@@ -33,7 +33,6 @@ namespace Accounts.DataAccess.Mapping
                             new Role(2, RoleNames.CEO),
                             new Role(3, RoleNames.Manager),
                             new Role(4, RoleNames.Employee));
-
         }
     }
 }
