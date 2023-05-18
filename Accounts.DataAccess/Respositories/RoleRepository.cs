@@ -57,6 +57,7 @@ namespace Accounts.DataAccess.Respositories
         {
             return await _usersDbContext
                 .QueryableAsNoTracking<Role>()
+                .Include(x => x.Privileges)
                 .ToListAsync();
         }
 

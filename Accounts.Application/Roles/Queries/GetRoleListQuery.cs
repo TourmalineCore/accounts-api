@@ -1,29 +1,27 @@
-using Accounts.Application.Contracts;
-using Accounts.Core.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Accounts.Application.Contracts;
+using Accounts.Core.Contracts;
 
-namespace Accounts.Application.Roles.Queries
+namespace Accounts.Application.Roles.Queries;
+
+public abstract class GetRoleListQuery
 {
-    public class GetRoleListQuery
+}
+
+public class GetRoleListQueryHandler : IQueryHandler<GetRoleListQuery, IEnumerable<RoleDto>>
+{
+    private readonly IRoleRepository _roleRepository;
+
+    public GetRoleListQueryHandler(IRoleRepository roleRepository)
     {
+        _roleRepository = roleRepository;
     }
 
-    public class GetRoleListQueryHandler : IQueryHandler<GetRoleListQuery, IEnumerable<RoleDto>>
+    public async Task<IEnumerable<RoleDto>> Handle(GetRoleListQuery? request = null)
     {
-        private readonly IRoleRepository _roleRepository;
-
-        public GetRoleListQueryHandler(IRoleRepository roleRepository)
-        {
-            _roleRepository = roleRepository;
-        }
-
-        public async Task<IEnumerable<RoleDto>> Handle(GetRoleListQuery request)
-        {
-            var roleEntities = await _roleRepository.GetAllAsync();
-
-            return roleEntities.Select(role => new RoleDto(role));
-        }
+        var roles = await _roleRepository.GetAllAsync();
+        return roles.Select(role => new RoleDto(role));
     }
 }
