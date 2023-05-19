@@ -3,6 +3,7 @@ using System;
 using Accounts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace UserManagementService.DataAccess.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    partial class UsersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230518103556_RenamePrivilegeEntityToPermission")]
+    partial class RenamePrivilegeEntityToPermission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,7 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -83,13 +85,47 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles", (string)null);
+                    b.ToTable("AccountRoles");
 
                     b.HasData(
                         new
                         {
                             AccountId = 1L,
                             RoleId = 2L
+                        });
+                });
+
+            modelBuilder.Entity("Accounts.Core.Entities.Permission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "CanManageEmployees"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "CanViewAnalytic"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "CanViewFinanceForPayroll"
                         });
                 });
 
@@ -105,32 +141,80 @@ namespace UserManagementService.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string[]>("Permissions")
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Name = "Admin",
-                            Permissions = new[] { "CanManageEmployees" }
+                            NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = 2L,
                             Name = "CEO",
-                            Permissions = new[] { "CanManageEmployees", "CanViewAnalytic", "CanViewFinanceForPayroll" }
+                            NormalizedName = "CEO"
                         },
                         new
                         {
                             Id = 3L,
                             Name = "Manager",
-                            Permissions = new[] { "CanManageEmployees" }
+                            NormalizedName = "Manager"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Name = "Employee",
+                            NormalizedName = "Employee"
+                        });
+                });
+
+            modelBuilder.Entity("RolesPermissions", b =>
+                {
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PermissionId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolesPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            PermissionId = 1L,
+                            RoleId = 1L
+                        },
+                        new
+                        {
+                            PermissionId = 1L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            PermissionId = 2L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            PermissionId = 3L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            PermissionId = 1L,
+                            RoleId = 3L
                         });
                 });
 
@@ -151,6 +235,21 @@ namespace UserManagementService.DataAccess.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("RolesPermissions", b =>
+                {
+                    b.HasOne("Accounts.Core.Entities.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Accounts.Core.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Accounts.Core.Entities.Account", b =>

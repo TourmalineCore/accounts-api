@@ -1,17 +1,20 @@
 using Accounts.Core.Entities;
+using System.Collections.Generic;
 
-namespace Accounts.Application.Roles
+namespace Accounts.Application.Roles;
+
+public struct RoleDto
 {
-    public readonly struct RoleDto
+    public RoleDto(Role role)
     {
-        public RoleDto(Role role)
-        {
-            Id = role.Id;
-            Name = role.NormalizedName;
-        }
-
-        public long Id { get; init; }
-
-        public string Name { get; init; }
+        Id = role.Id;
+        Name = role.Name;
+        Permissions = role.Permissions;
     }
+
+    public long Id { get; }
+
+    public string Name { get; }
+
+    public IEnumerable<string> Permissions { get; }
 }

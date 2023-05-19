@@ -1,10 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
 using Accounts.Application.Users.Commands;
 using Accounts.Application.Users.Queries;
-using Accounts.Application.Privileges.Queries;
 using Accounts.Application.Roles.Commands;
-using Accounts.Application.Privileges.Commands;
 using Accounts.Application.Roles.Queries;
 using Accounts.Application.HttpClients;
 using Accounts.Application.Validators;
@@ -28,12 +25,10 @@ namespace Accounts.Application
             services.AddTransient<GetRoleListQueryHandler>();
             services.AddTransient<GetRoleByIdQueryHandler>();
             services.AddTransient<DeleteRoleCommandHandler>();
-            services.AddTransient<AddPrivilegeCommandHandler>();
+            services.AddTransient<RoleCreationCommandHandler>();
+            services.AddTransient<RoleUpdateCommandHandler>();
 
-            services.AddTransient<GetPrivilegeListQueryHandler>();
-            services.AddTransient<GetPrivilegeByIdQueryHandler>();
-            services.AddTransient<GetPrivilegesByAccountIdQueryHandler>();
-            services.AddTransient<DeletePrivilegeCommandHandler>();
+            services.AddTransient<GetPermissionsByAccountIdQueryHandler>();
 
             services.AddScoped<AccountCreationCommandValidator>();
             services.AddTransient<IHttpClient, AccountHttpClient>();

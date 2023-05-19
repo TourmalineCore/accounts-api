@@ -1,52 +1,54 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Accounts.Core.Entities
+namespace Accounts.Core.Entities;
+
+public class Role : IIdentityEntity
 {
-    public enum RoleNames
+    public long Id { get; private set; }
+
+    public string Name { get; private set; }
+
+    public List<AccountRole> AccountRoles { get; private set; }
+
+    public string[] Permissions { get; private set; } = Array.Empty<string>();
+
+    public Role(string name)
     {
-        Admin = 1,
-        CEO,
-        Manager,
-        Employee
+        Name = name;
     }
 
-    public class Role : IIdentityEntity
+    public Role(long id, string name, IEnumerable<Permission> permissions)
     {
-        public long Id { get; private set; }
+        Id = id;
+        Name = name;
+        SetPermissions(permissions);
+    }
 
-        public RoleNames Name { get; private set; }
+    public Role(string name, IEnumerable<Permission> permissions)
+    {
+        Name = name;
+        SetPermissions(permissions);
+    }
 
-        public string NormalizedName { get; private set; }
+    public void Update(string name, IEnumerable<Permission> permissions)
+    {
+        Name = name;
+        SetPermissions(permissions);
+    }
 
-        public List<AccountRole> AccountRoles { get; private set; }
+    public void UpdateRole(IEnumerable<Permission> permissions)
+    {
+        SetPermissions(permissions);
+    }
 
-        public List<Privilege> Privileges { get; private set; } = new List<Privilege>();
+    private void SetPermissions(IEnumerable<Permission> permissions)
+    {
+        Permissions = permissions.Select(x => x.Name).ToArray();
+    }
 
-        // For Db Context
-        private Role() { }
-
-        public Role(RoleNames name)
-        {
-            Name = name;
-            NormalizedName = name.ToString().Normalize();
-
-        }
-
-        public Role(long id, RoleNames name)
-        {
-            Id = id;
-            Name = name;
-            NormalizedName = name.ToString().Normalize();
-        }
-
-        public void Update(RoleNames name)
-        {
-            Name = name;
-            NormalizedName = name.ToString().Normalize();
-        }
-        public void UpdateRole(List<Privilege> privileges)
-        {
-            Privileges = privileges;
-        }
+    private Role()
+    {
     }
 }

@@ -20,9 +20,9 @@ namespace Accounts.Application.Roles.Commands
 
         public async Task Handle(DeleteRoleCommand request)
         {
-            var privilege = await _roleRepository.FindByIdAsync(request.Id);
+            var permission = await _roleRepository.FindByIdAsync(request.Id);
 
-            await _roleRepository.RemoveAsync(privilege);
+            await _roleRepository.RemoveAsync(permission);
         }
     }
 }

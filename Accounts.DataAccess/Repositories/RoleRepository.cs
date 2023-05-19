@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Accounts.DataAccess.Respositories
+namespace Accounts.DataAccess.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
@@ -15,12 +15,12 @@ namespace Accounts.DataAccess.Respositories
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Role account)
+        public async Task<long> CreateAsync(Role role)
         {
-            await _usersDbContext.AddAsync(account);
+            await _usersDbContext.AddAsync(role);
             await _usersDbContext.SaveChangesAsync();
 
-            return account.Id;
+            return role.Id;
         }
 
         public async Task<IEnumerable<Role>> GetRolesAsync()
@@ -28,14 +28,13 @@ namespace Accounts.DataAccess.Respositories
             return await _usersDbContext
                 .Queryable<Role>()
                 .Include(x => x.AccountRoles)
-                .Include(x => x.Privileges)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task UpdateRoleAsync(Role role, List<Privilege> privileges)
+        public async Task UpdateRoleAsync(Role role, List<Permission> permission)
         {
-            role.UpdateRole(privileges);
+            role.UpdateRole(permission);
             await _usersDbContext.SaveChangesAsync();
         }
 
@@ -77,8 +76,8 @@ namespace Accounts.DataAccess.Respositories
         public async Task<List<Role>> FindListAsync(List<long> roleIds)
         {
             var roles = new List<Role>();
-                  
-            foreach(var id in roleIds)
+
+            foreach (var id in roleIds)
             {
                 var role = await FindOneAsync(id);
                 roles.Add(role);

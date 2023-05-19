@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Accounts.DataAccess.Respositories
+namespace Accounts.DataAccess.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
@@ -28,12 +28,12 @@ namespace Accounts.DataAccess.Respositories
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public async Task<long> CreateAsync(Account account)
+        public async Task<long> CreateAsync(Account role)
         {
-            await _usersDbContext.AddAsync(account);
+            await _usersDbContext.AddAsync(role);
             await _usersDbContext.SaveChangesAsync();
 
-            return account.Id;
+            return role.Id;
         }
 
         public Task<Account?> FindByCorporateEmailAsync(string corporateEmail)
@@ -51,7 +51,6 @@ namespace Accounts.DataAccess.Respositories
                     .Queryable<Account>()
                     .Include(x => x.AccountRoles)
                     .ThenInclude(x => x.Role)
-                    .ThenInclude(x => x.Privileges)
                     .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
         }
 
