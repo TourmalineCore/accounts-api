@@ -1,6 +1,5 @@
 using Accounts.Core.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Accounts.Application.Roles;
 
@@ -10,12 +9,12 @@ public struct RoleDto
     {
         Id = role.Id;
         Name = role.NormalizedName;
-        Permissions = role.Permissions.Select(x => x.Name).ToList();
+        Permissions = role.Permissions;
     }
 
     public long Id { get; }
 
     public string Name { get; }
 
-    public List<string> Permissions { get; }
+    public IEnumerable<string> Permissions { get; }
 }

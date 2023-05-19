@@ -28,12 +28,12 @@ namespace Accounts.DataAccess.Repositories
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public async Task<long> CreateAsync(Account account)
+        public async Task<long> CreateAsync(Account role)
         {
-            await _usersDbContext.AddAsync(account);
+            await _usersDbContext.AddAsync(role);
             await _usersDbContext.SaveChangesAsync();
 
-            return account.Id;
+            return role.Id;
         }
 
         public Task<Account?> FindByCorporateEmailAsync(string corporateEmail)

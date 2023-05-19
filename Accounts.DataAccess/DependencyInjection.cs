@@ -23,7 +23,6 @@ namespace Accounts.DataAccess
 
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
-            services.AddTransient<IPermissionsRepository, PermissionsRepository>();
 
             return services;
         }

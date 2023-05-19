@@ -20,7 +20,6 @@ public class GetPermissionsByAccountIdQueryHandler
 
         return user.AccountRoles
             .Select(x => x.Role)
-            .SelectMany(x => x.Permissions)
-            .Select(x => x.Name.ToString());
+            .SelectMany(x => x.Permissions);
     }
 }

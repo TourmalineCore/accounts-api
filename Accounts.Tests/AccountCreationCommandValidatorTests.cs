@@ -15,16 +15,42 @@ namespace Accounts.Tests
 
         private readonly List<Role> _roles = new()
         {
-            new Role(1, RoleNames.Admin),
-            new Role(2, RoleNames.CEO),
-            new Role(3, RoleNames.Manager),
-            new Role(4, RoleNames.Employee),
+            new Role(1,
+                    RoleNames.Admin,
+                    new List<Permission>
+                    {
+                        new(Permissions.CanManageEmployees),
+                    }
+                ),
+            new Role(2,
+                    RoleNames.CEO,
+                    new List<Permission>
+                    {
+                        new(Permissions.CanManageEmployees),
+                        new(Permissions.CanViewAnalytic),
+                        new(Permissions.CanViewFinanceForPayroll),
+                    }
+                ),
+            new Role(3,
+                    RoleNames.Manager,
+                    new List<Permission>
+                    {
+                        new(Permissions.CanManageEmployees),
+                    }
+                ),
+            new Role(4, RoleNames.Employee, new List<Permission>()),
         };
 
         public AccountCreationCommandValidatorTests()
         {
             var accountValidOptionsMock = new Mock<IOptions<AccountValidationOptions>>();
-            accountValidOptionsMock.Setup(x => x.Value).Returns(new AccountValidationOptions { CorporateEmailDomain = "@tourmalinecore.com" });
+
+            accountValidOptionsMock.Setup(x => x.Value)
+                .Returns(new AccountValidationOptions
+                        {
+                            CorporateEmailDomain = "@tourmalinecore.com",
+                        }
+                    );
             var roleRepositoryMock = new Mock<IRoleRepository>();
             _accountRepositoryMock = new Mock<IAccountRepository>();
 
@@ -32,12 +58,11 @@ namespace Accounts.Tests
                 .Setup(x => x.GetRolesAsync())
                 .ReturnsAsync(_roles);
 
-            _validator = new AccountCreationCommandValidator
-            (
-                roleRepositoryMock.Object,
-                _accountRepositoryMock.Object,
-                accountValidOptionsMock.Object
-            );
+            _validator = new AccountCreationCommandValidator(
+                    roleRepositoryMock.Object,
+                    _accountRepositoryMock.Object,
+                    accountValidOptionsMock.Object
+                );
         }
 
         [Fact]
@@ -48,7 +73,10 @@ namespace Accounts.Tests
                 FirstName = "Ivan",
                 LastName = "Smith",
                 CorporateEmail = "ivan@tourmalinecore.com",
-                RoleIds = new List<long> { 1 }
+                RoleIds = new List<long>
+                {
+                    1,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
@@ -63,12 +91,24 @@ namespace Accounts.Tests
                 FirstName = "Ivan",
                 LastName = "Smith",
                 CorporateEmail = "ivan@tourmalinecore.com",
-                RoleIds = new List<long> { 3 }
+                RoleIds = new List<long>
+                {
+                    3,
+                },
             };
 
             _accountRepositoryMock
                 .Setup(x => x.FindByCorporateEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Account("ivan@tourmalinecore.com", "Ivan", "Smith", "Alexandrovich", new List<Role> { new(RoleNames.Employee) }));
+                .ReturnsAsync(new Account("ivan@tourmalinecore.com",
+                            "Ivan",
+                            "Smith",
+                            "Alexandrovich",
+                            new List<Role>
+                            {
+                                new(RoleNames.Employee),
+                            }
+                        )
+                    );
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
             Assert.False(validationResult.IsValid);
@@ -82,12 +122,16 @@ namespace Accounts.Tests
                 FirstName = "",
                 LastName = "",
                 CorporateEmail = "",
-                RoleIds = new List<long> { 1 }
+                RoleIds = new List<long>
+                {
+                    1,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
             Assert.False(validationResult.IsValid);
         }
+
         [Fact]
         public async Task CorporateEmailIsInvalid_ReturnFalse()
         {
@@ -96,7 +140,10 @@ namespace Accounts.Tests
                 FirstName = "John",
                 LastName = "Doe",
                 CorporateEmail = "invalidmail.com",
-                RoleIds = new List<long> { 1 }
+                RoleIds = new List<long>
+                {
+                    1,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
@@ -111,7 +158,10 @@ namespace Accounts.Tests
                 FirstName = "Ivan",
                 LastName = "Smith",
                 CorporateEmail = "ivan@tourmalinecore.com",
-                RoleIds = new List<long> { -1 }
+                RoleIds = new List<long>
+                {
+                    -1,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
@@ -126,7 +176,10 @@ namespace Accounts.Tests
                 FirstName = "Ivan",
                 LastName = "Smith",
                 CorporateEmail = "ivan@tourmalinecore.com",
-                RoleIds = new List<long> { 100 }
+                RoleIds = new List<long>
+                {
+                    100,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);
@@ -141,7 +194,13 @@ namespace Accounts.Tests
                 FirstName = "Ivan",
                 LastName = "Smith",
                 CorporateEmail = "ivan@tourmalinecore.com",
-                RoleIds = new List<long> { 1, 1, 1, 1 }
+                RoleIds = new List<long>
+                {
+                    1,
+                    1,
+                    1,
+                    1,
+                },
             };
 
             var validationResult = await _validator.ValidateAsync(accountCreationCommand);

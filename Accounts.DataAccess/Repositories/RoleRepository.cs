@@ -15,12 +15,12 @@ namespace Accounts.DataAccess.Repositories
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Role account)
+        public async Task<long> CreateAsync(Role role)
         {
-            await _usersDbContext.AddAsync(account);
+            await _usersDbContext.AddAsync(role);
             await _usersDbContext.SaveChangesAsync();
 
-            return account.Id;
+            return role.Id;
         }
 
         public async Task<IEnumerable<Role>> GetRolesAsync()

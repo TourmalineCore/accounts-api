@@ -9,26 +9,32 @@ namespace Accounts.Api.Controllers;
 public class RolesController : Controller
 {
     private readonly GetRoleListQueryHandler _getRoleListQueryHandler;
+    private readonly RoleCreationCommandHandler _roleCreationCommandHandler;
     private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
     private readonly DeleteRoleCommandHandler _deleteRoleCommandHandler;
-    private readonly AddPermissionCommandHandler _addPermissionCommandhandler;
 
     public RolesController(
         GetRoleListQueryHandler getRoleListQueryHandler,
         GetRoleByIdQueryHandler getRoleByIdQueryHandler,
         DeleteRoleCommandHandler deleteRoleCommandHandler,
-        AddPermissionCommandHandler addPermissionCommandHandler)
+        RoleCreationCommandHandler roleCreationCommandHandler)
     {
         _getRoleListQueryHandler = getRoleListQueryHandler;
         _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
         _deleteRoleCommandHandler = deleteRoleCommandHandler;
-        _addPermissionCommandhandler = addPermissionCommandHandler;
+        _roleCreationCommandHandler = roleCreationCommandHandler;
     }
 
     [HttpGet]
     public async Task<IEnumerable<RoleDto>> GetAllAsync()
     {
         return await _getRoleListQueryHandler.Handle();
+    }
+
+    [HttpPost("create")]
+    public async Task CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
+    {
+        await _roleCreationCommandHandler.Handle(roleCreationCommand);
     }
 
     [HttpGet("find/{id}")]
@@ -41,11 +47,5 @@ public class RolesController : Controller
     public Task FindById([FromQuery] DeleteRoleCommand deleteRoleCommand)
     {
         return _deleteRoleCommandHandler.Handle(deleteRoleCommand);
-    }
-
-    [HttpPost("add-permission")]
-    public Task AddPermissionAsync([FromBody] AddPermissionCommand addPermissionCommand)
-    {
-        return _addPermissionCommandhandler.Handle(addPermissionCommand);
     }
 }
