@@ -3,6 +3,7 @@ using Accounts.Application.Users.Commands;
 using Accounts.Application.Validators;
 using Accounts.Core.Contracts;
 using Accounts.Core.Entities;
+using Accounts.Tests.TestsData;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -12,42 +13,6 @@ namespace Accounts.Tests
     {
         private readonly AccountCreationCommandValidator _validator;
         private readonly Mock<IAccountRepository> _accountRepositoryMock;
-        
-        private static class RoleNames
-        {
-            public const string Admin = "Admin";
-            public const string Ceo = "Ceo";
-            public const string Manager = "Manager";
-            public const string Employee = "Employee";
-        }
-
-        private readonly List<Role> _roles = new()
-        {
-            new Role(1,
-                    RoleNames.Admin,
-                    new List<Permission>
-                    {
-                        new(Permissions.CanManageEmployees),
-                    }
-                ),
-            new Role(2,
-                    RoleNames.Ceo,
-                    new List<Permission>
-                    {
-                        new(Permissions.CanManageEmployees),
-                        new(Permissions.CanViewAnalytic),
-                        new(Permissions.CanViewFinanceForPayroll),
-                    }
-                ),
-            new Role(3,
-                    RoleNames.Manager,
-                    new List<Permission>
-                    {
-                        new(Permissions.CanManageEmployees),
-                    }
-                ),
-            new Role(4, RoleNames.Employee, new List<Permission>()),
-        };
 
         public AccountCreationCommandValidatorTests()
         {
@@ -64,7 +29,7 @@ namespace Accounts.Tests
 
             roleRepositoryMock
                 .Setup(x => x.GetRolesAsync())
-                .ReturnsAsync(_roles);
+                .ReturnsAsync(TestData.Roles);
 
             _validator = new AccountCreationCommandValidator(
                     roleRepositoryMock.Object,
@@ -113,7 +78,7 @@ namespace Accounts.Tests
                             "Alexandrovich",
                             new List<Role>
                             {
-                                new(RoleNames.Employee),
+                                new(TestData.RoleNames.Employee),
                             }
                         )
                     );
