@@ -20,7 +20,7 @@ internal class RoleMapping : IEntityTypeConfiguration<Role>
                         }
                     ),
                 new Role(2,
-                        RoleNames.CEO,
+                        RoleNames.Ceo,
                         new List<Permission>
                         {
                             new(Permissions.CanManageEmployees),
@@ -36,5 +36,12 @@ internal class RoleMapping : IEntityTypeConfiguration<Role>
                         }
                     )
             );
+    }
+
+    private static class RoleNames
+    {
+        public const string Admin = "Admin";
+        public const string Ceo = "CEO";
+        public const string Manager = "Manager";
     }
 }

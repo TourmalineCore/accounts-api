@@ -12,6 +12,14 @@ namespace Accounts.Tests
     {
         private readonly AccountCreationCommandValidator _validator;
         private readonly Mock<IAccountRepository> _accountRepositoryMock;
+        
+        private static class RoleNames
+        {
+            public const string Admin = "Admin";
+            public const string Ceo = "Ceo";
+            public const string Manager = "Manager";
+            public const string Employee = "Employee";
+        }
 
         private readonly List<Role> _roles = new()
         {
@@ -23,7 +31,7 @@ namespace Accounts.Tests
                     }
                 ),
             new Role(2,
-                    RoleNames.CEO,
+                    RoleNames.Ceo,
                     new List<Permission>
                     {
                         new(Permissions.CanManageEmployees),

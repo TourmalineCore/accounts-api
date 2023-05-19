@@ -57,7 +57,7 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -83,7 +83,7 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles");
+                    b.ToTable("AccountRoles", (string)null);
 
                     b.HasData(
                         new
@@ -111,7 +111,7 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new

@@ -28,7 +28,6 @@ namespace Accounts.DataAccess.Repositories
             return await _usersDbContext
                 .Queryable<Role>()
                 .Include(x => x.AccountRoles)
-                .Include(x => x.Permissions)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -57,7 +56,6 @@ namespace Accounts.DataAccess.Repositories
         {
             return await _usersDbContext
                 .QueryableAsNoTracking<Role>()
-                .Include(x => x.Permissions)
                 .ToListAsync();
         }
 

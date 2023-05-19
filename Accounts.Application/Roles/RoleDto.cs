@@ -8,7 +8,7 @@ public struct RoleDto
     public RoleDto(Role role)
     {
         Id = role.Id;
-        Name = role.NormalizedName;
+        Name = role.Name;
         Permissions = role.Permissions;
     }
 

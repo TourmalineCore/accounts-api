@@ -26,15 +26,16 @@ namespace Accounts.Application.Roles.Commands
 
         public async Task Handle(RoleCreationCommand command)
         {
-            var roleNameParsed = Enum.TryParse<RoleNames>(command.Name, out var roleName);
+            var roles = await _roleRepository.GetRolesAsync();
+            var rolesNames = roles.Select(x => x.Name).ToList();
 
-            if (!roleNameParsed)
+            if (rolesNames.Contains(command.Name))
             {
-                throw new ArgumentException("Role name doesn't exists");
+                throw new ArgumentException($"Role with name [{command.Name}] already exists");
             }
 
             var permissions = command.Permissions.Select(permissionName => new Permission(permissionName));
-            await _roleRepository.CreateAsync(new Role(roleName, permissions));
+            await _roleRepository.CreateAsync(new Role(command.Name, permissions));
         }
     }
 }
