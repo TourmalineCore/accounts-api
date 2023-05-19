@@ -27,6 +27,7 @@ namespace Accounts.Application
             services.AddTransient<GetRoleByIdQueryHandler>();
             services.AddTransient<DeleteRoleCommandHandler>();
             services.AddTransient<RoleCreationCommandHandler>();
+            services.AddTransient<RoleUpdateCommandHandler>();
 
             services.AddTransient<GetPermissionsByAccountIdQueryHandler>();
 

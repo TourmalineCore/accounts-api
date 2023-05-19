@@ -8,8 +8,6 @@ namespace Accounts.Core.Contracts
     {
         public Task<IEnumerable<Role>> GetRolesAsync();
 
-        public Task UpdateRoleAsync(Role role, List<Permission> permission);
-
         public Task<List<Role>> FindListAsync(List<long> ids);
     }
 }

@@ -11,6 +11,7 @@ public class RolesController : Controller
 {
     private readonly GetRoleListQueryHandler _getRoleListQueryHandler;
     private readonly RoleCreationCommandHandler _roleCreationCommandHandler;
+    private readonly RoleUpdateCommandHandler _roleUpdateCommandHandler;
     private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
     private readonly DeleteRoleCommandHandler _deleteRoleCommandHandler;
 
@@ -18,12 +19,14 @@ public class RolesController : Controller
         GetRoleListQueryHandler getRoleListQueryHandler,
         GetRoleByIdQueryHandler getRoleByIdQueryHandler,
         DeleteRoleCommandHandler deleteRoleCommandHandler,
-        RoleCreationCommandHandler roleCreationCommandHandler)
+        RoleCreationCommandHandler roleCreationCommandHandler,
+        RoleUpdateCommandHandler roleUpdateCommandHandler)
     {
         _getRoleListQueryHandler = getRoleListQueryHandler;
         _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
         _deleteRoleCommandHandler = deleteRoleCommandHandler;
         _roleCreationCommandHandler = roleCreationCommandHandler;
+        _roleUpdateCommandHandler = roleUpdateCommandHandler;
     }
 
     [HttpGet]
@@ -38,6 +41,20 @@ public class RolesController : Controller
         try
         {
             await _roleCreationCommandHandler.Handle(roleCreationCommand);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, nameof(RolesController), (int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpPost("edit")]
+    public async Task<ActionResult> UpdateRoleAsync([FromBody] RoleUpdateCommand roleUpdateCommand)
+    {
+        try
+        {
+            await _roleUpdateCommandHandler.Handle(roleUpdateCommand);
             return Ok();
         }
         catch (Exception ex)

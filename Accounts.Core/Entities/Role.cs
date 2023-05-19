@@ -32,9 +32,10 @@ public class Role : IIdentityEntity
         SetPermissions(permissions);
     }
 
-    public void Update(string name)
+    public void Update(string name, IEnumerable<Permission> permissions)
     {
         Name = name;
+        SetPermissions(permissions);
     }
 
     public void UpdateRole(IEnumerable<Permission> permissions)
