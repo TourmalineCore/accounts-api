@@ -7,7 +7,6 @@ using Accounts.Application.HttpClients;
 using Accounts.Application.Validators;
 using Accounts.Application.Services;
 using NodaTime;
-using Accounts.Application.Permissions.Queries;
 
 namespace Accounts.Application
 {

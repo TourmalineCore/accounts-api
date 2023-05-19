@@ -51,7 +51,6 @@ namespace Accounts.DataAccess.Repositories
                     .Queryable<Account>()
                     .Include(x => x.AccountRoles)
                     .ThenInclude(x => x.Role)
-                    .ThenInclude(x => x.Permissions)
                     .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
         }
 

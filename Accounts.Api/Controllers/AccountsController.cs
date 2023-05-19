@@ -12,6 +12,7 @@ namespace Accounts.Api.Controllers
         private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
         private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
         private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
+        private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
 
         private readonly UpdateUserCommandHandler _updateUserCommandHandler;
         private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
@@ -26,7 +27,8 @@ namespace Accounts.Api.Controllers
             UpdateUserCommandHandler updateUserCommandHandler,
             DeleteUserCommandHandler deleteUserCommandHandler,
             AddRoleToUserCommandHandler addRoleToUserCommandHandler,
-            GetAccountByIdQueryHandler getAccountByIdQueryHandler)
+            GetAccountByIdQueryHandler getAccountByIdQueryHandler,
+            GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler)
         {
             _getAccountsQueryHandler = getAccountsQueryHandler;
             _accountCreationCommandHandler = accountCreationCommandHandler;
@@ -35,6 +37,7 @@ namespace Accounts.Api.Controllers
             _deleteUserCommandHandler = deleteUserCommandHandler;
             _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
             _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
+            _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
         }
 
         [HttpGet("all")]
@@ -61,6 +64,12 @@ namespace Accounts.Api.Controllers
             {
                 return Problem(ex.Message, null, InternalServerErrorCode);
             }
+        }
+
+        [HttpGet("{accountId}/permissions")]
+        public Task<IEnumerable<string>> GetPermissionsByAccountIdAsync([FromRoute] long accountId)
+        {
+            return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
         }
 
         //TODO: #861ma1b6p - temporary disabled until we get prototypes

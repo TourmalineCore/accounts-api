@@ -1,4 +1,4 @@
-namespace Accounts.Application.Permissions;
+namespace Accounts.Application.Users;
 
 public class PermissionDto
 {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Accounts.Core.Contracts;
 
-namespace Accounts.Application.Permissions.Queries;
+namespace Accounts.Application.Users.Queries;
 
 public class GetPermissionsByAccountIdQueryHandler
 {
