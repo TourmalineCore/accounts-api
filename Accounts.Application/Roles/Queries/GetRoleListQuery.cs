@@ -22,6 +22,6 @@ public class GetRoleListQueryHandler : IQueryHandler<GetRoleListQuery, IEnumerab
     public async Task<IEnumerable<RoleDto>> Handle(GetRoleListQuery? request = null)
     {
         var roles = await _roleRepository.GetAllAsync();
-        return roles.Select(role => new RoleDto(role));
+        return roles.Select(role => new RoleDto(role)).OrderBy(x => x.Id);
     }
 }
