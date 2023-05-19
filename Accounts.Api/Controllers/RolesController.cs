@@ -1,3 +1,4 @@
+using System.Net;
 using Accounts.Application.Roles;
 using Accounts.Application.Roles.Commands;
 using Accounts.Application.Roles.Queries;
@@ -32,9 +33,17 @@ public class RolesController : Controller
     }
 
     [HttpPost("create")]
-    public async Task CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
+    public async Task<ActionResult> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
     {
-        await _roleCreationCommandHandler.Handle(roleCreationCommand);
+        try
+        {
+            await _roleCreationCommandHandler.Handle(roleCreationCommand);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, nameof(RolesController), (int)HttpStatusCode.InternalServerError);
+        }
     }
 
     [HttpGet("find/{id}")]
