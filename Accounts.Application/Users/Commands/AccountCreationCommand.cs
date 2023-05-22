@@ -10,7 +10,7 @@ using FluentValidation;
 
 namespace Accounts.Application.Users.Commands
 {
-    public readonly struct AccountCreationCommand
+    public class AccountCreationCommand
     {
         public string FirstName { get; init; }
 
