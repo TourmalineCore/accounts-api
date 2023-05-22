@@ -16,7 +16,7 @@ namespace Accounts.Application.Users.Commands
 
         public string LastName { get; init; }
 
-        public string MiddleName { get; init; }
+        public string? MiddleName { get; init; }
 
         public string CorporateEmail { get; init; }
 
