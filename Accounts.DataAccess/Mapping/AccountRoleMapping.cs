@@ -23,10 +23,16 @@ internal class AccountRoleMapping : IEntityTypeConfiguration<AccountRole>
             .WithMany(x => x.AccountRoles)
             .HasForeignKey(x => x.RoleId);
 
-        builder.HasData(new
+        builder.HasData(
+                new
                 {
                     AccountId = 1L,
                     RoleId = 2L,
+                },
+                new
+                {
+                    AccountId = 2L,
+                    RoleId = 1L,
                 }
             );
     }

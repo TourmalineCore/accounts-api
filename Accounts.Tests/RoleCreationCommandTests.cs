@@ -25,7 +25,7 @@ public class RoleCreationCommandTests
             Name = TestData.RoleNames.Admin,
             Permissions = new List<string>
             {
-                Permissions.CanViewAnalytic,
+                Permissions.AccessAnalyticalForecastsPage,
             },
         };
 

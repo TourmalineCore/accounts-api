@@ -10,7 +10,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        var ceoCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
+        var accountsCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
                         01,
                         01,
                         0,
@@ -23,14 +23,24 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
         builder.HasIndex(user => user.CorporateEmail)
             .IsUnique();
 
-        builder.HasData(new
+        builder.HasData(
+                new
                 {
                     Id = 1L,
                     CorporateEmail = "ceo@tourmalinecore.com",
                     FirstName = "Ceo",
                     LastName = "Ceo",
                     MiddleName = "Ceo",
-                    CreatedAt = Instant.FromDateTimeUtc(ceoCreatedAtUtc),
+                    CreatedAt = Instant.FromDateTimeUtc(accountsCreatedAtUtc),
+                }, 
+                new
+                {
+                    Id = 2L,
+                    CorporateEmail = "inner-circle-admin@tourmalinecore.com",
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    MiddleName = "Admin",
+                    CreatedAt = Instant.FromDateTimeUtc(accountsCreatedAtUtc),
                 }
             );
     }

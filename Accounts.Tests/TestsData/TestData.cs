@@ -18,23 +18,22 @@ namespace Accounts.Tests.TestsData
                     RoleNames.Admin,
                     new List<Permission>
                     {
-                        new(Permissions.CanManageEmployees),
+                        new(Permissions.EditFullEmployeesData),
                     }
                 ),
             new Role(2,
                     RoleNames.Ceo,
                     new List<Permission>
                     {
-                        new(Permissions.CanManageEmployees),
-                        new(Permissions.CanViewAnalytic),
-                        new(Permissions.CanViewFinanceForPayroll),
+                        new(Permissions.EditFullEmployeesData),
+                        new(Permissions.AccessAnalyticalForecastsPage),
                     }
                 ),
             new Role(3,
                     RoleNames.Manager,
                     new List<Permission>
                     {
-                        new(Permissions.CanManageEmployees),
+                        new(Permissions.EditFullEmployeesData),
                     }
                 ),
             new Role(4, RoleNames.Employee, new List<Permission>()),

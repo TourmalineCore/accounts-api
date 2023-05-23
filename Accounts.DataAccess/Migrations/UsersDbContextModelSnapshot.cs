@@ -57,7 +57,7 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -68,6 +68,15 @@ namespace UserManagementService.DataAccess.Migrations
                             FirstName = "Ceo",
                             LastName = "Ceo",
                             MiddleName = "Ceo"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CorporateEmail = "inner-circle-admin@tourmalinecore.com",
+                            CreatedAt = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            MiddleName = "Admin"
                         });
                 });
 
@@ -83,13 +92,18 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles", (string)null);
+                    b.ToTable("AccountRoles");
 
                     b.HasData(
                         new
                         {
                             AccountId = 1L,
                             RoleId = 2L
+                        },
+                        new
+                        {
+                            AccountId = 2L,
+                            RoleId = 1L
                         });
                 });
 
@@ -111,26 +125,20 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Name = "Admin",
-                            Permissions = new[] { "CanManageEmployees" }
+                            Permissions = new[] { "View personal profile", "Edit personal profile", "View contacts", "View salary and documents data", "Edit full employees data", "Access to analytical forecasts page", "View accounts", "Edit accounts", "View roles", "Edit roles" }
                         },
                         new
                         {
                             Id = 2L,
                             Name = "CEO",
-                            Permissions = new[] { "CanManageEmployees", "CanViewAnalytic", "CanViewFinanceForPayroll" }
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Name = "Manager",
-                            Permissions = new[] { "CanManageEmployees" }
+                            Permissions = new[] { "View personal profile", "Edit personal profile", "View contacts", "View salary and documents data", "Edit full employees data", "Access to analytical forecasts page", "View accounts", "Edit accounts", "View roles", "Edit roles" }
                         });
                 });
 
