@@ -27,7 +27,7 @@ namespace Accounts.Application.HttpClients
 
         }
 
-        public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string middleName)
+        public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName)
         {
             var url = $"{_urls.EmployeeServiceUrl}/internal/create-employee";
 

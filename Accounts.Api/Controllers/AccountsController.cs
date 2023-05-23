@@ -14,7 +14,7 @@ public class AccountsController : Controller
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
     private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
 
-    private readonly UpdateUserCommandHandler _updateUserCommandHandler;
+    private readonly AccountUpdateCommandHandler _accountUpdateCommandHandler;
     private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
     private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
 
@@ -24,7 +24,7 @@ public class AccountsController : Controller
     public AccountsController(
         GetAccountsQueryHandler getAccountsQueryHandler,
         AccountCreationCommandHandler accountCreationCommandHandler,
-        UpdateUserCommandHandler updateUserCommandHandler,
+        AccountUpdateCommandHandler accountUpdateCommandHandler,
         DeleteUserCommandHandler deleteUserCommandHandler,
         AddRoleToUserCommandHandler addRoleToUserCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
@@ -33,7 +33,7 @@ public class AccountsController : Controller
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
 
-        _updateUserCommandHandler = updateUserCommandHandler;
+        _accountUpdateCommandHandler = accountUpdateCommandHandler;
         _deleteUserCommandHandler = deleteUserCommandHandler;
         _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
@@ -72,13 +72,21 @@ public class AccountsController : Controller
         return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
     }
 
+    [HttpPost("edit")]
+    public async Task<ActionResult> EditAsync([FromBody] AccountUpdateCommand accountUpdateCommand)
+    {
+        try
+        {
+            await _accountUpdateCommandHandler.Handle(accountUpdateCommand);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+        }
+    }
+
     //TODO: #861ma1b6p - temporary disabled until we get prototypes
-    // [HttpPut("update")]
-    // public Task Update([FromBody] UpdateUserCommand updateUserCommand)
-    // {
-    //     return _updateUserCommandHandler.Handle(updateUserCommand);
-    // }
-    //
     // [HttpDelete("delete")]
     // public Task Delete([FromBody] DeleteUserCommand deleteUserCommand)
     // {

@@ -6,6 +6,6 @@ namespace Accounts.Application.HttpClients
     {
         Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail);
 
-        Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string middleName);
+        Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName);
     }
 }
