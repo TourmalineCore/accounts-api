@@ -7,34 +7,28 @@ namespace Accounts.DataAccess.Mapping;
 
 internal class RoleMapping : IEntityTypeConfiguration<Role>
 {
+    private readonly List<Permission> _allPermissions = new()
+    {
+        new Permission(Permissions.ViewPersonalProfile),
+        new Permission(Permissions.EditPersonalProfile),
+        new Permission(Permissions.ViewContacts),
+        new Permission(Permissions.ViewSalaryAndDocumentsData),
+        new Permission(Permissions.EditFullEmployeesData),
+        new Permission(Permissions.AccessAnalyticalForecastsPage),
+        new Permission(Permissions.ViewAccounts),
+        new Permission(Permissions.EditAccounts),
+        new Permission(Permissions.ViewRoles),
+        new Permission(Permissions.EditRoles),
+    };
+
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.Property(x => x.Name)
             .HasConversion<string>();
 
-        builder.HasData(new Role(1,
-                        RoleNames.Admin,
-                        new List<Permission>
-                        {
-                            new(Permissions.CanManageEmployees),
-                        }
-                    ),
-                new Role(2,
-                        RoleNames.Ceo,
-                        new List<Permission>
-                        {
-                            new(Permissions.CanManageEmployees),
-                            new(Permissions.CanViewAnalytic),
-                            new(Permissions.CanViewFinanceForPayroll),
-                        }
-                    ),
-                new Role(3,
-                        RoleNames.Manager,
-                        new List<Permission>
-                        {
-                            new(Permissions.CanManageEmployees),
-                        }
-                    )
+        builder.HasData(
+                new Role(1, RoleNames.Admin, _allPermissions),
+                new Role(2, RoleNames.Ceo, _allPermissions)
             );
     }
 
@@ -42,6 +36,5 @@ internal class RoleMapping : IEntityTypeConfiguration<Role>
     {
         public const string Admin = "Admin";
         public const string Ceo = "CEO";
-        public const string Manager = "Manager";
     }
 }
