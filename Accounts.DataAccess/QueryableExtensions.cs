@@ -23,14 +23,20 @@ namespace Accounts.DataAccess
         public static async Task<TEntity> GetByIdAsync<TEntity>(this IQueryable<TEntity> queryable, long id)
             where TEntity : class, IIdentityEntity
         {
-            var entity = await queryable.SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await FindByIdAsync(queryable, id);
 
             if (entity == null)
             {
-                throw new Exception("Entity does not exits");
+                throw new NullReferenceException("Entity does not exits");
             }
 
             return entity;
+        }
+
+        public static async Task<TEntity?> FindByIdAsync<TEntity>(this IQueryable<TEntity> queryable, long id)
+            where TEntity : class, IIdentityEntity
+        {
+            return await queryable.SingleOrDefaultAsync(x => x.Id == id);
         }
     }
 }

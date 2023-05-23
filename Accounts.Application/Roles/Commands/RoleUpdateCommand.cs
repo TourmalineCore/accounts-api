@@ -33,7 +33,7 @@ public class RoleUpdateCommandHandler : ICommandHandler<RoleUpdateCommand>
 
     public async Task Handle(RoleUpdateCommand command)
     {
-        var dbRole = await _roleRepository.FindByIdAsync(command.Id);
+        var dbRole = await _roleRepository.GetByIdAsync(command.Id);
         await ValidateRoleNameAsync(dbRole.Name, command.Name);
         dbRole.Update(command.Name, command.GetRolePermissions());
         await _roleRepository.UpdateAsync(dbRole);

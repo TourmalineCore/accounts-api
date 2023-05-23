@@ -45,13 +45,22 @@ namespace Accounts.DataAccess.Repositories
                     .SingleOrDefaultAsync(x => x.CorporateEmail == corporateEmail && x.DeletedAtUtc == null);
         }
 
-        public Task<Account> FindByIdAsync(long id)
+        public Task<Account?> FindByIdAsync(long id)
         {
             return _usersDbContext
-                    .Queryable<Account>()
-                    .Include(x => x.AccountRoles)
-                    .ThenInclude(x => x.Role)
-                    .SingleAsync(x => x.Id == id && x.DeletedAtUtc == null);
+                .Queryable<Account>()
+                .Include(x => x.AccountRoles)
+                .ThenInclude(x => x.Role)
+                .FindByIdAsync(id);
+        }
+
+        public Task<Account> GetByIdAsync(long id)
+        {
+            return _usersDbContext
+                .Queryable<Account>()
+                .Include(x => x.AccountRoles)
+                .ThenInclude(x => x.Role)
+                .GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<Account>> GetAllAsync()
@@ -71,9 +80,9 @@ namespace Accounts.DataAccess.Repositories
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Account user)
+        public Task UpdateAsync(Account account)
         {
-            _usersDbContext.Update(user);
+            _usersDbContext.Update(account);
 
             return _usersDbContext.SaveChangesAsync();
         }

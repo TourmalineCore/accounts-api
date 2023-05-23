@@ -38,11 +38,18 @@ namespace Accounts.DataAccess.Repositories
             await _usersDbContext.SaveChangesAsync();
         }
 
-        public Task<Role> FindByIdAsync(long id)
+        public Task<Role> GetByIdAsync(long id)
+        {
+            return _usersDbContext
+                .Queryable<Role>()
+                .GetByIdAsync(id);
+        }
+
+        public Task<Role?> FindByIdAsync(long id)
         {
             return _usersDbContext
                     .Queryable<Role>()
-                    .GetByIdAsync(id);
+                    .FindByIdAsync(id);
         }
 
         public Task<Role> FindOneAsync(long id)
@@ -66,9 +73,9 @@ namespace Accounts.DataAccess.Repositories
             return _usersDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Role role)
+        public Task UpdateAsync(Role account)
         {
-            _usersDbContext.Update(role);
+            _usersDbContext.Update(account);
 
             return _usersDbContext.SaveChangesAsync();
         }

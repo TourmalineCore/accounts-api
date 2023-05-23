@@ -8,12 +8,14 @@ namespace Accounts.Core.Contracts
     {
         public Task<long> CreateAsync(TEntity role);
 
-        public Task<TEntity> FindByIdAsync(long id);
+        public Task<TEntity?> FindByIdAsync(long id);
+
+        public Task<TEntity> GetByIdAsync(long id);
 
         public Task<IEnumerable<TEntity>> GetAllAsync();
 
         public Task RemoveAsync(TEntity entity);
 
-        public Task UpdateAsync(TEntity entity);
+        public Task UpdateAsync(TEntity account);
     }
 }

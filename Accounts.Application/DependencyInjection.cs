@@ -15,7 +15,7 @@ namespace Accounts.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<AccountCreationCommandHandler>();
-            services.AddTransient<UpdateUserCommandHandler>();
+            services.AddTransient<AccountUpdateCommandHandler>();
             services.AddTransient<DeleteUserCommandHandler>();
             services.AddTransient<AddRoleToUserCommandHandler>();
 
@@ -31,6 +31,7 @@ namespace Accounts.Application
             services.AddTransient<GetPermissionsByAccountIdQueryHandler>();
 
             services.AddScoped<AccountCreationCommandValidator>();
+            services.AddScoped<AccountUpdateCommandValidator>();
             services.AddTransient<IHttpClient, AccountHttpClient>();
 
             services.AddTransient<IClock, Clock>();
