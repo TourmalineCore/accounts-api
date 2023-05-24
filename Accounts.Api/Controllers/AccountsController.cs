@@ -14,6 +14,9 @@ public class AccountsController : Controller
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
     private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
 
+    private readonly AccountBlockCommand _accountBlockCommand;
+    private readonly AccountUnblockCommand _accountUnblockCommand;
+
     private readonly AccountUpdateCommandHandler _accountUpdateCommandHandler;
     private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
     private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
@@ -28,7 +31,9 @@ public class AccountsController : Controller
         DeleteUserCommandHandler deleteUserCommandHandler,
         AddRoleToUserCommandHandler addRoleToUserCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
-        GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler)
+        GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler,
+        AccountBlockCommand accountBlockCommand,
+        AccountUnblockCommand accountUnblockCommand)
     {
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
@@ -38,6 +43,8 @@ public class AccountsController : Controller
         _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
         _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
+        _accountBlockCommand = accountBlockCommand;
+        _accountUnblockCommand = accountUnblockCommand;
     }
 
     [HttpGet("all")]
@@ -78,6 +85,34 @@ public class AccountsController : Controller
         try
         {
             await _accountUpdateCommandHandler.Handle(accountUpdateCommand);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+        }
+    }
+
+    [HttpPost("{accountId:long}/block")]
+    public async Task<ActionResult> BlockAsync([FromRoute] long accountId)
+    {
+        try
+        {
+            await _accountBlockCommand.Handle(accountId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+        }
+    }
+
+    [HttpPost("{accountId:long}/unblock")]
+    public async Task<ActionResult> UnblockAsync([FromRoute] long accountId)
+    {
+        try
+        {
+            await _accountUnblockCommand.Handle(accountId);
             return Ok();
         }
         catch (Exception ex)

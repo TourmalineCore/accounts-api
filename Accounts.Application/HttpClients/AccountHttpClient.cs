@@ -40,5 +40,27 @@ namespace Accounts.Application.HttpClients
                     MiddleName = middleName,
                 });
         }
+
+        public async Task SendRequestToBlockUserAsync(long accountId)
+        {
+            var url = $"{_urls.AuthServiceUrl}/block";
+
+            await _client.PostAsJsonAsync(url,
+                new
+                {
+                    AccountId = accountId,
+                });
+        }
+
+        public async Task SendRequestToUnblockUserAsync(long accountId)
+        {
+            var url = $"{_urls.AuthServiceUrl}/unblock";
+
+            await _client.PostAsJsonAsync(url,
+                new
+                {
+                    AccountId = accountId,
+                });
+        }
     }
 }
