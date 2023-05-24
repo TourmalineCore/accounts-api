@@ -45,6 +45,9 @@ namespace UserManagementService.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -66,6 +69,7 @@ namespace UserManagementService.DataAccess.Migrations
                             CorporateEmail = "ceo@tourmalinecore.com",
                             CreatedAt = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
                             FirstName = "Ceo",
+                            IsBlocked = false,
                             LastName = "Ceo",
                             MiddleName = "Ceo"
                         },
@@ -75,6 +79,7 @@ namespace UserManagementService.DataAccess.Migrations
                             CorporateEmail = "inner-circle-admin@tourmalinecore.com",
                             CreatedAt = NodaTime.Instant.FromUnixTimeTicks(15778368000000000L),
                             FirstName = "Admin",
+                            IsBlocked = false,
                             LastName = "Admin",
                             MiddleName = "Admin"
                         });

@@ -29,7 +29,7 @@ public class RoleUpdateCommandTests
         };
 
         _roleRepositoryMock
-            .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
+            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
@@ -49,7 +49,7 @@ public class RoleUpdateCommandTests
         };
 
         _roleRepositoryMock
-            .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
+            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
@@ -72,7 +72,7 @@ public class RoleUpdateCommandTests
         };
 
         _roleRepositoryMock
-            .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
+            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);

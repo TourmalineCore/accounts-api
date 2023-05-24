@@ -31,6 +31,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
                     FirstName = "Ceo",
                     LastName = "Ceo",
                     MiddleName = "Ceo",
+                    IsBlocked = false,
                     CreatedAt = Instant.FromDateTimeUtc(accountsCreatedAtUtc),
                 }, 
                 new
@@ -40,6 +41,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
                     FirstName = "Admin",
                     LastName = "Admin",
                     MiddleName = "Admin",
+                    IsBlocked = false,
                     CreatedAt = Instant.FromDateTimeUtc(accountsCreatedAtUtc),
                 }
             );

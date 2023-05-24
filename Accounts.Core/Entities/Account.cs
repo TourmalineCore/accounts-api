@@ -1,3 +1,4 @@
+using System;
 using NodaTime;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace Accounts.Core.Entities
 
         public string? MiddleName { get; private set; }
 
+        public bool IsBlocked { get; private set; }
+
         public Instant CreatedAt { get; init; }
 
         public List<AccountRole> AccountRoles { get; private set; } = new();
@@ -28,6 +31,7 @@ namespace Accounts.Core.Entities
             FirstName = firstName;
             LastName = lastName;
             MiddleName = middleName;
+            IsBlocked = false;
             CreatedAt = SystemClock.Instance.GetCurrentInstant();
             AccountRoles = roles
                 .Select(role => new AccountRole { RoleId = role.Id })
@@ -42,6 +46,16 @@ namespace Accounts.Core.Entities
             AccountRoles = roleIds
                 .Select(roleId => new AccountRole { RoleId = roleId })
                 .ToList();
+        }
+
+        public void Block()
+        {
+            IsBlocked = true;
+        }
+
+        public void Unblock()
+        {
+            IsBlocked = false;
         }
 
         public void AddRole(AccountRole role)

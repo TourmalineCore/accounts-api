@@ -34,6 +34,9 @@ namespace Accounts.Application
             services.AddScoped<AccountUpdateCommandValidator>();
             services.AddTransient<IHttpClient, AccountHttpClient>();
 
+            services.AddTransient<AccountBlockCommand>();
+            services.AddTransient<AccountUnblockCommand>();
+
             services.AddTransient<IClock, Clock>();
 
             return services;
