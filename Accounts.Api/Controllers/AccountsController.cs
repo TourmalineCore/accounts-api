@@ -2,10 +2,14 @@ using System.Net;
 using Accounts.Application.Users;
 using Accounts.Application.Users.Commands;
 using Accounts.Application.Users.Queries;
+using Accounts.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace Accounts.Api.Controllers;
 
+[Authorize]
 [Route("api/accounts")]
 public class AccountsController : Controller
 {
@@ -47,18 +51,21 @@ public class AccountsController : Controller
         _accountUnblockCommand = accountUnblockCommand;
     }
 
+    [RequiresPermission(Permissions.ViewAccounts)]
     [HttpGet("all")]
     public Task<IEnumerable<AccountDto>> FindAll([FromQuery] GetAccountsQuery getAccountsQuery)
     {
         return _getAccountsQueryHandler.Handle(getAccountsQuery);
     }
 
+    [RequiresPermission(Permissions.ViewAccounts)]
     [HttpGet("findById/{id}")]
     public Task<AccountDto> FindByIdAsync([FromRoute] GetAccountByIdQuery getAccountByIdQuery)
     {
         return _getAccountByIdQueryHandler.Handle(getAccountByIdQuery);
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("create")]
     public async Task<ActionResult<long>> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
     {
@@ -73,12 +80,13 @@ public class AccountsController : Controller
         }
     }
 
-    [HttpGet("{accountId}/permissions")]
+    [HttpGet("{accountId:long}/permissions")]
     public Task<IEnumerable<string>> GetPermissionsByAccountIdAsync([FromRoute] long accountId)
     {
         return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("edit")]
     public async Task<ActionResult> EditAsync([FromBody] AccountUpdateCommand accountUpdateCommand)
     {
@@ -93,6 +101,7 @@ public class AccountsController : Controller
         }
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/block")]
     public async Task<ActionResult> BlockAsync([FromRoute] long accountId)
     {
@@ -107,6 +116,7 @@ public class AccountsController : Controller
         }
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/unblock")]
     public async Task<ActionResult> UnblockAsync([FromRoute] long accountId)
     {
