@@ -6,16 +6,16 @@ namespace Accounts.Core.Entities;
 
 public static class Permissions
 {
-    public const string ViewPersonalProfile = "View personal profile";
-    public const string EditPersonalProfile = "Edit personal profile";
-    public const string ViewContacts = "View contacts";
-    public const string ViewSalaryAndDocumentsData = "View salary and documents data";
-    public const string EditFullEmployeesData = "Edit full employees data";
-    public const string AccessAnalyticalForecastsPage = "Access to analytical forecasts page";
-    public const string ViewAccounts = "View accounts";
-    public const string EditAccounts = "Edit accounts";
-    public const string ViewRoles = "View roles";
-    public const string EditRoles = "Edit roles";
+    public const string ViewPersonalProfile = "ViewPersonalProfile";
+    public const string EditPersonalProfile = "EditPersonalProfile";
+    public const string ViewContacts = "ViewContacts";
+    public const string ViewSalaryAndDocumentsData = "ViewSalaryAndDocumentsData";
+    public const string EditFullEmployeesData = "EditFullEmployeesData";
+    public const string AccessAnalyticalForecastsPage = "AccessAnalyticalForecastsPage";
+    public const string ViewAccounts = "ViewAccounts";
+    public const string EditAccounts = "EditAccounts";
+    public const string ViewRoles = "ViewRoles";
+    public const string EditRoles = "EditRoles";
 
     public static bool IsPermissionExists(string permissionName)
     {
