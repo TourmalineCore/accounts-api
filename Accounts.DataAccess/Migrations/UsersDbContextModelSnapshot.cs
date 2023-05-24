@@ -137,13 +137,13 @@ namespace UserManagementService.DataAccess.Migrations
                         {
                             Id = 1L,
                             Name = "Admin",
-                            Permissions = new[] { "View personal profile", "Edit personal profile", "View contacts", "View salary and documents data", "Edit full employees data", "Access to analytical forecasts page", "View accounts", "Edit accounts", "View roles", "Edit roles" }
+                            Permissions = new[] { "ViewPersonalProfile", "EditPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "EditAccounts", "ViewRoles", "EditRoles" }
                         },
                         new
                         {
                             Id = 2L,
                             Name = "CEO",
-                            Permissions = new[] { "View personal profile", "Edit personal profile", "View contacts", "View salary and documents data", "Edit full employees data", "Access to analytical forecasts page", "View accounts", "Edit accounts", "View roles", "Edit roles" }
+                            Permissions = new[] { "ViewPersonalProfile", "EditPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "EditAccounts", "ViewRoles", "EditRoles" }
                         });
                 });
 
