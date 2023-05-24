@@ -2,10 +2,14 @@ using System.Net;
 using Accounts.Application.Roles;
 using Accounts.Application.Roles.Commands;
 using Accounts.Application.Roles.Queries;
+using Accounts.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace Accounts.Api.Controllers;
 
+[Authorize]
 [Route("api/roles")]
 public class RolesController : Controller
 {
@@ -29,12 +33,21 @@ public class RolesController : Controller
         _roleUpdateCommandHandler = roleUpdateCommandHandler;
     }
 
+    [RequiresPermission(Permissions.ViewRoles)]
     [HttpGet]
     public async Task<IEnumerable<RoleDto>> GetAllAsync()
     {
         return await _getRoleListQueryHandler.Handle();
     }
 
+    [RequiresPermission(Permissions.ViewRoles)]
+    [HttpGet("find/{id}")]
+    public Task<RoleDto> FindById([FromRoute] GetRoleByIdQuery getRoleByIdQuery)
+    {
+        return _getRoleByIdQueryHandler.Handle(getRoleByIdQuery);
+    }
+
+    [RequiresPermission(Permissions.ManageRoles)]
     [HttpPost("create")]
     public async Task<ActionResult> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
     {
@@ -49,6 +62,7 @@ public class RolesController : Controller
         }
     }
 
+    [RequiresPermission(Permissions.ManageRoles)]
     [HttpPost("edit")]
     public async Task<ActionResult> UpdateRoleAsync([FromBody] RoleUpdateCommand roleUpdateCommand)
     {
@@ -63,12 +77,7 @@ public class RolesController : Controller
         }
     }
 
-    [HttpGet("find/{id}")]
-    public Task<RoleDto> FindById([FromRoute] GetRoleByIdQuery getRoleByIdQuery)
-    {
-        return _getRoleByIdQueryHandler.Handle(getRoleByIdQuery);
-    }
-
+    [RequiresPermission(Permissions.ManageRoles)]
     [HttpGet("delete")]
     public Task FindById([FromQuery] DeleteRoleCommand deleteRoleCommand)
     {

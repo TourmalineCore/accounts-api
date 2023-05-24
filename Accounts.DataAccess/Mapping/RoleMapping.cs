@@ -16,9 +16,9 @@ internal class RoleMapping : IEntityTypeConfiguration<Role>
         new Permission(Permissions.EditFullEmployeesData),
         new Permission(Permissions.AccessAnalyticalForecastsPage),
         new Permission(Permissions.ViewAccounts),
-        new Permission(Permissions.EditAccounts),
+        new Permission(Permissions.ManageAccounts),
         new Permission(Permissions.ViewRoles),
-        new Permission(Permissions.EditRoles),
+        new Permission(Permissions.ManageRoles),
     };
 
     public void Configure(EntityTypeBuilder<Role> builder)

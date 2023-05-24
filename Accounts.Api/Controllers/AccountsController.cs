@@ -2,17 +2,20 @@ using System.Net;
 using Accounts.Application.Users;
 using Accounts.Application.Users.Commands;
 using Accounts.Application.Users.Queries;
+using Accounts.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
 
 namespace Accounts.Api.Controllers;
 
+[Authorize]
 [Route("api/accounts")]
 public class AccountsController : Controller
 {
     private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
     private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
-    private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
 
     private readonly AccountBlockCommand _accountBlockCommand;
     private readonly AccountUnblockCommand _accountUnblockCommand;
@@ -31,34 +34,34 @@ public class AccountsController : Controller
         DeleteUserCommandHandler deleteUserCommandHandler,
         AddRoleToUserCommandHandler addRoleToUserCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
-        GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler,
         AccountBlockCommand accountBlockCommand,
         AccountUnblockCommand accountUnblockCommand)
     {
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
-
         _accountUpdateCommandHandler = accountUpdateCommandHandler;
         _deleteUserCommandHandler = deleteUserCommandHandler;
         _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
-        _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
         _accountBlockCommand = accountBlockCommand;
         _accountUnblockCommand = accountUnblockCommand;
     }
 
+    [RequiresPermission(Permissions.ViewAccounts)]
     [HttpGet("all")]
     public Task<IEnumerable<AccountDto>> FindAll([FromQuery] GetAccountsQuery getAccountsQuery)
     {
         return _getAccountsQueryHandler.Handle(getAccountsQuery);
     }
 
+    [RequiresPermission(Permissions.ViewAccounts)]
     [HttpGet("findById/{id}")]
     public Task<AccountDto> FindByIdAsync([FromRoute] GetAccountByIdQuery getAccountByIdQuery)
     {
         return _getAccountByIdQueryHandler.Handle(getAccountByIdQuery);
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("create")]
     public async Task<ActionResult<long>> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
     {
@@ -73,12 +76,7 @@ public class AccountsController : Controller
         }
     }
 
-    [HttpGet("{accountId}/permissions")]
-    public Task<IEnumerable<string>> GetPermissionsByAccountIdAsync([FromRoute] long accountId)
-    {
-        return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
-    }
-
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("edit")]
     public async Task<ActionResult> EditAsync([FromBody] AccountUpdateCommand accountUpdateCommand)
     {
@@ -93,6 +91,7 @@ public class AccountsController : Controller
         }
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/block")]
     public async Task<ActionResult> BlockAsync([FromRoute] long accountId)
     {
@@ -107,6 +106,7 @@ public class AccountsController : Controller
         }
     }
 
+    [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/unblock")]
     public async Task<ActionResult> UnblockAsync([FromRoute] long accountId)
     {

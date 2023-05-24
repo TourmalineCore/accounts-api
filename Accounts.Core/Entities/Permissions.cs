@@ -13,9 +13,9 @@ public static class Permissions
     public const string EditFullEmployeesData = "EditFullEmployeesData";
     public const string AccessAnalyticalForecastsPage = "AccessAnalyticalForecastsPage";
     public const string ViewAccounts = "ViewAccounts";
-    public const string EditAccounts = "EditAccounts";
+    public const string ManageAccounts = "ManageAccounts";
     public const string ViewRoles = "ViewRoles";
-    public const string EditRoles = "EditRoles";
+    public const string ManageRoles = "ManageRoles";
 
     public static bool IsPermissionExists(string permissionName)
     {
