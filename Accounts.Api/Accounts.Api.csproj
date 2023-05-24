@@ -18,6 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="TourmalineCore.AspNetCore.JwtAuthentication.Identity" Version="0.1.1" />
   </ItemGroup>
 
   <ItemGroup>
