@@ -16,7 +16,6 @@ public class AccountsController : Controller
     private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
     private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
-    private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
 
     private readonly AccountBlockCommand _accountBlockCommand;
     private readonly AccountUnblockCommand _accountUnblockCommand;
@@ -35,18 +34,15 @@ public class AccountsController : Controller
         DeleteUserCommandHandler deleteUserCommandHandler,
         AddRoleToUserCommandHandler addRoleToUserCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
-        GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler,
         AccountBlockCommand accountBlockCommand,
         AccountUnblockCommand accountUnblockCommand)
     {
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
-
         _accountUpdateCommandHandler = accountUpdateCommandHandler;
         _deleteUserCommandHandler = deleteUserCommandHandler;
         _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
-        _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
         _accountBlockCommand = accountBlockCommand;
         _accountUnblockCommand = accountUnblockCommand;
     }
@@ -78,12 +74,6 @@ public class AccountsController : Controller
         {
             return Problem(ex.Message, null, InternalServerErrorCode);
         }
-    }
-
-    [HttpGet("{accountId:long}/permissions")]
-    public Task<IEnumerable<string>> GetPermissionsByAccountIdAsync([FromRoute] long accountId)
-    {
-        return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]

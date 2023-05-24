@@ -116,9 +116,9 @@ using (var serviceScope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 }
 
-app.UseJwtAuthentication();
-
 app.UseRouting();
+
+app.UseJwtAuthentication();
 
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
