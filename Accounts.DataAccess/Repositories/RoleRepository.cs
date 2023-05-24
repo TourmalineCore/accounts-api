@@ -15,12 +15,12 @@ namespace Accounts.DataAccess.Repositories
             _usersDbContext = usersDbContext;
         }
 
-        public async Task<long> CreateAsync(Role role)
+        public async Task<long> CreateAsync(Role account)
         {
-            await _usersDbContext.AddAsync(role);
+            await _usersDbContext.AddAsync(account);
             await _usersDbContext.SaveChangesAsync();
 
-            return role.Id;
+            return account.Id;
         }
 
         public async Task<IEnumerable<Role>> GetRolesAsync()
@@ -62,7 +62,7 @@ namespace Accounts.DataAccess.Repositories
         public async Task<IEnumerable<Role>> GetAllAsync()
         {
             return await _usersDbContext
-                .QueryableAsNoTracking<Role>()
+                .Roles
                 .ToListAsync();
         }
 
