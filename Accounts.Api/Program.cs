@@ -1,11 +1,14 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Accounts.Api;
 using Accounts.Application;
 using Accounts.Application.HttpClients;
 using Accounts.Application.Options;
 using Accounts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core;
+using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,64 +19,70 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    var env = hostingContext.HostingEnvironment;
-    var reloadOnChange = hostingContext.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
+        {
+            var env = hostingContext.HostingEnvironment;
+            var reloadOnChange = hostingContext.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 
-    config.AddJsonFile("appsettings.json", true, reloadOnChange)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reloadOnChange)
-        .AddJsonFile("appsettings.Active.json", true, reloadOnChange);
+            config.AddJsonFile("appsettings.json", true, reloadOnChange)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reloadOnChange)
+                .AddJsonFile("appsettings.Active.json", true, reloadOnChange);
 
-    if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
-    {
-        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+            if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
+            {
+                var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
 
-        config.AddUserSecrets(appAssembly, true);
-    }
+                config.AddUserSecrets(appAssembly, true);
+            }
 
-    config.AddEnvironmentVariables();
+            config.AddEnvironmentVariables();
 
-    if (args != null)
-    {
-        config.AddCommandLine(args);
-    }
-});
+            if (args != null)
+            {
+                config.AddCommandLine(args);
+            }
+        }
+    );
 
 var configuration = builder.Configuration;
+
+var authenticationOptions = configuration.GetSection(nameof(AuthenticationOptions)).Get<AuthenticationOptions>();
+builder.Services.AddJwtAuthentication(authenticationOptions).WithUserClaimsProvider<UserClaimsProvider>(UserClaimsProvider.PermissionClaimType);
+
 builder.Services.AddPersistence(configuration);
 builder.Services.AddApplication();
 
 builder.Host.ConfigureLogging((hostingContext, logging) =>
-{
-    var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        {
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-    // IMPORTANT: This needs to be added *before* configuration is loaded, this lets
-    // the defaults be overridden by the configuration.
-    if (isWindows)
-    {
-        // Default the EventLogLoggerProvider to warning or above
-        logging.AddFilter<EventLogLoggerProvider>(level => level >= LogLevel.Warning);
-    }
+            // IMPORTANT: This needs to be added *before* configuration is loaded, this lets
+            // the defaults be overridden by the configuration.
+            if (isWindows)
+            {
+                // Default the EventLogLoggerProvider to warning or above
+                logging.AddFilter<EventLogLoggerProvider>(level => level >= LogLevel.Warning);
+            }
 
-    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-    logging.AddConsole();
-    logging.AddDebug();
-    logging.AddEventSourceLogger();
+            logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+            logging.AddConsole();
+            logging.AddDebug();
+            logging.AddEventSourceLogger();
 
-    if (isWindows)
-    {
-        // Add the EventLogLoggerProvider on windows machines
-        logging.AddEventLog();
-    }
+            if (isWindows)
+            {
+                // Add the EventLogLoggerProvider on windows machines
+                logging.AddEventLog();
+            }
 
-    logging.Configure(options =>
-    {
-        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
-                                          | ActivityTrackingOptions.TraceId
-                                          | ActivityTrackingOptions.ParentId;
-    }
-        );
-});
+            logging.Configure(options =>
+                    {
+                        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                                          | ActivityTrackingOptions.TraceId
+                                                          | ActivityTrackingOptions.ParentId;
+                    }
+                );
+        }
+    );
 
 var httpUrls = configuration.GetSection(nameof(HttpUrls));
 builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
@@ -83,12 +92,12 @@ builder.Services.Configure<AccountValidationOptions>(builder.Configuration.GetSe
 var app = builder.Build();
 
 app.UseCors(
-    corsPolicyBuilder => corsPolicyBuilder
-        .AllowAnyHeader()
-        .SetIsOriginAllowed(host => true)
-        .AllowAnyMethod()
-        .AllowAnyOrigin()
-);
+        corsPolicyBuilder => corsPolicyBuilder
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(host => true)
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+    );
 
 if (builder.Environment.IsDevelopment())
 {
@@ -106,6 +115,8 @@ using (var serviceScope = app.Services.CreateScope())
     var context = serviceScope.ServiceProvider.GetRequiredService<AccountsDbContext>();
     await context.Database.MigrateAsync();
 }
+
+app.UseJwtAuthentication();
 
 app.UseRouting();
 
