@@ -1,7 +1,6 @@
-using System;
-using NodaTime;
 using System.Collections.Generic;
 using System.Linq;
+using NodaTime;
 
 namespace Accounts.Core.Entities
 {
@@ -33,8 +32,14 @@ namespace Accounts.Core.Entities
             MiddleName = middleName;
             IsBlocked = false;
             CreatedAt = SystemClock.Instance.GetCurrentInstant();
+
             AccountRoles = roles
-                .Select(role => new AccountRole { RoleId = role.Id })
+                .Select(role => new AccountRole
+                        {
+                            RoleId = role.Id,
+                            Role = role,
+                        }
+                    )
                 .ToList();
         }
 
@@ -43,8 +48,13 @@ namespace Accounts.Core.Entities
             FirstName = firstName;
             LastName = lastName;
             MiddleName = middleName;
+
             AccountRoles = roleIds
-                .Select(roleId => new AccountRole { RoleId = roleId })
+                .Select(roleId => new AccountRole
+                        {
+                            RoleId = roleId,
+                        }
+                    )
                 .ToList();
         }
 
@@ -69,6 +79,8 @@ namespace Accounts.Core.Entities
         }
 
         // For DB Context
-        private Account() { }
+        private Account()
+        {
+        }
     }
 }

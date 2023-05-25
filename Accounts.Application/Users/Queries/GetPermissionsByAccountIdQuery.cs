@@ -16,10 +16,11 @@ public class GetPermissionsByAccountIdQueryHandler
 
     public async Task<IEnumerable<string>> Handle(long accountId)
     {
-        var user = await _accountRepository.FindByIdAsync(accountId);
+        var account = await _accountRepository.GetByIdAsync(accountId);
 
-        return user.AccountRoles
+        return account.AccountRoles
             .Select(x => x.Role)
-            .SelectMany(x => x.Permissions);
+            .SelectMany(x => x.Permissions)
+            .Distinct();
     }
 }
