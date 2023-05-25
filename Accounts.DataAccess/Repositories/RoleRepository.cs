@@ -32,12 +32,6 @@ namespace Accounts.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task UpdateRoleAsync(Role role, List<Permission> permission)
-        {
-            role.UpdateRole(permission);
-            await _usersDbContext.SaveChangesAsync();
-        }
-
         public Task<Role> GetByIdAsync(long id)
         {
             return _usersDbContext
@@ -78,19 +72,6 @@ namespace Accounts.DataAccess.Repositories
             _usersDbContext.Update(account);
 
             return _usersDbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<Role>> FindListAsync(List<long> roleIds)
-        {
-            var roles = new List<Role>();
-
-            foreach (var id in roleIds)
-            {
-                var role = await FindOneAsync(id);
-                roles.Add(role);
-            }
-
-            return roles;
         }
     }
 }

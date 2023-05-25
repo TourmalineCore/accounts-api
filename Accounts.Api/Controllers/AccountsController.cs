@@ -21,8 +21,6 @@ public class AccountsController : Controller
     private readonly AccountUnblockCommand _accountUnblockCommand;
 
     private readonly AccountUpdateCommandHandler _accountUpdateCommandHandler;
-    private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
-    private readonly AddRoleToUserCommandHandler _addRoleToUserCommandHandler;
 
     private const int CreatedStatusCode = (int)HttpStatusCode.Created;
     private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
@@ -31,8 +29,6 @@ public class AccountsController : Controller
         GetAccountsQueryHandler getAccountsQueryHandler,
         AccountCreationCommandHandler accountCreationCommandHandler,
         AccountUpdateCommandHandler accountUpdateCommandHandler,
-        DeleteUserCommandHandler deleteUserCommandHandler,
-        AddRoleToUserCommandHandler addRoleToUserCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
         AccountBlockCommand accountBlockCommand,
         AccountUnblockCommand accountUnblockCommand)
@@ -40,8 +36,6 @@ public class AccountsController : Controller
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
         _accountUpdateCommandHandler = accountUpdateCommandHandler;
-        _deleteUserCommandHandler = deleteUserCommandHandler;
-        _addRoleToUserCommandHandler = addRoleToUserCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
         _accountBlockCommand = accountBlockCommand;
         _accountUnblockCommand = accountUnblockCommand;
@@ -120,17 +114,4 @@ public class AccountsController : Controller
             return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
         }
     }
-
-    //TODO: #861ma1b6p - temporary disabled until we get prototypes
-    // [HttpDelete("delete")]
-    // public Task Delete([FromBody] DeleteUserCommand deleteUserCommand)
-    // {
-    //     return _deleteUserCommandHandler.Handle(deleteUserCommand);
-    // }
-    //
-    // [HttpPost("add-role")]
-    // public Task AddRole([FromBody] AddRoleToUserCommand addRoleToUserCommand)
-    // {
-    //     return _addRoleToUserCommandHandler.Handle(addRoleToUserCommand);
-    // }
 }

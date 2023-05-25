@@ -16,18 +16,6 @@ namespace Accounts.DataAccess.Repositories
             _usersDbContext = usersDbContext;
         }
 
-        public Task AddRoleAsync(Account user, Role role)
-        {
-            var accountRole = new AccountRole
-            {
-                Role = role,
-            };
-
-            user.AddRole(accountRole);
-
-            return _usersDbContext.SaveChangesAsync();
-        }
-
         public async Task<long> CreateAsync(Account role)
         {
             await _usersDbContext.AddAsync(role);

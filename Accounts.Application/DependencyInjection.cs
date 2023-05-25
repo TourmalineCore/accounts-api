@@ -16,8 +16,6 @@ namespace Accounts.Application
         {
             services.AddTransient<AccountCreationCommandHandler>();
             services.AddTransient<AccountUpdateCommandHandler>();
-            services.AddTransient<DeleteUserCommandHandler>();
-            services.AddTransient<AddRoleToUserCommandHandler>();
 
             services.AddTransient<GetAccountsQueryHandler>();
             services.AddTransient<GetAccountByIdQueryHandler>();
