@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Core.Entities;
+namespace Core.Models;
 
 public static class Permissions
 {

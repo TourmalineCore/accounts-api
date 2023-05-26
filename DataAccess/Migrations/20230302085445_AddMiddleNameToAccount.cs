@@ -10,13 +10,13 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "MiddleName",
-                table: "Users",
+                table: "Accounts",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.UpdateData(
-                table: "Users",
+                table: "Accounts",
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "MiddleName",
@@ -27,7 +27,7 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "MiddleName",
-                table: "Users");
+                table: "Accounts");
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using Application.Roles;
 using Core.Entities;
 
-namespace Application.Users;
+namespace Application.Accounts;
 
 public readonly struct AccountDto
 {

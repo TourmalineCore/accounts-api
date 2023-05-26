@@ -1,14 +1,15 @@
-using Application.Users.Queries;
+using Application.Accounts.Queries;
 using Core.Contracts;
 using Core.Entities;
+using Core.Models;
 using Moq;
 using Tests.TestsData;
 
-namespace Tests;
+namespace Tests.Accounts;
 
 public class GetPermissionsByAccountIdQueryHandlerTests
 {
-    private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
+    private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
 
     [Fact]
     public async Task PermissionListCannotHasDuplicates()
@@ -39,13 +40,18 @@ public class GetPermissionsByAccountIdQueryHandlerTests
                 roles
             );
 
+        var query = new GetPermissionsByAccountIdQuery
+        {
+            Id = It.IsAny<long>(),
+        };
+
         _accountRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(account);
 
         var queryHandler = new GetPermissionsByAccountIdQueryHandler(_accountRepositoryMock.Object);
 
-        var permissions = await queryHandler.Handle(It.IsAny<long>());
+        var permissions = await queryHandler.HandleAsync(query);
         permissions = permissions.ToList();
 
         Assert.Equal(2, permissions.Count());

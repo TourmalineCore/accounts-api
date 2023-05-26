@@ -63,7 +63,7 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Accounts");
 
                     b.HasData(
                         new

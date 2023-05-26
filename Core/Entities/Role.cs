@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Contracts;
+using Core.Models;
 
 namespace Core.Entities;
 
-public class Role : IIdentityEntity
+public class Role : IEntity
 {
     public long Id { get; private set; }
 
@@ -35,11 +37,6 @@ public class Role : IIdentityEntity
     public void Update(string name, IEnumerable<Permission> permissions)
     {
         Name = name;
-        SetPermissions(permissions);
-    }
-
-    public void UpdateRole(IEnumerable<Permission> permissions)
-    {
         SetPermissions(permissions);
     }
 

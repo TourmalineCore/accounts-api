@@ -10,7 +10,7 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "MiddleName",
-                table: "Users",
+                table: "Accounts",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -21,7 +21,7 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "MiddleName",
-                table: "Users",
+                table: "Accounts",
                 type: "text",
                 nullable: false,
                 defaultValue: "",

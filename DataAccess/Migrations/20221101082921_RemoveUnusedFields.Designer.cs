@@ -141,7 +141,7 @@ namespace UserManagementService.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("PrivilegeRole", b =>

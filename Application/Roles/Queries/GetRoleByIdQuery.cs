@@ -2,27 +2,25 @@ using System.Threading.Tasks;
 using Application.Contracts;
 using Core.Contracts;
 
-namespace Application.Roles.Queries
+namespace Application.Roles.Queries;
+
+public readonly struct GetRoleByIdQuery
 {
-    public class GetRoleByIdQuery
+    public long Id { get; init; }
+}
+
+public class GetRoleByIdQueryHandler : IQueryHandler<GetRoleByIdQuery, RoleDto>
+{
+    private readonly IRolesRepository _rolesRepository;
+
+    public GetRoleByIdQueryHandler(IRolesRepository rolesRepository)
     {
-        public long Id { get; set; }
+        _rolesRepository = rolesRepository;
     }
 
-    public class GetRoleByIdQueryHandler : IQueryHandler<GetRoleByIdQuery, RoleDto>
+    public async Task<RoleDto> HandleAsync(GetRoleByIdQuery query)
     {
-        private readonly IRoleRepository _roleRepository;
-
-        public GetRoleByIdQueryHandler(IRoleRepository roleRepository)
-        {
-            _roleRepository = roleRepository;
-        }
-
-        public async Task<RoleDto> Handle(GetRoleByIdQuery request)
-        {
-            var role = await _roleRepository.FindByIdAsync(request.Id);
-
-            return new RoleDto(role);
-        }
+        var role = await _rolesRepository.GetByIdAsync(query.Id);
+        return new RoleDto(role);
     }
 }

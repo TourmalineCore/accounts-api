@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Account.Api - debug": {
+    "Debug": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -30,7 +30,7 @@ namespace UserManagementService.DataAccess.Migrations
                 value: new[] { "View personal profile", "Edit personal profile", "View contacts", "View salary and documents data", "Edit full employees data", "Access to analytical forecasts page", "View accounts", "Edit accounts", "View roles", "Edit roles" });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "Accounts",
                 columns: new[] { "Id", "CorporateEmail", "CreatedAt", "DeletedAtUtc", "FirstName", "LastName", "MiddleName" },
                 values: new object[] { 2L, "inner-circle-admin@tourmalinecore.com", NodaTime.Instant.FromUnixTimeTicks(15778368000000000L), null, "Admin", "Admin", "Admin" });
 
@@ -48,7 +48,7 @@ namespace UserManagementService.DataAccess.Migrations
                 keyValues: new object[] { 2L, 1L });
 
             migrationBuilder.DeleteData(
-                table: "Users",
+                table: "Accounts",
                 keyColumn: "Id",
                 keyValue: 2L);
 

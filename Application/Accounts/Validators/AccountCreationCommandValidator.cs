@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using Application.Accounts.Commands;
 using Application.Options;
-using Application.Users.Commands;
 using Core.Contracts;
 using FluentValidation;
 using Microsoft.Extensions.Options;
 
-namespace Application.Validators;
+namespace Application.Accounts.Validators;
 
 public class AccountCreationCommandValidator : AbstractValidator<AccountCreationCommand>
 {
     private readonly AccountValidationOptions _accountValidOptions;
 
-    public AccountCreationCommandValidator(IRoleRepository roleRepository, IAccountRepository accountRepository, IOptions<AccountValidationOptions> accountValidOptions)
+    public AccountCreationCommandValidator(IRolesRepository rolesRepository, IAccountsRepository accountsRepository, IOptions<AccountValidationOptions> accountValidOptions)
     {
         _accountValidOptions = accountValidOptions.Value;
 
@@ -27,7 +27,7 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
                         .MustAsync(
                                 async (corporateEmail, _) =>
                                 {
-                                    var account = await accountRepository.FindByCorporateEmailAsync(corporateEmail);
+                                    var account = await accountsRepository.FindByCorporateEmailAsync(corporateEmail);
                                     return account == null;
                                 }
                             )
@@ -42,7 +42,7 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
             .MustAsync(
                     async (accountRoleIds, _) =>
                     {
-                        var roles = await roleRepository.GetRolesAsync();
+                        var roles = await rolesRepository.GetRolesAsync();
                         var roleIds = roles.Select(x => x.Id);
 
                         return accountRoleIds.All(x => roleIds.Contains(x));

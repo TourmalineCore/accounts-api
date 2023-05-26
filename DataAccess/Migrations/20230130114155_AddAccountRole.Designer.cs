@@ -57,7 +57,7 @@ namespace UserManagementService.DataAccess.Migrations
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("Accounts.Core.Entities.AccountRole", b =>

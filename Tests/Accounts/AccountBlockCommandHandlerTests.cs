@@ -1,17 +1,17 @@
+using Application.Accounts.Commands;
 using Application.HttpClients;
-using Application.Users.Commands;
 using Core.Contracts;
 using Core.Entities;
 using Moq;
 
-namespace Tests;
+namespace Tests.Accounts;
 
-public class AccountBlockCommandTests
+public class AccountBlockCommandHandlerTests
 {
-    private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
+    private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
     private readonly Mock<IHttpClient> _httpClientMock = new();
 
-    public AccountBlockCommandTests()
+    public AccountBlockCommandHandlerTests()
     {
         _httpClientMock
             .Setup(x => x.SendRequestToBlockUserAsync(It.IsAny<long>()))
@@ -28,14 +28,19 @@ public class AccountBlockCommandTests
                 new List<Role>()
             );
 
+        var command = new AccountBlockCommand
+        {
+            Id = It.IsAny<long>(),
+        };
+
         _accountRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(account);
 
-        var command = new AccountBlockCommand(_accountRepositoryMock.Object, _httpClientMock.Object);
+        var accountBlockCommandHandler = new AccountBlockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
 
         Assert.False(account.IsBlocked);
-        await command.Handle(It.IsAny<long>());
+        await accountBlockCommandHandler.HandleAsync(command);
         Assert.True(account.IsBlocked);
     }
 
@@ -49,17 +54,22 @@ public class AccountBlockCommandTests
                 new List<Role>()
             );
 
+        var command = new AccountBlockCommand
+        {
+            Id = It.IsAny<long>(),
+        };
+
         _accountRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(account);
 
-        var command = new AccountBlockCommand(_accountRepositoryMock.Object, _httpClientMock.Object);
+        var accountBlockCommandHandler = new AccountBlockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
 
         Assert.False(account.IsBlocked);
-        await command.Handle(It.IsAny<long>());
+        await accountBlockCommandHandler.HandleAsync(command);
         Assert.True(account.IsBlocked);
 
-        await command.Handle(It.IsAny<long>());
+        await accountBlockCommandHandler.HandleAsync(command);
         Assert.True(account.IsBlocked);
     }
 }

@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using Application.Users.Commands;
+using Application.Accounts.Commands;
 using Core.Contracts;
 using FluentValidation;
 
-namespace Application.Validators;
+namespace Application.Accounts.Validators;
 
 public class AccountUpdateCommandValidator : AbstractValidator<AccountUpdateCommand>
 {
-    public AccountUpdateCommandValidator(IRoleRepository roleRepository)
+    public AccountUpdateCommandValidator(IRolesRepository rolesRepository)
     {
         RuleFor(x => x.Roles)
             .NotNull()
@@ -17,7 +17,7 @@ public class AccountUpdateCommandValidator : AbstractValidator<AccountUpdateComm
             .MustAsync(
                     async (accountRoleIds, _) =>
                     {
-                        var roles = await roleRepository.GetRolesAsync();
+                        var roles = await rolesRepository.GetRolesAsync();
                         var roleIds = roles.Select(x => x.Id);
 
                         return accountRoleIds.All(x => roleIds.Contains(x));

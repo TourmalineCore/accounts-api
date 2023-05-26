@@ -1,8 +1,7 @@
-using System.Net;
-using Application.Users;
-using Application.Users.Commands;
-using Application.Users.Queries;
-using Core.Entities;
+using Application.Accounts;
+using Application.Accounts.Commands;
+using Application.Accounts.Queries;
+using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
@@ -16,57 +15,73 @@ public class AccountsController : Controller
     private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
     private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
-
-    private readonly AccountBlockCommand _accountBlockCommand;
-    private readonly AccountUnblockCommand _accountUnblockCommand;
-
     private readonly AccountUpdateCommandHandler _accountUpdateCommandHandler;
-
-    private const int CreatedStatusCode = (int)HttpStatusCode.Created;
-    private const int InternalServerErrorCode = (int)HttpStatusCode.InternalServerError;
+    private readonly AccountBlockCommandHandler _accountBlockCommandHandler;
+    private readonly AccountUnblockCommandHandler _accountUnblockCommandHandler;
 
     public AccountsController(
         GetAccountsQueryHandler getAccountsQueryHandler,
         AccountCreationCommandHandler accountCreationCommandHandler,
         AccountUpdateCommandHandler accountUpdateCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
-        AccountBlockCommand accountBlockCommand,
-        AccountUnblockCommand accountUnblockCommand)
+        AccountBlockCommandHandler accountBlockCommandHandler,
+        AccountUnblockCommandHandler accountUnblockCommandHandler)
     {
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
         _accountUpdateCommandHandler = accountUpdateCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
-        _accountBlockCommand = accountBlockCommand;
-        _accountUnblockCommand = accountUnblockCommand;
+        _accountBlockCommandHandler = accountBlockCommandHandler;
+        _accountUnblockCommandHandler = accountUnblockCommandHandler;
     }
 
     [RequiresPermission(Permissions.ViewAccounts)]
     [HttpGet("all")]
-    public Task<IEnumerable<AccountDto>> FindAll([FromQuery] GetAccountsQuery getAccountsQuery)
+    public async Task<ActionResult<IEnumerable<AccountDto>>> GetAllAsync()
     {
-        return _getAccountsQueryHandler.Handle(getAccountsQuery);
+        try
+        {
+            var accounts = await _getAccountsQueryHandler.HandleAsync();
+            return Ok(accounts);
+        }
+        catch (Exception ex)
+        {
+            return GetProblem(ex);
+        }
     }
 
     [RequiresPermission(Permissions.ViewAccounts)]
-    [HttpGet("findById/{id}")]
-    public Task<AccountDto> FindByIdAsync([FromRoute] GetAccountByIdQuery getAccountByIdQuery)
+    [HttpGet("findById/{accountId:long}")]
+    public async Task<ActionResult<AccountDto>> GetByIdAsync(long accountId)
     {
-        return _getAccountByIdQueryHandler.Handle(getAccountByIdQuery);
+        try
+        {
+            var account = await _getAccountByIdQueryHandler.HandleAsync(new GetAccountByIdQuery
+                    {
+                        Id = accountId,
+                    }
+                );
+
+            return Ok( account );
+        }
+        catch (Exception ex)
+        {
+            return GetProblem(ex);
+        }
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("create")]
-    public async Task<ActionResult<long>> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
+    public async Task<ActionResult> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
     {
         try
         {
             await _accountCreationCommandHandler.HandleAsync(accountCreationCommand);
-            return StatusCode(CreatedStatusCode);
+            return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, null, InternalServerErrorCode);
+            return GetProblem(ex);
         }
     }
 
@@ -76,42 +91,57 @@ public class AccountsController : Controller
     {
         try
         {
-            await _accountUpdateCommandHandler.Handle(accountUpdateCommand);
+            await _accountUpdateCommandHandler.HandleAsync(accountUpdateCommand);
             return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+            return GetProblem(ex);
         }
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/block")]
-    public async Task<ActionResult> BlockAsync([FromRoute] long accountId)
+    public async Task<ActionResult> BlockAsync(long accountId)
     {
         try
         {
-            await _accountBlockCommand.Handle(accountId);
+            await _accountBlockCommandHandler.HandleAsync(new AccountBlockCommand
+                    {
+                        Id = accountId,
+                    }
+                );
+
             return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+            return GetProblem(ex);
         }
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("{accountId:long}/unblock")]
-    public async Task<ActionResult> UnblockAsync([FromRoute] long accountId)
+    public async Task<ActionResult> UnblockAsync(long accountId)
     {
         try
         {
-            await _accountUnblockCommand.Handle(accountId);
+            await _accountUnblockCommandHandler.HandleAsync(new AccountUnblockCommand
+                    {
+                        Id = accountId,
+                    }
+                );
+
             return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, nameof(AccountsController), InternalServerErrorCode);
+            return GetProblem(ex);
         }
+    }
+
+    private ObjectResult GetProblem(Exception exception)
+    {
+        return Problem(exception.Message, nameof(AccountsController), StatusCodes.Status500InternalServerError);
     }
 }

@@ -10,7 +10,7 @@ namespace UserManagementService.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "Accounts",
                 columns: new[] { "Id", "CorporateEmail", "CreatedAt", "DeletedAtUtc", "FirstName", "LastName" },
                 values: new object[] { 1L, "ceo@tourmalinecore.com", NodaTime.Instant.FromUnixTimeTicks(15778368000000000L), null, "Ceo", "Ceo" });
 
@@ -28,7 +28,7 @@ namespace UserManagementService.DataAccess.Migrations
                 keyValues: new object[] { 1L, 2L });
 
             migrationBuilder.DeleteData(
-                table: "Users",
+                table: "Accounts",
                 keyColumn: "Id",
                 keyValue: 1L);
         }

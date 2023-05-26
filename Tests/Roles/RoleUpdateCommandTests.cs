@@ -4,11 +4,11 @@ using Core.Entities;
 using Moq;
 using Tests.TestsData;
 
-namespace Tests;
+namespace Tests.Roles;
 
 public class RoleUpdateCommandTests
 {
-    private readonly Mock<IRoleRepository> _roleRepositoryMock = new();
+    private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
     private readonly Role _adminRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Admin);
 
     public RoleUpdateCommandTests()
@@ -33,7 +33,7 @@ public class RoleUpdateCommandTests
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
-        var exception = await Record.ExceptionAsync(() => roleUpdateCommandHandler.Handle(command));
+        var exception = await Record.ExceptionAsync(() => roleUpdateCommandHandler.HandleAsync(command));
 
         Assert.Null(exception);
     }
@@ -53,7 +53,7 @@ public class RoleUpdateCommandTests
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal($"Role with name [{TestData.RoleNames.Ceo}] already exists", exception.Message);
     }
@@ -76,7 +76,7 @@ public class RoleUpdateCommandTests
             .ReturnsAsync(_adminRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Permission [NonExistingPermission] doesn't exists", exception.Message);
     }
@@ -94,6 +94,6 @@ public class RoleUpdateCommandTests
         };
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
-        await Assert.ThrowsAsync<NullReferenceException>(() => roleUpdateCommandHandler.Handle(command));
+        await Assert.ThrowsAsync<NullReferenceException>(() => roleUpdateCommandHandler.HandleAsync(command));
     }
 }

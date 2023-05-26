@@ -1,19 +1,19 @@
-using Application.Users.Commands;
-using Application.Validators;
+using Application.Accounts.Commands;
+using Application.Accounts.Validators;
 using Core.Contracts;
 using Core.Entities;
 using FluentValidation;
 using Moq;
 using Tests.TestsData;
 
-namespace Tests;
+namespace Tests.Accounts;
 
-public class AccountUpdateCommandTests
+public class AccountUpdateCommandHandlerTests
 {
-    private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
-    private readonly Mock<IRoleRepository> _roleRepositoryMock = new();
+    private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
+    private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
 
-    private readonly Account _testAccount = new ("test@tourmalinecore.com",
+    private readonly Account _testAccount = new("test@tourmalinecore.com",
             "test",
             "test",
             "test",
@@ -25,7 +25,7 @@ public class AccountUpdateCommandTests
         .Single(x => x.Name == TestData.RoleNames.Admin)
         .Id;
 
-    public AccountUpdateCommandTests()
+    public AccountUpdateCommandHandlerTests()
     {
         _roleRepositoryMock
             .Setup(x => x.GetRolesAsync())
@@ -47,7 +47,7 @@ public class AccountUpdateCommandTests
         };
 
         var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
-        var exception = await Assert.ThrowsAsync<NullReferenceException>(() => accountUpdateCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<NullReferenceException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Account not found", exception.Message);
     }
@@ -73,7 +73,7 @@ public class AccountUpdateCommandTests
             .ReturnsAsync(_testAccount);
 
         var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
-        var exception = await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Incorrect role ids. Probably you tried to set unavailable role id", exception.Message);
     }
@@ -98,7 +98,7 @@ public class AccountUpdateCommandTests
             .ReturnsAsync(_testAccount);
 
         var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
-        await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.Handle(command));
+        await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class AccountUpdateCommandTests
             .ReturnsAsync(_testAccount);
 
         var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
-        await accountUpdateCommandHandler.Handle(command);
+        await accountUpdateCommandHandler.HandleAsync(command);
 
         var account = await _accountRepositoryMock.Object.FindByIdAsync(1);
 

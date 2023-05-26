@@ -1,9 +1,8 @@
-namespace Application.HttpClients
-{
-    public class HttpUrls
-    {
-        public string AuthServiceUrl { get; set; }
+namespace Application.HttpClients;
 
-        public string EmployeeServiceUrl { get; set; }
-    }
+public class HttpUrls
+{
+    public string AuthServiceUrl { get; set; }
+
+    public string EmployeeServiceUrl { get; set; }
 }

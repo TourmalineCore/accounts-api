@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
 
-namespace Application.HttpClients
+namespace Application.HttpClients;
+
+public interface IHttpClient
 {
-    public interface IHttpClient
-    {
-        Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail);
+    Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail);
 
-        Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName);
+    Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName);
 
-        Task SendRequestToBlockUserAsync(long accountId);
+    Task SendRequestToBlockUserAsync(long accountId);
 
-        Task SendRequestToUnblockUserAsync(long accountId);
-    }
+    Task SendRequestToUnblockUserAsync(long accountId);
 }

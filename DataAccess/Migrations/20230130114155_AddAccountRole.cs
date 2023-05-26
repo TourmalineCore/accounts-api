@@ -11,42 +11,42 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Users_Roles_RoleId",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropIndex(
                 name: "IX_Users_Email",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropIndex(
                 name: "IX_Users_RoleId",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropColumn(
                 name: "RoleId",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.RenameColumn(
                 name: "Email",
-                table: "Users",
+                table: "Accounts",
                 newName: "LastName");
 
             migrationBuilder.AddColumn<string>(
                 name: "CorporateEmail",
-                table: "Users",
+                table: "Accounts",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<Instant>(
                 name: "CreatedAt",
-                table: "Users",
+                table: "Accounts",
                 type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: NodaTime.Instant.FromUnixTimeTicks(0L));
 
             migrationBuilder.AddColumn<string>(
                 name: "FirstName",
-                table: "Users",
+                table: "Accounts",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -70,14 +70,14 @@ namespace UserManagementService.DataAccess.Migrations
                     table.ForeignKey(
                         name: "FK_AccountRoles_Users_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Users",
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CorporateEmail",
-                table: "Users",
+                table: "Accounts",
                 column: "CorporateEmail",
                 unique: true);
 
@@ -94,46 +94,46 @@ namespace UserManagementService.DataAccess.Migrations
 
             migrationBuilder.DropIndex(
                 name: "IX_Users_CorporateEmail",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropColumn(
                 name: "CorporateEmail",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.DropColumn(
                 name: "FirstName",
-                table: "Users");
+                table: "Accounts");
 
             migrationBuilder.RenameColumn(
                 name: "LastName",
-                table: "Users",
+                table: "Accounts",
                 newName: "Email");
 
             migrationBuilder.AddColumn<long>(
                 name: "RoleId",
-                table: "Users",
+                table: "Accounts",
                 type: "bigint",
                 nullable: false,
                 defaultValue: 0L);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
-                table: "Users",
+                table: "Accounts",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
-                table: "Users",
+                table: "Accounts",
                 column: "RoleId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Users_Roles_RoleId",
-                table: "Users",
+                table: "Accounts",
                 column: "RoleId",
                 principalTable: "Roles",
                 principalColumn: "Id",

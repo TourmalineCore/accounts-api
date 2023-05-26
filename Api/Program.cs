@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging.EventLog;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Options;
 
+const string debugEnvironmentName = "Debug";
+const string loggingSectionKey = "Logging";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -30,16 +33,11 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
             if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
             {
                 var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-
                 config.AddUserSecrets(appAssembly, true);
             }
 
             config.AddEnvironmentVariables();
-
-            if (args != null)
-            {
-                config.AddCommandLine(args);
-            }
+            config.AddCommandLine(args);
         }
     );
 
@@ -55,22 +53,18 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
         {
             var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-            // IMPORTANT: This needs to be added *before* configuration is loaded, this lets
-            // the defaults be overridden by the configuration.
             if (isWindows)
             {
-                // Default the EventLogLoggerProvider to warning or above
                 logging.AddFilter<EventLogLoggerProvider>(level => level >= LogLevel.Warning);
             }
 
-            logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+            logging.AddConfiguration(hostingContext.Configuration.GetSection(loggingSectionKey));
             logging.AddConsole();
             logging.AddDebug();
             logging.AddEventSourceLogger();
 
             if (isWindows)
             {
-                // Add the EventLogLoggerProvider on windows machines
                 logging.AddEventLog();
             }
 
@@ -84,17 +78,15 @@ builder.Host.ConfigureLogging((hostingContext, logging) =>
         }
     );
 
-var httpUrls = configuration.GetSection(nameof(HttpUrls));
-builder.Services.Configure<HttpUrls>(u => httpUrls.Bind(u));
-
-builder.Services.Configure<AccountValidationOptions>(builder.Configuration.GetSection(nameof(AccountValidationOptions)));
+builder.Services.Configure<HttpUrls>(configuration.GetSection(nameof(HttpUrls)));
+builder.Services.Configure<AccountValidationOptions>(configuration.GetSection(nameof(AccountValidationOptions)));
 
 var app = builder.Build();
 
 app.UseCors(
         corsPolicyBuilder => corsPolicyBuilder
             .AllowAnyHeader()
-            .SetIsOriginAllowed(host => true)
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
             .AllowAnyOrigin()
     );
@@ -104,7 +96,7 @@ if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-if (app.Environment.IsEnvironment("Debug"))
+if (app.Environment.IsEnvironment(debugEnvironmentName))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -117,9 +109,6 @@ using (var serviceScope = app.Services.CreateScope())
 }
 
 app.UseRouting();
-
 app.UseJwtAuthentication();
-
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
 app.Run();

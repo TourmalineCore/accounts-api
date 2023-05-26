@@ -1,8 +1,7 @@
-using System.Net;
 using Application.Roles;
 using Application.Roles.Commands;
 using Application.Roles.Queries;
-using Core.Entities;
+using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TourmalineCore.AspNetCore.JwtAuthentication.Core.Filters;
@@ -13,38 +12,59 @@ namespace Api.Controllers;
 [Route("api/roles")]
 public class RolesController : Controller
 {
-    private readonly GetRoleListQueryHandler _getRoleListQueryHandler;
+    private readonly GetRolesQueryHandler _getRolesQueryHandler;
     private readonly RoleCreationCommandHandler _roleCreationCommandHandler;
     private readonly RoleUpdateCommandHandler _roleUpdateCommandHandler;
     private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
-    private readonly DeleteRoleCommandHandler _deleteRoleCommandHandler;
+    private readonly RoleRemoveCommandHandler _roleRemoveCommandHandler;
 
     public RolesController(
-        GetRoleListQueryHandler getRoleListQueryHandler,
+        GetRolesQueryHandler getRolesQueryHandler,
         GetRoleByIdQueryHandler getRoleByIdQueryHandler,
-        DeleteRoleCommandHandler deleteRoleCommandHandler,
+        RoleRemoveCommandHandler roleRemoveCommandHandler,
         RoleCreationCommandHandler roleCreationCommandHandler,
         RoleUpdateCommandHandler roleUpdateCommandHandler)
     {
-        _getRoleListQueryHandler = getRoleListQueryHandler;
+        _getRolesQueryHandler = getRolesQueryHandler;
         _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
-        _deleteRoleCommandHandler = deleteRoleCommandHandler;
+        _roleRemoveCommandHandler = roleRemoveCommandHandler;
         _roleCreationCommandHandler = roleCreationCommandHandler;
         _roleUpdateCommandHandler = roleUpdateCommandHandler;
     }
 
     [RequiresPermission(Permissions.ViewRoles)]
     [HttpGet]
-    public async Task<IEnumerable<RoleDto>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<RoleDto>>> GetAllAsync()
     {
-        return await _getRoleListQueryHandler.Handle();
+        try
+        {
+            var roles = await _getRolesQueryHandler.HandleAsync();
+            return Ok(roles);
+        }
+        catch (Exception ex)
+        {
+            return GetProblem(ex);
+        }
     }
 
     [RequiresPermission(Permissions.ViewRoles)]
-    [HttpGet("find/{id}")]
-    public Task<RoleDto> FindById([FromRoute] GetRoleByIdQuery getRoleByIdQuery)
+    [HttpGet("find/{roleId:long}")]
+    public async Task<ActionResult<RoleDto>> GetByIdAsync(long roleId)
     {
-        return _getRoleByIdQueryHandler.Handle(getRoleByIdQuery);
+        try
+        {
+            var role = await _getRoleByIdQueryHandler.HandleAsync(new GetRoleByIdQuery
+                    {
+                        Id = roleId,
+                    }
+                );
+
+            return Ok(role);
+        }
+        catch (Exception ex)
+        {
+            return GetProblem(ex);
+        }
     }
 
     [RequiresPermission(Permissions.ManageRoles)]
@@ -53,12 +73,12 @@ public class RolesController : Controller
     {
         try
         {
-            await _roleCreationCommandHandler.Handle(roleCreationCommand);
+            await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
             return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, nameof(RolesController), (int)HttpStatusCode.InternalServerError);
+            return GetProblem(ex);
         }
     }
 
@@ -68,19 +88,37 @@ public class RolesController : Controller
     {
         try
         {
-            await _roleUpdateCommandHandler.Handle(roleUpdateCommand);
+            await _roleUpdateCommandHandler.HandleAsync(roleUpdateCommand);
             return Ok();
         }
         catch (Exception ex)
         {
-            return Problem(ex.Message, nameof(RolesController), (int)HttpStatusCode.InternalServerError);
+            return GetProblem(ex);
         }
     }
 
     [RequiresPermission(Permissions.ManageRoles)]
-    [HttpGet("delete")]
-    public Task FindById([FromQuery] DeleteRoleCommand deleteRoleCommand)
+    [HttpDelete("{roleId:long}")]
+    public async Task<ActionResult> RemoveAsync(long roleId)
     {
-        return _deleteRoleCommandHandler.Handle(deleteRoleCommand);
+        try
+        {
+            await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand
+                    {
+                        Id = roleId,
+                    }
+                );
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return GetProblem(ex);
+        }
+    }
+
+    private ObjectResult GetProblem(Exception exception)
+    {
+        return Problem(exception.Message, nameof(RolesController), StatusCodes.Status500InternalServerError);
     }
 }

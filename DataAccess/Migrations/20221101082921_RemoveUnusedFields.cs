@@ -62,7 +62,7 @@ namespace UserManagementService.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -109,13 +109,13 @@ namespace UserManagementService.DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
-                table: "Users",
+                table: "Accounts",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
-                table: "Users",
+                table: "Accounts",
                 column: "RoleId");
         }
 
@@ -125,7 +125,7 @@ namespace UserManagementService.DataAccess.Migrations
                 name: "RolePrivileges");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Privilege");

@@ -1,14 +1,14 @@
 using Application.Roles.Commands;
 using Core.Contracts;
-using Core.Entities;
+using Core.Models;
 using Moq;
 using Tests.TestsData;
 
-namespace Tests;
+namespace Tests.Roles;
 
 public class RoleCreationCommandTests
 {
-    private readonly Mock<IRoleRepository> _roleRepositoryMock = new();
+    private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
 
     public RoleCreationCommandTests()
     {
@@ -30,7 +30,7 @@ public class RoleCreationCommandTests
         };
 
         var roleCreationCommandHandler = new RoleCreationCommandHandler(_roleRepositoryMock.Object);
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleCreationCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleCreationCommandHandler.HandleAsync(command));
 
         Assert.Equal("Role with name [Admin] already exists", exception.Message);
     }
@@ -48,7 +48,7 @@ public class RoleCreationCommandTests
         };
 
         var roleCreationCommandHandler = new RoleCreationCommandHandler(_roleRepositoryMock.Object);
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleCreationCommandHandler.Handle(command));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleCreationCommandHandler.HandleAsync(command));
 
         Assert.Equal("Permission [NonExistingPermission] doesn't exists", exception.Message);
     }

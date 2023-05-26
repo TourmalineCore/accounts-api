@@ -1,21 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Entities;
 
-namespace Core.Contracts
+namespace Core.Contracts;
+
+public interface IRepository<TEntity> where TEntity : IEntity
 {
-    public interface IRepository<TEntity> where TEntity : IIdentityEntity
-    {
-        public Task<long> CreateAsync(TEntity role);
+    public Task<IEnumerable<TEntity>> GetAllAsync();
 
-        public Task<TEntity?> FindByIdAsync(long id);
+    public Task<TEntity> GetByIdAsync(long id);
 
-        public Task<TEntity> GetByIdAsync(long id);
+    public Task<TEntity?> FindByIdAsync(long id);
 
-        public Task<IEnumerable<TEntity>> GetAllAsync();
+    public Task<long> CreateAsync(TEntity role);
 
-        public Task RemoveAsync(TEntity entity);
+    public Task RemoveAsync(TEntity entity);
 
-        public Task UpdateAsync(TEntity account);
-    }
+    public Task UpdateAsync(TEntity account);
 }

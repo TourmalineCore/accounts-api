@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Application.Contracts
+namespace Application.Contracts;
+
+public interface IQueryHandler<in TIn, TOut>
 {
-    public interface IQueryHandler<in Tin, Tout>
-    {
-        Task<Tout> Handle(Tin query);
-    }
+    Task<TOut> HandleAsync(TIn query);
+}
+
+public interface IQueryHandler<TOut>
+{
+    Task<TOut> HandleAsync();
 }

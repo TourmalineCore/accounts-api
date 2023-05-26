@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Application.Contracts;
 using Core.Contracts;
 using Core.Entities;
+using Core.Models;
 
 namespace Application.Roles.Commands;
 
-public class RoleCreationCommand
+public readonly struct RoleCreationCommand
 {
-    public string Name { get; set; }
+    public string Name { get; init; }
 
-    public List<string> Permissions { get; set; }
+    public List<string> Permissions { get; init; }
 
     public IEnumerable<Permission> GetRolePermissions()
     {
@@ -22,25 +23,25 @@ public class RoleCreationCommand
 
 public class RoleCreationCommandHandler : ICommandHandler<RoleCreationCommand>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IRolesRepository _rolesRepository;
 
-    public RoleCreationCommandHandler(IRoleRepository roleRepository)
+    public RoleCreationCommandHandler(IRolesRepository rolesRepository)
     {
-        _roleRepository = roleRepository;
+        _rolesRepository = rolesRepository;
     }
 
-    public async Task Handle(RoleCreationCommand command)
+    public async Task HandleAsync(RoleCreationCommand command)
     {
-        await ValidateRoleName(command.Name);
-        await _roleRepository.CreateAsync(new Role(command.Name, command.GetRolePermissions()));
+        await ValidateRoleNameAsync(command.Name);
+        await _rolesRepository.CreateAsync(new Role(command.Name, command.GetRolePermissions()));
     }
 
-    private async Task ValidateRoleName(string name)
+    private async Task ValidateRoleNameAsync(string name)
     {
-        var roles = await _roleRepository.GetRolesAsync();
-        var rolesNames = roles.Select(x => x.Name);
+        var roles = await _rolesRepository.GetRolesAsync();
+        var roleNames = roles.Select(x => x.Name);
 
-        if (rolesNames.Contains(name))
+        if (roleNames.Contains(name))
         {
             throw new ArgumentException($"Role with name [{name}] already exists");
         }

@@ -10,7 +10,7 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.AddColumn<bool>(
                 name: "IsBlocked",
-                table: "Users",
+                table: "Accounts",
                 type: "boolean",
                 nullable: false,
                 defaultValue: false);
@@ -20,7 +20,7 @@ namespace UserManagementService.DataAccess.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsBlocked",
-                table: "Users");
+                table: "Accounts");
         }
     }
 }

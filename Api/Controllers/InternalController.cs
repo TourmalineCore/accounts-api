@@ -1,4 +1,4 @@
-using Application.Users.Queries;
+using Application.Accounts.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -14,8 +14,12 @@ public class InternalController : Controller
     }
 
     [HttpGet("account-permissions/{accountId:long}")]
-    public Task<IEnumerable<string>> GetPermissionsByAccountIdAsync([FromRoute] long accountId)
+    public async Task<IEnumerable<string>> GetPermissionsByAccountIdAsync(long accountId)
     {
-        return _getPermissionsByAccountIdQueryHandler.Handle(accountId);
+        return await _getPermissionsByAccountIdQueryHandler.HandleAsync(new GetPermissionsByAccountIdQuery
+                {
+                    Id = accountId,
+                }
+            );
     }
 }
