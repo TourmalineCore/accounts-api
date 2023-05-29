@@ -8,6 +8,8 @@ namespace Application.Accounts.Commands;
 public readonly struct AccountUnblockCommand
 {
     public long Id { get; init; }
+
+    public string CallerCorporateEmail { get; init; }
 }
 
 public class AccountUnblockCommandHandler : ICommandHandler<AccountUnblockCommand>
@@ -24,7 +26,7 @@ public class AccountUnblockCommandHandler : ICommandHandler<AccountUnblockComman
     public async Task HandleAsync(AccountUnblockCommand command)
     {
         var account = await _accountsRepository.GetByIdAsync(command.Id);
-        account.Unblock();
+        account.Unblock(command.CallerCorporateEmail);
         await _accountsRepository.UpdateAsync(account);
         await _httpClient.SendRequestToUnblockUserAsync(command.Id);
     }

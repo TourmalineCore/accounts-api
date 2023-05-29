@@ -41,7 +41,10 @@ public class AccountsController : Controller
     {
         try
         {
-            var accounts = await _getAccountsQueryHandler.HandleAsync();
+            var accounts = await _getAccountsQueryHandler.HandleAsync(new GetAccountsQuery
+            {
+                CallerCorporateEmail = User.GetCorporateEmail(),
+            });
             return Ok(accounts);
         }
         catch (Exception ex)
@@ -109,6 +112,7 @@ public class AccountsController : Controller
             await _accountBlockCommandHandler.HandleAsync(new AccountBlockCommand
                     {
                         Id = accountId,
+                        CallerCorporateEmail = User.GetCorporateEmail(),
                     }
                 );
 
@@ -129,6 +133,7 @@ public class AccountsController : Controller
             await _accountUnblockCommandHandler.HandleAsync(new AccountUnblockCommand
                     {
                         Id = accountId,
+                        CallerCorporateEmail = User.GetCorporateEmail(),
                     }
                 );
 

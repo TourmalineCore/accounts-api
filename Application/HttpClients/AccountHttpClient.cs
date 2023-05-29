@@ -18,7 +18,7 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail)
     {
-        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/register",
+        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/api/auth/register",
                 new
                 {
                     AccountId = accountId,
@@ -42,7 +42,7 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToBlockUserAsync(long accountId)
     {
-        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/block",
+        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/internal/block-user",
                 new
                 {
                     AccountId = accountId,
@@ -52,7 +52,7 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToUnblockUserAsync(long accountId)
     {
-        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/unblock",
+        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/internal/unblock-user",
                 new
                 {
                     AccountId = accountId,
