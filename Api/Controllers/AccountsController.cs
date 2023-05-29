@@ -41,7 +41,10 @@ public class AccountsController : Controller
     {
         try
         {
-            var accounts = await _getAccountsQueryHandler.HandleAsync();
+            var accounts = await _getAccountsQueryHandler.HandleAsync(new GetAccountsQuery
+            {
+                CallerCorporateEmail = User.GetCorporateEmail(),
+            });
             return Ok(accounts);
         }
         catch (Exception ex)

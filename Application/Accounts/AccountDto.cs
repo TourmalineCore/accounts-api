@@ -8,7 +8,7 @@ namespace Application.Accounts;
 
 public readonly struct AccountDto
 {
-    public AccountDto(Account account)
+    public AccountDto(Account account, string callerCorporateEmail)
     {
         Id = account.Id;
         CorporateEmail = account.CorporateEmail;
@@ -20,6 +20,7 @@ public readonly struct AccountDto
 
         // Refactor: use Instant in controllers instead of date time
         CreationDate = account.CreatedAt.ToDateTimeUtc();
+        CanChangeAccountState = account.CorporateEmail == callerCorporateEmail;
     }
 
     public long Id { get; }
@@ -37,4 +38,6 @@ public readonly struct AccountDto
     public bool IsBlocked { get; }
 
     public IEnumerable<RoleDto> Roles { get; }
+
+    public bool CanChangeAccountState { get; }
 }

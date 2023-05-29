@@ -7,6 +7,8 @@ namespace Application.Accounts.Queries;
 public readonly struct GetAccountByIdQuery
 {
     public long Id { get; init; }
+
+    public string CallerCorporateEmail { get; init; }
 }
 
 public class GetAccountByIdQueryHandler : IQueryHandler<GetAccountByIdQuery, AccountDto>
@@ -18,9 +20,9 @@ public class GetAccountByIdQueryHandler : IQueryHandler<GetAccountByIdQuery, Acc
         _accountsRepository = accountsRepository;
     }
 
-    public async Task<AccountDto> HandleAsync(GetAccountByIdQuery request)
+    public async Task<AccountDto> HandleAsync(GetAccountByIdQuery query)
     {
-        var account = await _accountsRepository.GetByIdAsync(request.Id);
-        return new AccountDto(account);
+        var account = await _accountsRepository.GetByIdAsync(query.Id);
+        return new AccountDto(account, query.CallerCorporateEmail);
     }
 }
