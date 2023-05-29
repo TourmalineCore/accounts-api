@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace Application.Accounts.Commands;
 
-public readonly struct AccountUpdateCommand
+public class AccountUpdateCommand
 {
     public long Id { get; init; }
 
@@ -19,6 +19,8 @@ public readonly struct AccountUpdateCommand
     public string? MiddleName { get; init; }
 
     public List<long> Roles { get; init; }
+
+    public string CallerCorporateEmail { get; set; }
 }
 
 public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
@@ -52,7 +54,8 @@ public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
                 command.FirstName,
                 command.LastName,
                 command.MiddleName,
-                command.Roles
+                command.Roles,
+                command.CallerCorporateEmail
             );
 
         await _accountsRepository.UpdateAsync(account);

@@ -46,8 +46,18 @@ public class Account : IEntity
             .ToList();
     }
 
-    public void Update(string firstName, string lastName, string? middleName, IEnumerable<long> roleIds)
+    public void Update(string firstName, string lastName, string? middleName, IEnumerable<long> roleIds, string callerCorporateEmail)
     {
+        if (IsAdmin())
+        {
+            throw new AccountOperationException("Admin can't be edited");
+        }
+
+        if (CorporateEmail == callerCorporateEmail)
+        {
+            throw new AccountOperationException("Can't edit myself");
+        }
+
         FirstName = firstName;
         LastName = lastName;
         MiddleName = middleName;
@@ -65,12 +75,12 @@ public class Account : IEntity
     {
         if (IsAdmin())
         {
-            throw new AccountBlockingException("Admin can't be blocked");
+            throw new AccountOperationException("Admin can't be blocked");
         }
 
         if (CorporateEmail == callerCorporateEmail)
         {
-            throw new AccountBlockingException("Can't block myself");
+            throw new AccountOperationException("Can't block myself");
         }
 
         IsBlocked = true;
@@ -80,12 +90,12 @@ public class Account : IEntity
     {
         if (IsAdmin())
         {
-            throw new AccountUnblockingException("Admin can't be unblocked");
+            throw new AccountOperationException("Admin can't be unblocked");
         }
 
         if (CorporateEmail == callerCorporateEmail)
         {
-            throw new AccountUnblockingException("Can't unblock myself");
+            throw new AccountOperationException("Can't unblock myself");
         }
 
         IsBlocked = false;
