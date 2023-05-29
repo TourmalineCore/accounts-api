@@ -109,6 +109,7 @@ public class AccountsController : Controller
             await _accountBlockCommandHandler.HandleAsync(new AccountBlockCommand
                     {
                         Id = accountId,
+                        CallerCorporateEmail = User.GetCorporateEmail(),
                     }
                 );
 
@@ -129,6 +130,7 @@ public class AccountsController : Controller
             await _accountUnblockCommandHandler.HandleAsync(new AccountUnblockCommand
                     {
                         Id = accountId,
+                        CallerCorporateEmail = User.GetCorporateEmail(),
                     }
                 );
 

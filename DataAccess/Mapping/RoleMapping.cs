@@ -28,14 +28,8 @@ internal class RoleMapping : IEntityTypeConfiguration<Role>
             .HasConversion<string>();
 
         builder.HasData(
-                new Role(1, RoleNames.Admin, _allPermissions),
-                new Role(2, RoleNames.Ceo, _allPermissions)
+                new Role(1, BaseRoleNames.Admin, _allPermissions),
+                new Role(2, BaseRoleNames.Ceo, _allPermissions)
             );
-    }
-
-    private static class RoleNames
-    {
-        public const string Admin = "Admin";
-        public const string Ceo = "CEO";
     }
 }

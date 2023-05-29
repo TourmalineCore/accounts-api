@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Contracts;
+using Core.Exceptions;
+using Core.Models;
 using NodaTime;
 
 namespace Core.Entities;
@@ -59,14 +61,46 @@ public class Account : IEntity
             .ToList();
     }
 
-    public void Block()
+    public void Block(string callerCorporateEmail)
     {
+        if (IsAdmin())
+        {
+            throw new AccountBlockingException("Admin can't be blocked");
+        }
+
+        if (CorporateEmail == callerCorporateEmail)
+        {
+            throw new AccountBlockingException("Can't block myself");
+        }
+
         IsBlocked = true;
     }
 
-    public void Unblock()
+    public void Unblock(string callerCorporateEmail)
     {
+        if (IsAdmin())
+        {
+            throw new AccountUnblockingException("Admin can't be unblocked");
+        }
+
+        if (CorporateEmail == callerCorporateEmail)
+        {
+            throw new AccountUnblockingException("Can't unblock myself");
+        }
+
         IsBlocked = false;
+    }
+
+    private bool IsAdmin()
+    {
+        if (AccountRoles.Count == 0)
+        {
+            return false;
+        }
+
+        return AccountRoles
+            .Select(x => x.Role.Name)
+            .Contains(BaseRoleNames.Admin);
     }
 
     private Account()
