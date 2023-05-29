@@ -94,6 +94,7 @@ public class AccountsController : Controller
     {
         try
         {
+            accountUpdateCommand.CallerCorporateEmail = User.GetCorporateEmail();
             await _accountUpdateCommandHandler.HandleAsync(accountUpdateCommand);
             return Ok();
         }
