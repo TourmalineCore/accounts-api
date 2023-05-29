@@ -38,7 +38,7 @@ image:
 
 # Here you need to pass your application dll to the dotnet utility
 args:
-  - "Accounts.Api.dll"
+  - "Api.dll"
   # - "EmailSender.Api.dll"
 
 ## @param bindURLs URLs to bind
