@@ -33,7 +33,7 @@ public class AccountUnblockCommandHandlerTests
             Id = It.IsAny<long>(),
         };
 
-        account.Block();
+        account.Block("caller@tourmalinecore.com");
 
         _accountRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
@@ -60,7 +60,7 @@ public class AccountUnblockCommandHandlerTests
             Id = It.IsAny<long>(),
         };
 
-        account.Block();
+        account.Block("caller@tourmalinecore.com");
 
         _accountRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
