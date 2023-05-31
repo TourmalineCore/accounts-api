@@ -28,7 +28,7 @@ public class AccountCreationCommandValidatorTests
         _accountRepositoryMock = new Mock<IAccountsRepository>();
 
         roleRepositoryMock
-            .Setup(x => x.GetRolesAsync())
+            .Setup(x => x.GetAllAsync())
             .ReturnsAsync(TestData.Roles);
 
         _validator = new AccountCreationCommandValidator(

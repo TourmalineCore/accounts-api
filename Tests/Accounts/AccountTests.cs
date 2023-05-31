@@ -17,24 +17,7 @@ public class AccountTests
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Block("test@tourmalinecore.com"));
-        Assert.Equal("Can't block myself", exception.Message);
-    }
-
-    [Fact]
-    public void CannotBlockAdmin()
-    {
-        var account = new Account("test@tourmalinecore.com",
-                "test",
-                "test",
-                "test",
-                new List<Role>
-                {
-                    new Role(1, BaseRoleNames.Admin, new List<Permission>()),
-                }
-            );
-
-        var exception = Assert.Throws<AccountOperationException>(() => account.Block("test@tourmalinecore.com"));
-        Assert.Equal("Admin can't be blocked", exception.Message);
+        Assert.Equal("The operation cannot be executed with own account", exception.Message);
     }
 
     [Fact]
@@ -50,7 +33,7 @@ public class AccountTests
         account.Block("caller@tourmalinecore.com");
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Unblock("test@tourmalinecore.com"));
-        Assert.Equal("Can't unblock myself", exception.Message);
+        Assert.Equal("The operation cannot be executed with own account", exception.Message);
     }
 
     [Fact]
@@ -66,39 +49,38 @@ public class AccountTests
         var exception = Assert.Throws<AccountOperationException>(() => account.Update("firstName",
                     "lastName",
                     "middleName",
-                    new List<long>
+                    new List<Role>
                     {
-                        2,
+                        new Role(BaseRoleNames.Ceo, new List<Permission>()),
                     },
                     "test@tourmalinecore.com"
                 )
             );
-        Assert.Equal("Can't edit myself", exception.Message);
+
+        Assert.Equal("The operation cannot be executed with own account", exception.Message);
     }
 
     [Fact]
-    public void CannotEditAdmin()
+    public void CannotSetAdminRoleForAccount()
     {
         var account = new Account("test@tourmalinecore.com",
                 "test",
                 "test",
                 "test",
-                new List<Role>
-                {
-                    new Role(1, BaseRoleNames.Admin, new List<Permission>()),
-                }
+                new List<Role>()
             );
 
-        var exception = Assert.Throws<AccountOperationException>(() => account.Update("firstName",
-                    "lastName",
-                    "middleName",
-                    new List<long>
+        var exception = Assert.Throws<AccountOperationException>(() => account.Update("test",
+                    "test",
+                    "test",
+                    new List<Role>
                     {
-                        2,
+                        new Role(BaseRoleNames.Admin, new List<Permission>()),
                     },
-                    "caller@tourmalinecore.com"
+                    "admin@tourmalinecore.com"
                 )
             );
-        Assert.Equal("Admin can't be edited", exception.Message);
+
+        Assert.Equal("Can't set admin role", exception.Message);
     }
 }

@@ -24,4 +24,6 @@ public class AccountsDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
+    public AccountsDbContext() : base() { }
 }

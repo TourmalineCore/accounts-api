@@ -9,12 +9,12 @@ namespace Tests.Roles;
 public class RoleUpdateCommandTests
 {
     private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
-    private readonly Role _adminRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Admin);
+    private readonly Role _ceoRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Ceo);
 
     public RoleUpdateCommandTests()
     {
         _roleRepositoryMock
-            .Setup(x => x.GetRolesAsync())
+            .Setup(x => x.GetAllAsync())
             .ReturnsAsync(TestData.Roles);
     }
 
@@ -23,14 +23,14 @@ public class RoleUpdateCommandTests
     {
         var command = new RoleUpdateCommand
         {
-            Id = _adminRole.Id,
-            Name = _adminRole.Name,
-            Permissions = _adminRole.Permissions.ToList(),
+            Id = _ceoRole.Id,
+            Name = _ceoRole.Name,
+            Permissions = _ceoRole.Permissions.ToList(),
         };
 
         _roleRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(_adminRole);
+            .ReturnsAsync(_ceoRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
         var exception = await Record.ExceptionAsync(() => roleUpdateCommandHandler.HandleAsync(command));
@@ -43,19 +43,19 @@ public class RoleUpdateCommandTests
     {
         var command = new RoleUpdateCommand
         {
-            Id = _adminRole.Id,
-            Name = TestData.RoleNames.Ceo,
-            Permissions = _adminRole.Permissions.ToList(),
+            Id = _ceoRole.Id,
+            Name = TestData.RoleNames.Manager,
+            Permissions = _ceoRole.Permissions.ToList(),
         };
 
         _roleRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(_adminRole);
+            .ReturnsAsync(_ceoRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.HandleAsync(command));
 
-        Assert.Equal($"Role with name [{TestData.RoleNames.Ceo}] already exists", exception.Message);
+        Assert.Equal($"Role with name [{TestData.RoleNames.Manager}] already exists", exception.Message);
     }
 
     [Fact]
@@ -63,8 +63,8 @@ public class RoleUpdateCommandTests
     {
         var command = new RoleUpdateCommand
         {
-            Id = _adminRole.Id,
-            Name = _adminRole.Name,
+            Id = _ceoRole.Id,
+            Name = _ceoRole.Name,
             Permissions = new List<string>
             {
                 "NonExistingPermission",
@@ -73,7 +73,7 @@ public class RoleUpdateCommandTests
 
         _roleRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(_adminRole);
+            .ReturnsAsync(_ceoRole);
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => roleUpdateCommandHandler.HandleAsync(command));
@@ -89,8 +89,8 @@ public class RoleUpdateCommandTests
         var command = new RoleUpdateCommand
         {
             Id = nonExistingRoleId,
-            Name = _adminRole.Name,
-            Permissions = _adminRole.Permissions.ToList(),
+            Name = _ceoRole.Name,
+            Permissions = _ceoRole.Permissions.ToList(),
         };
 
         var roleUpdateCommandHandler = new RoleUpdateCommandHandler(_roleRepositoryMock.Object);

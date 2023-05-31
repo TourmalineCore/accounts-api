@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Contracts;
 using Core.Exceptions;
-using Core.Models;
 using NodaTime;
 
 namespace Core.Entities;
@@ -27,6 +26,8 @@ public class Account : IEntity
 
     public Instant? DeletedAtUtc { get; private set; }
 
+    public bool IsAdmin => AccountRoles.Count != 0 && AccountRoles.Exists(x => x.Role.IsAdmin);
+
     public Account(string corporateEmail, string firstName, string lastName, string? middleName, IEnumerable<Role> roles)
     {
         CorporateEmail = corporateEmail;
@@ -46,26 +47,29 @@ public class Account : IEntity
             .ToList();
     }
 
-    public void Update(string firstName, string lastName, string? middleName, IEnumerable<long> roleIds, string callerCorporateEmail)
+    public void Update(string firstName, string lastName, string? middleName, List<Role> roles, string callerCorporateEmail)
     {
-        if (IsAdmin())
+        ValidateIsNotSelfOperation(callerCorporateEmail);
+
+        if (roles.Exists(role => role.IsAdmin))
         {
-            throw new AccountOperationException("Admin can't be edited");
+            throw new AccountOperationException("Can't set admin role");
         }
 
-        if (CorporateEmail == callerCorporateEmail)
+        if (IsAdmin)
         {
-            throw new AccountOperationException("Can't edit myself");
+            throw new AccountOperationException("Can't edit admin");
         }
 
         FirstName = firstName;
         LastName = lastName;
         MiddleName = middleName;
 
-        AccountRoles = roleIds
-            .Select(roleId => new AccountRole
+        AccountRoles = roles
+            .Select(role => new AccountRole
                     {
-                        RoleId = roleId,
+                        RoleId = role.Id,
+                        Role = role,
                     }
                 )
             .ToList();
@@ -73,44 +77,22 @@ public class Account : IEntity
 
     public void Block(string callerCorporateEmail)
     {
-        if (IsAdmin())
-        {
-            throw new AccountOperationException("Admin can't be blocked");
-        }
-
-        if (CorporateEmail == callerCorporateEmail)
-        {
-            throw new AccountOperationException("Can't block myself");
-        }
-
+        ValidateIsNotSelfOperation(callerCorporateEmail);
         IsBlocked = true;
     }
 
     public void Unblock(string callerCorporateEmail)
     {
-        if (IsAdmin())
-        {
-            throw new AccountOperationException("Admin can't be unblocked");
-        }
-
-        if (CorporateEmail == callerCorporateEmail)
-        {
-            throw new AccountOperationException("Can't unblock myself");
-        }
-
+        ValidateIsNotSelfOperation(callerCorporateEmail);
         IsBlocked = false;
     }
 
-    private bool IsAdmin()
+    private void ValidateIsNotSelfOperation(string callerCorporateEmail)
     {
-        if (AccountRoles.Count == 0)
+        if (CorporateEmail == callerCorporateEmail)
         {
-            return false;
+            throw new AccountOperationException("The operation cannot be executed with own account");
         }
-
-        return AccountRoles
-            .Select(x => x.Role.Name)
-            .Contains(BaseRoleNames.Admin);
     }
 
     private Account()

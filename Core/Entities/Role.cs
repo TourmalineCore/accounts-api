@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Contracts;
+using Core.Exceptions;
 using Core.Models;
 
 namespace Core.Entities;
@@ -16,6 +17,8 @@ public class Role : IEntity
 
     public string[] Permissions { get; private set; } = Array.Empty<string>();
 
+    public bool IsAdmin => Name == BaseRoleNames.Admin;
+    
     public Role(string name)
     {
         Name = name;
@@ -36,6 +39,16 @@ public class Role : IEntity
 
     public void Update(string name, IEnumerable<Permission> permissions)
     {
+        if (IsAdmin)
+        {
+            throw new RoleOperationException("Can't update admin role");
+        }
+
+        if (name == BaseRoleNames.Admin)
+        {
+            throw new RoleOperationException("Can't set admin role");
+        }
+
         Name = name;
         SetPermissions(permissions);
     }

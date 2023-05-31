@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Contracts;
 using Core.Entities;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories;
@@ -17,19 +19,15 @@ public class RolesRepository : IRolesRepository
 
     public async Task<long> CreateAsync(Role role)
     {
+        if (role.IsAdmin)
+        {
+            throw new RoleOperationException("Can't create one more admin role");
+        }
+
         await _context.AddAsync(role);
         await _context.SaveChangesAsync();
 
         return role.Id;
-    }
-
-    public async Task<IEnumerable<Role>> GetRolesAsync()
-    {
-        return await _context
-            .Queryable<Role>()
-            .Include(x => x.AccountRoles)
-            .AsNoTracking()
-            .ToListAsync();
     }
 
     public Task<Role> GetByIdAsync(long id)
@@ -48,20 +46,41 @@ public class RolesRepository : IRolesRepository
 
     public async Task<IEnumerable<Role>> GetAllAsync()
     {
-        return await _context
+        var roles = await _context
             .Roles
+            .Include(x => x.AccountRoles)
             .ToListAsync();
+
+        return roles.Where(role => !role.IsAdmin);
     }
 
     public Task RemoveAsync(Role role)
     {
+        if (role.IsAdmin)
+        {
+            throw new RoleOperationException("Can't remove admin role");
+        }
+
         _context.Remove(role);
         return _context.SaveChangesAsync();
     }
 
     public Task UpdateAsync(Role role)
     {
+        if (role.IsAdmin)
+        {
+            throw new RoleOperationException("Can't update admin role");
+        }
+
         _context.Update(role);
         return _context.SaveChangesAsync();
+    }
+
+    public Task<List<Role>> FindAsync(IEnumerable<long> roleIds)
+    {
+        return _context
+            .Roles
+            .Where(x => roleIds.Contains(x.Id))
+            .ToListAsync();
     }
 }

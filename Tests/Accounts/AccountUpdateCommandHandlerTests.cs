@@ -20,15 +20,15 @@ public class AccountUpdateCommandHandlerTests
             new List<Role>()
         );
 
-    private readonly long _adminRoleId = TestData
+    private readonly long _ceoRoleId = TestData
         .Roles
-        .Single(x => x.Name == TestData.RoleNames.Admin)
+        .Single(x => x.Name == TestData.RoleNames.Ceo)
         .Id;
 
     public AccountUpdateCommandHandlerTests()
     {
         _roleRepositoryMock
-            .Setup(x => x.GetRolesAsync())
+            .Setup(x => x.GetAllAsync())
             .ReturnsAsync(TestData.Roles);
     }
 
@@ -42,11 +42,11 @@ public class AccountUpdateCommandHandlerTests
             LastName = "last name",
             Roles = new List<long>
             {
-                _adminRoleId,
+                _ceoRoleId,
             },
         };
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
         var exception = await Assert.ThrowsAsync<NullReferenceException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Account not found", exception.Message);
@@ -72,7 +72,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
         var exception = await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Incorrect role ids. Probably you tried to set unavailable role id", exception.Message);
@@ -88,8 +88,8 @@ public class AccountUpdateCommandHandlerTests
             LastName = "last name",
             Roles = new List<long>
             {
-                _adminRoleId,
-                _adminRoleId,
+                _ceoRoleId,
+                _ceoRoleId,
             },
         };
 
@@ -97,7 +97,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
@@ -112,15 +112,25 @@ public class AccountUpdateCommandHandlerTests
             MiddleName = "middle name",
             Roles = new List<long>
             {
-                _adminRoleId,
+                _ceoRoleId,
             },
         };
+
+        var ceoRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Ceo);
 
         _accountRepositoryMock
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object));
+        _roleRepositoryMock
+            .Setup(x => x.FindAsync(It.IsAny<IEnumerable<long>>()))
+            .ReturnsAsync(new List<Role>
+                    {
+                        ceoRole,
+                    }
+                );
+
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
         await accountUpdateCommandHandler.HandleAsync(command);
 
         var account = await _accountRepositoryMock.Object.FindByIdAsync(1);
@@ -129,6 +139,6 @@ public class AccountUpdateCommandHandlerTests
         Assert.Equal(command.LastName, account.LastName);
         Assert.Equal(command.MiddleName, account.MiddleName);
         Assert.Single(account.AccountRoles);
-        Assert.True(account.AccountRoles.Exists(x => x.RoleId == _adminRoleId));
+        Assert.True(account.AccountRoles.Exists(x => x.RoleId == _ceoRoleId));
     }
 }

@@ -20,7 +20,7 @@ public readonly struct AccountDto
 
         // Refactor: use Instant in controllers instead of date time
         CreationDate = account.CreatedAt.ToDateTimeUtc();
-        CanChangeAccountState = account.CorporateEmail == callerCorporateEmail;
+        CanChangeAccountState = account.CorporateEmail != callerCorporateEmail && !account.IsAdmin;
     }
 
     public long Id { get; }

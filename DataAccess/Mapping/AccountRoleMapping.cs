@@ -26,13 +26,13 @@ internal class AccountRoleMapping : IEntityTypeConfiguration<AccountRole>
         builder.HasData(
                 new
                 {
-                    AccountId = 1L,
-                    RoleId = 2L,
+                    AccountId = MappingData.AdminAccountId,
+                    RoleId = MappingData.AdminRoleId,
                 },
                 new
                 {
-                    AccountId = 2L,
-                    RoleId = 1L,
+                    AccountId = MappingData.CeoAccountId,
+                    RoleId = MappingData.CeoRoleId,
                 }
             );
     }
