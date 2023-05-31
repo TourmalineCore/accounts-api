@@ -41,7 +41,7 @@ public class RoleUpdateCommandHandler : ICommandHandler<RoleUpdateCommand>
 
     private async Task ValidateNewRoleNameAsync(string currentName, string newName)
     {
-        var roles = await _rolesRepository.GetRolesAsync();
+        var roles = await _rolesRepository.GetAllAsync();
         var roleNames = roles.Select(x => x.Name);
 
         if (currentName == newName)

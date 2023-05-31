@@ -38,7 +38,7 @@ public class RoleCreationCommandHandler : ICommandHandler<RoleCreationCommand>
 
     private async Task ValidateRoleNameAsync(string name)
     {
-        var roles = await _rolesRepository.GetRolesAsync();
+        var roles = await _rolesRepository.GetAllAsync();
         var roleNames = roles.Select(x => x.Name);
 
         if (roleNames.Contains(name))

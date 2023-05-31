@@ -13,7 +13,7 @@ public class RoleCreationCommandTests
     public RoleCreationCommandTests()
     {
         _roleRepositoryMock
-            .Setup(x => x.GetRolesAsync())
+            .Setup(x => x.GetAllAsync())
             .ReturnsAsync(TestData.Roles);
     }
 

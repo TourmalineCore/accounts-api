@@ -42,9 +42,11 @@ public class AccountsController : Controller
         try
         {
             var accounts = await _getAccountsQueryHandler.HandleAsync(new GetAccountsQuery
-            {
-                CallerCorporateEmail = User.GetCorporateEmail(),
-            });
+                    {
+                        CallerCorporateEmail = User.GetCorporateEmail(),
+                    }
+                );
+
             return Ok(accounts);
         }
         catch (Exception ex)
@@ -62,10 +64,11 @@ public class AccountsController : Controller
             var account = await _getAccountByIdQueryHandler.HandleAsync(new GetAccountByIdQuery
                     {
                         Id = accountId,
+                        CallerCorporateEmail = User.GetCorporateEmail(),
                     }
                 );
 
-            return Ok( account );
+            return Ok(account);
         }
         catch (Exception ex)
         {

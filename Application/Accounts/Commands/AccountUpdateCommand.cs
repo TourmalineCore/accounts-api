@@ -26,12 +26,14 @@ public class AccountUpdateCommand
 public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
 {
     private readonly IAccountsRepository _accountsRepository;
+    private readonly IRolesRepository _rolesRepository;
     private readonly AccountUpdateCommandValidator _validator;
 
-    public AccountUpdateCommandHandler(IAccountsRepository accountsRepository, AccountUpdateCommandValidator accountUpdateCommandValidator)
+    public AccountUpdateCommandHandler(IAccountsRepository accountsRepository, AccountUpdateCommandValidator accountUpdateCommandValidator, IRolesRepository rolesRepository)
     {
         _accountsRepository = accountsRepository;
         _validator = accountUpdateCommandValidator;
+        _rolesRepository = rolesRepository;
     }
 
     public async Task HandleAsync(AccountUpdateCommand command)
@@ -50,11 +52,13 @@ public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
             throw new NullReferenceException("Account not found");
         }
 
+        var newAccountRoles = await _rolesRepository.FindAsync(command.Roles);
+
         account.Update(
                 command.FirstName,
                 command.LastName,
                 command.MiddleName,
-                command.Roles,
+                newAccountRoles,
                 command.CallerCorporateEmail
             );
 

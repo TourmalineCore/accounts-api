@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Core.Entities;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,28 +7,14 @@ namespace DataAccess.Mapping;
 
 internal class RoleMapping : IEntityTypeConfiguration<Role>
 {
-    private readonly List<Permission> _allPermissions = new()
-    {
-        new Permission(Permissions.ViewPersonalProfile),
-        new Permission(Permissions.EditPersonalProfile),
-        new Permission(Permissions.ViewContacts),
-        new Permission(Permissions.ViewSalaryAndDocumentsData),
-        new Permission(Permissions.EditFullEmployeesData),
-        new Permission(Permissions.AccessAnalyticalForecastsPage),
-        new Permission(Permissions.ViewAccounts),
-        new Permission(Permissions.ManageAccounts),
-        new Permission(Permissions.ViewRoles),
-        new Permission(Permissions.ManageRoles),
-    };
-
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.Property(x => x.Name)
             .HasConversion<string>();
 
         builder.HasData(
-                new Role(1, BaseRoleNames.Admin, _allPermissions),
-                new Role(2, BaseRoleNames.Ceo, _allPermissions)
+                new Role(MappingData.AdminRoleId, BaseRoleNames.Admin, MappingData.AllPermissions),
+                new Role(MappingData.CeoRoleId, BaseRoleNames.Ceo, MappingData.AllPermissions)
             );
     }
 }

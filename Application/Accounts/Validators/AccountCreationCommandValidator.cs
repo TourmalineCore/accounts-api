@@ -42,7 +42,7 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
             .MustAsync(
                     async (accountRoleIds, _) =>
                     {
-                        var roles = await rolesRepository.GetRolesAsync();
+                        var roles = await rolesRepository.GetAllAsync();
                         var roleIds = roles.Select(x => x.Id);
 
                         return accountRoleIds.All(x => roleIds.Contains(x));

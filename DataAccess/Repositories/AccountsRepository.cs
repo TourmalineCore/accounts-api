@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Contracts;
 using Core.Entities;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories;
@@ -18,6 +19,11 @@ public class AccountsRepository : IAccountsRepository
 
     public async Task<long> CreateAsync(Account account)
     {
+        if (account.IsAdmin)
+        {
+            throw new AccountOperationException("Can't create one more admin");
+        }
+
         await _context.AddAsync(account);
         await _context.SaveChangesAsync();
 
@@ -53,23 +59,35 @@ public class AccountsRepository : IAccountsRepository
 
     public async Task<IEnumerable<Account>> GetAllAsync()
     {
-        return await _context
+        var accounts = await _context
             .QueryableAsNoTracking<Account>()
-            .Where(x => x.DeletedAtUtc == null)
             .Include(x => x.AccountRoles)
             .ThenInclude(x => x.Role)
+            .Where(x => x.DeletedAtUtc == null)
             .ToListAsync();
+
+        return accounts.Where(account => !account.IsAdmin);
     }
 
     public Task RemoveAsync(Account account)
     {
+        if (account.IsAdmin)
+        {
+            throw new AccountOperationException("Can't remove admin");
+        }
+
         _context.Remove(account);
         return _context.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(Account account)
+    public async Task UpdateAsync(Account account)
     {
+        if (account.IsAdmin)
+        {
+            throw new AccountOperationException("Can't edit admin");
+        }
+
         _context.Update(account);
-        return _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 }
