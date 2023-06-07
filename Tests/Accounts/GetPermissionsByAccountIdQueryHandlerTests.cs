@@ -20,15 +20,17 @@ public class GetPermissionsByAccountIdQueryHandlerTests
                     TestData.RoleNames.Admin,
                     new List<Permission>
                     {
-                        new(Permissions.EditFullEmployeesData),
+                        new(Permissions.ViewAccounts),
+                        new(Permissions.ViewRoles),
+                        new(Permissions.ManageRoles),
                     }
                 ),
             new Role(2,
                     TestData.RoleNames.Ceo,
                     new List<Permission>
                     {
-                        new(Permissions.EditFullEmployeesData),
-                        new(Permissions.AccessAnalyticalForecastsPage),
+                        new(Permissions.ViewAccounts),
+                        new(Permissions.ViewRoles),
                     }
                 ),
         };
@@ -54,8 +56,9 @@ public class GetPermissionsByAccountIdQueryHandlerTests
         var permissions = await queryHandler.HandleAsync(query);
         permissions = permissions.ToList();
 
-        Assert.Equal(2, permissions.Count());
-        Assert.Contains(Permissions.EditFullEmployeesData, permissions);
-        Assert.Contains(Permissions.AccessAnalyticalForecastsPage, permissions);
+        Assert.Equal(3, permissions.Count());
+        Assert.Contains(Permissions.ViewAccounts, permissions);
+        Assert.Contains(Permissions.ViewRoles, permissions);
+        Assert.Contains(Permissions.ManageRoles, permissions);
     }
 }

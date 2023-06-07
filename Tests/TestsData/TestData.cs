@@ -19,22 +19,24 @@ public static class TestData
                 RoleNames.Admin,
                 new List<Permission>
                 {
-                    new(Permissions.EditFullEmployeesData),
+                    new(Permissions.ViewAccounts),
+                    new(Permissions.ViewRoles),
+                    new(Permissions.ManageRoles),
                 }
             ),
         new Role(2,
                 RoleNames.Ceo,
                 new List<Permission>
                 {
-                    new(Permissions.EditFullEmployeesData),
-                    new(Permissions.AccessAnalyticalForecastsPage),
+                    new(Permissions.ViewAccounts),
+                    new(Permissions.ViewRoles),
                 }
             ),
         new Role(3,
                 RoleNames.Manager,
                 new List<Permission>
                 {
-                    new(Permissions.EditFullEmployeesData),
+                    new(Permissions.ViewAccounts),
                 }
             ),
         new Role(4, RoleNames.Employee, new List<Permission>()),
