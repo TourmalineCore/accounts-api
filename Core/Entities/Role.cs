@@ -11,14 +11,28 @@ public class Role : IEntity
 {
     public long Id { get; private set; }
 
-    public string Name { get; private set; }
-
     public List<AccountRole> AccountRoles { get; private set; }
 
     public string[] Permissions { get; private set; } = Array.Empty<string>();
 
     public bool IsAdmin => Name == BaseRoleNames.Admin;
-    
+
+    public string Name
+    {
+        get => _name;
+        private set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("The role name can't be empty or consist only of spaces");
+            }
+
+            _name = value;
+        }
+    }
+
+    private string _name;
+
     public Role(string name)
     {
         Name = name;
