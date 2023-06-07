@@ -52,4 +52,21 @@ public class RoleTests
         Assert.Null(Record.Exception(() => new Role(BaseRoleNames.Ceo, incorrectPermissions)));
         Assert.Null(Record.Exception(() => new Role(It.IsAny<long>(), BaseRoleNames.Ceo, incorrectPermissions)));
     }
+
+    [Fact]
+    public void CannotCreateRoleIfNameIsEmptyOrWhitespaces()
+    {
+        Assert.Throws<ArgumentException>(() => new Role(string.Empty));
+        Assert.Throws<ArgumentException>(() => new Role("  "));
+        Assert.Throws<ArgumentException>(() => new Role(string.Empty, new List<Permission>()));
+        Assert.Throws<ArgumentException>(() => new Role(It.IsAny<long>(), string.Empty, new List<Permission>()));
+    }
+
+    [Fact]
+    public void CannotUpdateRoleIfNewNameIsEmptyOrWhitespaces()
+    {
+        var role = new Role(BaseRoleNames.Ceo);
+        Assert.Throws<ArgumentException>(() => role.Update(string.Empty, new List<Permission>()));
+        Assert.Throws<ArgumentException>(() => role.Update("  ", new List<Permission>()));
+    }
 }
