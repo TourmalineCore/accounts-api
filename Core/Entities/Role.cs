@@ -55,7 +55,9 @@ public class Role : IEntity
 
     private void SetPermissions(IEnumerable<Permission> permissions)
     {
-        Permissions = permissions.Select(x => x.Name).ToArray();
+        var rolePermissions = permissions.Select(x => x.Name).ToArray();
+        RolePermissionsValidator.ValidatePermissions(rolePermissions);
+        Permissions = rolePermissions;
     }
 
     private Role()
