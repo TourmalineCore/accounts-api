@@ -2,6 +2,7 @@ using Application.Accounts.Commands;
 using Application.HttpClients;
 using Core.Contracts;
 using Core.Entities;
+using Core.Models;
 using Moq;
 
 namespace Tests.Accounts;
@@ -10,6 +11,11 @@ public class AccountBlockCommandHandlerTests
 {
     private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
     private readonly Mock<IHttpClient> _httpClientMock = new();
+
+    private readonly List<Role> _roles = new()
+    {
+        new Role(BaseRoleNames.Ceo),
+    };
 
     public AccountBlockCommandHandlerTests()
     {
@@ -25,7 +31,7 @@ public class AccountBlockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                _roles
             );
 
         var command = new AccountBlockCommand
@@ -51,7 +57,7 @@ public class AccountBlockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                _roles
             );
 
         var command = new AccountBlockCommand

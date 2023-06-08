@@ -18,11 +18,11 @@ public class AccountUpdateCommandHandlerTests
             "test",
             "test",
             "test",
-            new List<Role>()
+            TestData.ValidAccountRoles
         );
 
     private readonly long _ceoRoleId = TestData
-        .Roles
+        .AllRoles
         .Single(x => x.Name == TestData.RoleNames.Ceo)
         .Id;
 
@@ -30,9 +30,9 @@ public class AccountUpdateCommandHandlerTests
     {
         _roleRepositoryMock
             .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(TestData.Roles);
+            .ReturnsAsync(TestData.AllRoles);
 
-        var ceoRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Ceo);
+        var ceoRole = TestData.AllRoles.Single(x => x.Name == TestData.RoleNames.Ceo);
 
         _roleRepositoryMock
             .Setup(x => x.FindAsync(It.IsAny<IEnumerable<long>>()))
@@ -144,7 +144,7 @@ public class AccountUpdateCommandHandlerTests
     }
 
     [Fact]
-    public async Task CannotUpdateRoleIfFirstNameLengthMoreThan50()
+    public async Task CannotUpdateAccountIfFirstNameLengthMoreThan50()
     {
         var command = new AccountUpdateCommand
         {
@@ -166,7 +166,7 @@ public class AccountUpdateCommandHandlerTests
     }
 
     [Fact]
-    public async Task CannotUpdateRoleIfLastNameLengthMoreThan50()
+    public async Task CannotUpdateAccountIfLastNameLengthMoreThan50()
     {
         var command = new AccountUpdateCommand
         {
@@ -188,7 +188,7 @@ public class AccountUpdateCommandHandlerTests
     }
 
     [Fact]
-    public async Task CannotUpdateRoleIfMiddleNameLengthMoreThan50()
+    public async Task CannotUpdateAccountIfMiddleNameLengthMoreThan50()
     {
         var command = new AccountUpdateCommand
         {
@@ -200,6 +200,26 @@ public class AccountUpdateCommandHandlerTests
             {
                 _ceoRoleId,
             },
+        };
+
+        _accountRepositoryMock
+            .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
+            .ReturnsAsync(_testAccount);
+
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
+    }
+
+    [Fact]
+    public async Task CannotUpdateAccountIfRolesAreEmpty()
+    {
+        var command = new AccountUpdateCommand
+        {
+            Id = 1,
+            FirstName = "first name",
+            LastName = "middle name",
+            MiddleName = _longString,
+            Roles = new List<long>(),
         };
 
         _accountRepositoryMock

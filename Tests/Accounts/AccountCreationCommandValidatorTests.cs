@@ -30,7 +30,7 @@ public class AccountCreationCommandValidatorTests
 
         roleRepositoryMock
             .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(TestData.Roles);
+            .ReturnsAsync(TestData.AllRoles);
 
         _validator = new AccountCreationCommandValidator(
                 roleRepositoryMock.Object,
@@ -230,6 +230,22 @@ public class AccountCreationCommandValidatorTests
             {
                 2,
             },
+        };
+
+        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+        Assert.False(validationResult.IsValid);
+    }
+
+    [Fact]
+    public async Task RoleIdsAreEmpty_ReturnFalse()
+    {
+        var accountCreationCommand = new AccountCreationCommand
+        {
+            FirstName = "Ivan",
+            LastName = "Smith",
+            MiddleName = _longString,
+            CorporateEmail = "ivan@tourmalinecore.com",
+            RoleIds = new List<long>(),
         };
 
         var validationResult = await _validator.ValidateAsync(accountCreationCommand);

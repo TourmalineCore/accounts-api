@@ -14,7 +14,7 @@ public class RoleCreationCommandTests
     {
         _roleRepositoryMock
             .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(TestData.Roles);
+            .ReturnsAsync(TestData.AllRoles);
     }
 
     [Fact]

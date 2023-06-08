@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Contracts;
@@ -37,6 +38,8 @@ public class Account : IEntity
         IsBlocked = false;
         CreatedAt = SystemClock.Instance.GetCurrentInstant();
 
+        ValidateRoles(roles);
+
         AccountRoles = roles
             .Select(role => new AccountRole
                     {
@@ -50,6 +53,7 @@ public class Account : IEntity
     public void Update(string firstName, string lastName, string? middleName, List<Role> roles, string callerCorporateEmail)
     {
         ValidateIsNotSelfOperation(callerCorporateEmail);
+        ValidateRoles(roles);
 
         if (roles.Exists(role => role.IsAdmin))
         {
@@ -92,6 +96,14 @@ public class Account : IEntity
         if (CorporateEmail == callerCorporateEmail)
         {
             throw new AccountOperationException("The operation cannot be executed with own account");
+        }
+    }
+
+    private static void ValidateRoles(IEnumerable<Role> roles)
+    {
+        if (!roles.Any())
+        {
+            throw new ArgumentException("Account roles can't be empty");
         }
     }
 

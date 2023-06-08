@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -28,6 +27,12 @@ namespace Application.Accounts.Validators
 
         public async Task<bool> IsValidAsync(ValidationContext<T> context, List<long> accountRoleIds, CancellationToken cancellation)
         {
+            if (!accountRoleIds.Any())
+            {
+                _errorMessage = "Role ids can't be empty";
+                return false;
+            }
+
             if (!IsRoleIdsUnique(accountRoleIds))
             {
                 _errorMessage = "Role ids have duplicates";

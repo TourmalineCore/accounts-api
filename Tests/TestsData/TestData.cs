@@ -13,7 +13,12 @@ public static class TestData
         public const string Employee = "Employee";
     }
 
-    public static readonly List<Role> Roles = new()
+    public static readonly List<Role> ValidAccountRoles = new()
+    {
+        new Role(BaseRoleNames.Ceo),
+    };
+
+    public static readonly List<Role> AllRoles = new()
     {
         new Role(1,
                 RoleNames.Admin,

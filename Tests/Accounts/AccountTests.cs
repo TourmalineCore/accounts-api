@@ -1,6 +1,7 @@
 using Core.Entities;
 using Core.Exceptions;
 using Core.Models;
+using Tests.TestsData;
 
 namespace Tests.Accounts;
 
@@ -13,7 +14,7 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Block("test@tourmalinecore.com"));
@@ -27,7 +28,7 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         account.Block("caller@tourmalinecore.com");
@@ -43,16 +44,13 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Update("firstName",
                     "lastName",
                     "middleName",
-                    new List<Role>
-                    {
-                        new Role(BaseRoleNames.Ceo, new List<Permission>()),
-                    },
+                    TestData.ValidAccountRoles,
                     "test@tourmalinecore.com"
                 )
             );
@@ -67,7 +65,7 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Update("test",
@@ -82,5 +80,40 @@ public class AccountTests
             );
 
         Assert.Equal("Can't set admin role", exception.Message);
+    }
+
+    [Fact]
+    public void CannotCreateAccountWithEmptyRoles()
+    {
+        var exception = Assert.Throws<ArgumentException>(() => new Account("test@tourmalinecore.com",
+                    "test",
+                    "test",
+                    "test",
+                    new List<Role>()
+                )
+            );
+
+        Assert.Equal("Account roles can't be empty", exception.Message);
+    }
+
+    [Fact]
+    public void CannotUpdateAccountIfNewRolesAreEmpty()
+    {
+        var account = new Account("test@tourmalinecore.com",
+                "test",
+                "test",
+                "test",
+                TestData.ValidAccountRoles
+            );
+
+        var exception = Assert.Throws<ArgumentException>(() => account.Update("test",
+                    "test",
+                    "test",
+                    new List<Role>(),
+                    "user@tourmalinecore.com"
+                )
+            );
+
+        Assert.Equal("Account roles can't be empty", exception.Message);
     }
 }
