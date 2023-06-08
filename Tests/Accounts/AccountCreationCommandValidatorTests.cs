@@ -13,6 +13,7 @@ public class AccountCreationCommandValidatorTests
 {
     private readonly AccountCreationCommandValidator _validator;
     private readonly Mock<IAccountsRepository> _accountRepositoryMock;
+    private readonly string _longString = new('a', 51);
 
     public AccountCreationCommandValidatorTests()
     {
@@ -173,6 +174,61 @@ public class AccountCreationCommandValidatorTests
                 1,
                 1,
                 1,
+            },
+        };
+
+        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+        Assert.False(validationResult.IsValid);
+    }
+
+    [Fact]
+    public async Task FirstNameLengthMoreThan50_ReturnFalse()
+    {
+        var accountCreationCommand = new AccountCreationCommand
+        {
+            FirstName = _longString,
+            LastName = "Smith",
+            CorporateEmail = "ivan@tourmalinecore.com",
+            RoleIds = new List<long>
+            {
+                2,
+            },
+        };
+
+        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+        Assert.False(validationResult.IsValid);
+    }
+
+    [Fact]
+    public async Task LastNameLengthMoreThan50_ReturnFalse()
+    {
+        var accountCreationCommand = new AccountCreationCommand
+        {
+            FirstName = "Ivan",
+            LastName = _longString,
+            CorporateEmail = "ivan@tourmalinecore.com",
+            RoleIds = new List<long>
+            {
+                2,
+            },
+        };
+
+        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+        Assert.False(validationResult.IsValid);
+    }
+
+    [Fact]
+    public async Task MiddleNameLengthMoreThan50_ReturnFalse()
+    {
+        var accountCreationCommand = new AccountCreationCommand
+        {
+            FirstName = "Ivan",
+            LastName = "Smith",
+            MiddleName = _longString,
+            CorporateEmail = "ivan@tourmalinecore.com",
+            RoleIds = new List<long>
+            {
+                2,
             },
         };
 

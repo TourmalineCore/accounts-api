@@ -12,6 +12,10 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
         builder.HasIndex(user => user.CorporateEmail)
             .IsUnique();
 
+        builder.Property(x => x.FirstName).HasMaxLength(50);
+        builder.Property(x => x.LastName).HasMaxLength(50);
+        builder.Property(x => x.MiddleName).HasMaxLength(50);
+
         builder.HasData(
                 new
                 {
