@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Application.Accounts.Commands;
 using Application.Options;
 using Core.Contracts;
@@ -15,6 +13,10 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
     public AccountCreationCommandValidator(IRolesRepository rolesRepository, IAccountsRepository accountsRepository, IOptions<AccountValidationOptions> accountValidOptions)
     {
         _accountValidOptions = accountValidOptions.Value;
+
+        RuleFor(x => x.FirstName).MaximumLength(50);
+        RuleFor(x => x.LastName).MaximumLength(50);
+        RuleFor(x => x.MiddleName).MaximumLength(50);
 
         When(_ => !_accountValidOptions.IgnoreCorporateDomainValidationRule,
                 () =>
@@ -35,26 +37,7 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
                 }
             );
 
-        RuleFor(x => x.RoleIds)
-            .NotNull()
-            .NotEmpty()
-            .Must(IsRoleIdsUnique)
-            .MustAsync(
-                    async (accountRoleIds, _) =>
-                    {
-                        var roles = await rolesRepository.GetAllAsync();
-                        var roleIds = roles.Select(x => x.Id);
-
-                        return accountRoleIds.All(x => roleIds.Contains(x));
-                    }
-                )
-            .WithMessage("Incorrect role ids. Probably you tried to set unavailable role id");
-    }
-
-    private static bool IsRoleIdsUnique(List<long> roleIds)
-    {
-        var uniqueRoleIds = roleIds.Distinct().ToList();
-        return roleIds.Count == uniqueRoleIds.Count;
+        RuleFor(x => x.RoleIds).RolesMustBeValid(rolesRepository);
     }
 
     private bool IsCorporateEmail(string corporateEmail)
