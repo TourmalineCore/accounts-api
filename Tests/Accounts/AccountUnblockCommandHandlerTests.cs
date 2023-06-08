@@ -3,6 +3,7 @@ using Application.HttpClients;
 using Core.Contracts;
 using Core.Entities;
 using Moq;
+using Tests.TestsData;
 
 namespace Tests.Accounts;
 
@@ -25,7 +26,7 @@ public class AccountUnblockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         var command = new AccountUnblockCommand
@@ -52,7 +53,7 @@ public class AccountUnblockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                new List<Role>()
+                TestData.ValidAccountRoles
             );
 
         var command = new AccountUnblockCommand

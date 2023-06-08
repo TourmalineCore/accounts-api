@@ -9,13 +9,13 @@ namespace Tests.Roles;
 public class RoleUpdateCommandTests
 {
     private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
-    private readonly Role _ceoRole = TestData.Roles.Single(x => x.Name == TestData.RoleNames.Ceo);
+    private readonly Role _ceoRole = TestData.AllRoles.Single(x => x.Name == TestData.RoleNames.Ceo);
 
     public RoleUpdateCommandTests()
     {
         _roleRepositoryMock
             .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(TestData.Roles);
+            .ReturnsAsync(TestData.AllRoles);
     }
 
     [Fact]
