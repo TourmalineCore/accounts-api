@@ -15,7 +15,6 @@ internal static class MappingData
     public static readonly List<Permission> AllPermissions = new()
     {
         new Permission(Permissions.ViewPersonalProfile),
-        new Permission(Permissions.EditPersonalProfile),
         new Permission(Permissions.ViewContacts),
         new Permission(Permissions.ViewSalaryAndDocumentsData),
         new Permission(Permissions.EditFullEmployeesData),
