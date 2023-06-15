@@ -26,7 +26,6 @@ public class RolePermissionsValidatorTests
         var allPermissions = new List<string>
         {
             Permissions.ViewPersonalProfile,
-            Permissions.EditPersonalProfile,
             Permissions.ViewContacts,
             Permissions.ViewSalaryAndDocumentsData,
             Permissions.EditFullEmployeesData,
@@ -42,7 +41,6 @@ public class RolePermissionsValidatorTests
     }
 
     [Theory]
-    [InlineData(Permissions.EditPersonalProfile, new[] { Permissions.ViewPersonalProfile })]
     [InlineData(Permissions.ViewSalaryAndDocumentsData, new[] { Permissions.ViewContacts })]
     [InlineData(Permissions.EditFullEmployeesData, new[] { Permissions.ViewContacts, Permissions.ViewSalaryAndDocumentsData })]
     [InlineData(Permissions.ManageAccounts, new[] { Permissions.ViewAccounts })]
@@ -54,7 +52,6 @@ public class RolePermissionsValidatorTests
     }
 
     [Theory]
-    [InlineData(Permissions.EditPersonalProfile, Permissions.ViewPersonalProfile)]
     [InlineData(Permissions.ViewSalaryAndDocumentsData, Permissions.ViewContacts)]
     [InlineData(Permissions.EditFullEmployeesData, Permissions.ViewContacts, Permissions.ViewSalaryAndDocumentsData)]
     [InlineData(Permissions.ManageAccounts, Permissions.ViewAccounts)]
