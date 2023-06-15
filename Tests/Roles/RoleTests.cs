@@ -2,6 +2,7 @@ using Core.Entities;
 using Core.Exceptions;
 using Core.Models;
 using Moq;
+using Tests.TestsData;
 
 namespace Tests.Roles;
 
@@ -10,8 +11,8 @@ public class RoleTests
     [Fact]
     public void CannotSetAdminRole()
     {
-        var role = new Role(BaseRoleNames.Ceo, new List<Permission>());
-        var exception = Assert.Throws<RoleOperationException>(() => role.Update(BaseRoleNames.Admin, new List<Permission>()));
+        var role = new Role(BaseRoleNames.Ceo, TestData.ValidPermissions);
+        var exception = Assert.Throws<RoleOperationException>(() => role.Update(BaseRoleNames.Admin, TestData.ValidPermissions));
         Assert.Equal("Can't set admin role", exception.Message);
     }
 
@@ -23,7 +24,7 @@ public class RoleTests
             new(Permissions.EditFullEmployeesData),
         };
 
-        var role = new Role(BaseRoleNames.Ceo, new List<Permission>());
+        var role = new Role(BaseRoleNames.Ceo, TestData.ValidPermissions);
         Assert.Throws<ArgumentException>(() => role.Update(BaseRoleNames.Ceo, incorrectPermissions));
     }
 
@@ -56,18 +57,38 @@ public class RoleTests
     [Fact]
     public void CannotCreateRoleIfNameIsEmptyOrWhitespaces()
     {
-        Assert.Throws<ArgumentException>(() => new Role(string.Empty));
-        Assert.Throws<ArgumentException>(() => new Role("  "));
-        Assert.Throws<ArgumentException>(() => new Role(string.Empty, new List<Permission>()));
-        Assert.Throws<ArgumentException>(() => new Role(It.IsAny<long>(), string.Empty, new List<Permission>()));
+        Assert.Throws<ArgumentException>(() => new Role(string.Empty,
+                    new List<Permission>
+                    {
+                        new(Permissions.ViewPersonalProfile),
+                    }
+                )
+            );
+
+        Assert.Throws<ArgumentException>(() => new Role("  ",
+                    new List<Permission>
+                    {
+                        new(Permissions.ViewPersonalProfile),
+                    }
+                )
+            );
+
+        Assert.Throws<ArgumentException>(() => new Role(string.Empty, TestData.ValidPermissions));
+        Assert.Throws<ArgumentException>(() => new Role(It.IsAny<long>(), string.Empty, TestData.ValidPermissions));
     }
 
     [Fact]
     public void CannotUpdateRoleIfNewNameIsEmptyOrWhitespaces()
     {
-        var role = new Role(BaseRoleNames.Ceo);
-        Assert.Throws<ArgumentException>(() => role.Update(string.Empty, new List<Permission>()));
-        Assert.Throws<ArgumentException>(() => role.Update("  ", new List<Permission>()));
+        var role = new Role(BaseRoleNames.Ceo,
+                new List<Permission>
+                {
+                    new(Permissions.ViewPersonalProfile),
+                }
+            );
+
+        Assert.Throws<ArgumentException>(() => role.Update(string.Empty, TestData.ValidPermissions));
+        Assert.Throws<ArgumentException>(() => role.Update("  ", TestData.ValidPermissions));
     }
 
     [Fact]

@@ -3,6 +3,7 @@ using Application.Accounts.Validators;
 using Application.Options;
 using Core.Contracts;
 using Core.Entities;
+using Core.Models;
 using Microsoft.Extensions.Options;
 using Moq;
 using Tests.TestsData;
@@ -77,10 +78,7 @@ public class AccountCreationCommandValidatorTests
                         "Ivan",
                         "Smith",
                         "Alexandrovich",
-                        new List<Role>
-                        {
-                            new(TestData.RoleNames.Employee),
-                        }
+                        TestData.ValidAccountRoles
                     )
                 );
 

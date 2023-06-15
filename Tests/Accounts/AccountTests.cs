@@ -73,7 +73,7 @@ public class AccountTests
                     "test",
                     new List<Role>
                     {
-                        new Role(BaseRoleNames.Admin, new List<Permission>()),
+                        new Role(BaseRoleNames.Admin, TestData.ValidPermissions),
                     },
                     "admin@tourmalinecore.com"
                 )

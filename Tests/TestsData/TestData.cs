@@ -13,9 +13,20 @@ public static class TestData
         public const string Employee = "Employee";
     }
 
+    public static readonly List<Permission> ValidPermissions = new()
+    {
+        new Permission(Permissions.ViewPersonalProfile),
+    };
+
     public static readonly List<Role> ValidAccountRoles = new()
     {
-        new Role(BaseRoleNames.Ceo),
+        new Role(BaseRoleNames.Ceo,
+                new List<Permission>
+                {
+                    new(Permissions.ViewAccounts),
+                    new(Permissions.ViewRoles),
+                }
+            ),
     };
 
     public static readonly List<Role> AllRoles = new()
@@ -44,6 +55,12 @@ public static class TestData
                     new(Permissions.ViewAccounts),
                 }
             ),
-        new Role(4, RoleNames.Employee, new List<Permission>()),
+        new Role(4,
+                RoleNames.Employee,
+                new List<Permission>
+                {
+                    new(Permissions.ViewPersonalProfile),
+                }
+            ),
     };
 }
