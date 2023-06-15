@@ -16,6 +16,11 @@ public static class RolePermissionsValidator
 
     public static void ValidatePermissions(IEnumerable<string> permissions)
     {
+        if (!permissions.Any())
+        {
+            throw new ArgumentException("Permissions can't be empty");
+        }
+
         foreach (var permission in permissions)
         {
             if (!PermissionsWithDependencies.ContainsKey(permission))

@@ -69,4 +69,23 @@ public class RoleTests
         Assert.Throws<ArgumentException>(() => role.Update(string.Empty, new List<Permission>()));
         Assert.Throws<ArgumentException>(() => role.Update("  ", new List<Permission>()));
     }
+
+    [Fact]
+    public void CannotCreateRoleIfEmptyPermissions()
+    {
+        Assert.Throws<ArgumentException>(() => new Role(BaseRoleNames.Ceo, new List<Permission>()));
+    }
+
+    [Fact]
+    public void CannotUpdateRoleIfNewPermissionsAreEmpty()
+    {
+        var role = new Role(BaseRoleNames.Ceo,
+                new List<Permission>
+                {
+                    new(Permissions.ViewContacts),
+                }
+            );
+
+        Assert.Throws<ArgumentException>(() => role.Update(BaseRoleNames.Ceo, new List<Permission>()));
+    }
 }

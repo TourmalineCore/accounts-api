@@ -1,9 +1,18 @@
+using System.Security;
 using Core.Models;
 
 namespace Tests.Roles;
 
 public class RolePermissionsValidatorTests
 {
+    [Fact]
+    public void ValidatePermissions_AreEmpty_GetValidationErrors()
+    {
+        var exception = Assert.Throws<ArgumentException>(() => RolePermissionsValidator.ValidatePermissions(new string[] { }));
+        Assert.Equal("Permissions can't be empty", exception.Message);
+
+    }
+
     [Fact]
     public void ValidatePermissionsWithoutDependencies_NoValidationErrors()
     {
