@@ -33,11 +33,6 @@ public class Role : IEntity
 
     private string _name;
 
-    public Role(string name)
-    {
-        Name = name;
-    }
-
     public Role(long id, string name, IEnumerable<Permission> permissions)
     {
         Id = id;

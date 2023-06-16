@@ -4,6 +4,7 @@ using Core.Contracts;
 using Core.Entities;
 using Core.Models;
 using Moq;
+using Tests.TestsData;
 
 namespace Tests.Accounts;
 
@@ -14,7 +15,7 @@ public class AccountBlockCommandHandlerTests
 
     private readonly List<Role> _roles = new()
     {
-        new Role(BaseRoleNames.Ceo),
+        new Role(BaseRoleNames.Ceo, TestData.ValidPermissions),
     };
 
     public AccountBlockCommandHandlerTests()

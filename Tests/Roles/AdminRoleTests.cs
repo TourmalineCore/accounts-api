@@ -4,12 +4,13 @@ using Core.Models;
 using DataAccess;
 using DataAccess.Repositories;
 using Moq;
+using Tests.TestsData;
 
 namespace Tests.Roles;
 
 public class AdminRoleTests
 {
-    private readonly Role _adminRole = new(BaseRoleNames.Admin, new List<Permission>());
+    private readonly Role _adminRole = new(BaseRoleNames.Admin, TestData.ValidPermissions);
     private readonly RolesRepository _rolesRepository;
 
     public AdminRoleTests()

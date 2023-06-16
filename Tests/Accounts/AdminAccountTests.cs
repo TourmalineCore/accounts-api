@@ -4,6 +4,7 @@ using Core.Models;
 using DataAccess;
 using DataAccess.Repositories;
 using Moq;
+using Tests.TestsData;
 
 namespace Tests.Accounts;
 
@@ -15,7 +16,7 @@ public class AdminAccountTests
             "Admin",
             new List<Role>
             {
-                new(1, BaseRoleNames.Admin, new List<Permission>()),
+                new(1, BaseRoleNames.Admin, TestData.ValidPermissions),
             }
         );
 
