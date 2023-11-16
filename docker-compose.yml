@@ -19,7 +19,7 @@ services:
     depends_on:
       - "accounts-db-debug"
     build:
-      dockerfile: Accounts.Api/Dockerfile
+      dockerfile: Api/Dockerfile
       context: .
     ports:
       - 5015:80
