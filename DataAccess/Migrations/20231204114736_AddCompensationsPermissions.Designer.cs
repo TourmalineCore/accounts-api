@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace UserManagementService.DataAccess.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20231116071029_AddCompensationsPermissions")]
+    [Migration("20231204114736_AddCompensationsPermissions")]
     partial class AddCompensationsPermissions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,13 +142,13 @@ namespace UserManagementService.DataAccess.Migrations
                         {
                             Id = 1L,
                             Name = "Admin",
-                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "ViewEmployeesCompensations" }
+                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "CanManageCompensations" }
                         },
                         new
                         {
                             Id = 2L,
                             Name = "CEO",
-                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "ViewEmployeesCompensations" }
+                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "CanManageCompensations" }
                         });
                 });
 

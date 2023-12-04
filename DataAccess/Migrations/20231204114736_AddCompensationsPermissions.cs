@@ -14,14 +14,14 @@ namespace UserManagementService.DataAccess.Migrations
                 keyColumn: "Id",
                 keyValue: 1L,
                 column: "Permissions",
-                value: new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "ViewEmployeesCompensations" });
+                value: new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "CanManageCompensations" });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 column: "Permissions",
-                value: new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "ViewEmployeesCompensations" });
+                value: new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "ViewPersonalCompensations", "CanManageCompensations" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

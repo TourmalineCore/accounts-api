@@ -44,7 +44,7 @@ public class RolePermissionsValidatorTests
             Permissions.ViewRoles,
             Permissions.ManageRoles,
             Permissions.ViewPersonalCompensations,
-            Permissions.ViewEmployeesCompensations,
+            Permissions.CanManageCompensations,
         };
 
         var exception = Record.Exception(() => RolePermissionsValidator.ValidatePermissions(allPermissions));

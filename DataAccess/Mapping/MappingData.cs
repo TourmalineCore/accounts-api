@@ -24,7 +24,7 @@ internal static class MappingData
         new Permission(Permissions.ViewRoles),
         new Permission(Permissions.ManageRoles),
         new Permission(Permissions.ViewPersonalCompensations),
-        new Permission(Permissions.ViewEmployeesCompensations),
+        new Permission(Permissions.CanManageCompensations),
     };
 
     public static readonly DateTime AccountsCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
