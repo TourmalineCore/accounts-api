@@ -43,7 +43,7 @@ public class RolePermissionsValidatorTests
             Permissions.ManageAccounts,
             Permissions.ViewRoles,
             Permissions.ManageRoles,
-            Permissions.ViewPersonalCompensations,
+            Permissions.CanRequestCompensations,
             Permissions.CanManageCompensations,
         };
 

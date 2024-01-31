@@ -23,7 +23,7 @@ internal static class MappingData
         new Permission(Permissions.ManageAccounts),
         new Permission(Permissions.ViewRoles),
         new Permission(Permissions.ManageRoles),
-        new Permission(Permissions.ViewPersonalCompensations),
+        new Permission(Permissions.CanRequestCompensations),
         new Permission(Permissions.CanManageCompensations),
     };
 
