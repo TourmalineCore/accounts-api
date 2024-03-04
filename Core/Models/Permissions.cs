@@ -17,6 +17,7 @@ public static class Permissions
     public const string ManageRoles = "ManageRoles";
     public const string CanRequestCompensations = "CanRequestCompensations";
     public const string CanManageCompensations = "CanManageCompensations";
+    public const string CanManageDocuments = "CanManageDocuments";
 
     public static bool IsPermissionExists(string permissionName)
     {
