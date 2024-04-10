@@ -27,7 +27,7 @@ public class AccountHttpClient : IHttpClient
             );
     }
 
-    public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName)
+    public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId)
     {
         await _client.PostAsJsonAsync($"{_urls.EmployeeServiceUrl}/internal/create-employee",
                 new
@@ -36,6 +36,7 @@ public class AccountHttpClient : IHttpClient
                     FirstName = firstName,
                     LastName = lastName,
                     MiddleName = middleName,
+                    TenantId = tenantId
                 }
             );
     }

@@ -5,6 +5,8 @@ using Application.HttpClients;
 using Application.Roles.Commands;
 using Application.Roles.Queries;
 using Application.Services;
+using Application.Tenants.Commands;
+using Application.Tenants.Queries;
 using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 
@@ -34,6 +36,11 @@ public static class DependencyInjection
 
         services.AddTransient<AccountBlockCommandHandler>();
         services.AddTransient<AccountUnblockCommandHandler>();
+
+        services.AddTransient<TenantCreationCommandHandler>();
+        services.AddTransient<TenantDeleteCommandHandler>();
+        services.AddTransient<GetTenantsQueryHandler>();
+        services.AddTransient<GetTenantByAccountIdQueryHandler>();
 
         services.AddTransient<IClock, Clock>();
 

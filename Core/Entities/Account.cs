@@ -25,11 +25,15 @@ public class Account : IEntity
 
     public List<AccountRole> AccountRoles { get; private set; } = new();
 
+    public long TenantId { get; private set; }
+
+    public Tenant Tenant { get; private set; }
+
     public Instant? DeletedAtUtc { get; private set; }
 
     public bool IsAdmin => AccountRoles.Count != 0 && AccountRoles.Exists(x => x.Role.IsAdmin);
 
-    public Account(string corporateEmail, string firstName, string lastName, string? middleName, IEnumerable<Role> roles)
+    public Account(string corporateEmail, string firstName, string lastName, string? middleName, IEnumerable<Role> roles, long tenantId)
     {
         CorporateEmail = corporateEmail;
         FirstName = firstName;
@@ -37,6 +41,7 @@ public class Account : IEntity
         MiddleName = middleName;
         IsBlocked = false;
         CreatedAt = SystemClock.Instance.GetCurrentInstant();
+        TenantId = tenantId;
 
         ValidateRoles(roles);
 
