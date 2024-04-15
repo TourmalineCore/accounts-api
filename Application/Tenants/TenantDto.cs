@@ -1,5 +1,3 @@
-using Core.Entities;
-
 namespace Application.Tenants;
 
 public class TenantDto

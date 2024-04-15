@@ -33,7 +33,6 @@ public class InternalController : Controller
         return await _getTenantByAccountIdQueryHandler.HandleAsync(new GetTenantByAccountIdQuery
         {
             AccountId = accountId,
-        }
-        );
+        });
     }
 }
