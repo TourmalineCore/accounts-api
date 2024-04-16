@@ -21,6 +21,8 @@ public readonly struct AccountCreationCommand
     public string CorporateEmail { get; init; }
 
     public List<long> RoleIds { get; init; }
+
+    public long TenantId { get; init; }
 }
 
 public class AccountCreationCommandHandler : ICommandHandler<AccountCreationCommand, long>
@@ -54,21 +56,25 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
         var roles = await _rolesRepository.GetAllAsync();
         var newAccountRoles = roles.Where(x => command.RoleIds.Contains(x.Id));
 
-        var account = new Account(command.CorporateEmail,
+        var account = new Account(
+                command.CorporateEmail,
                 command.FirstName,
                 command.LastName,
                 command.MiddleName,
-                newAccountRoles
+                newAccountRoles,
+                command.TenantId
             );
 
         var accountId = await _accountsRepository.CreateAsync(account);
 
         await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail);
 
-        await _httpClient.SendRequestToCreateNewEmployeeAsync(command.CorporateEmail,
+        await _httpClient.SendRequestToCreateNewEmployeeAsync(
+                command.CorporateEmail,
                 command.FirstName,
                 command.LastName,
-                command.MiddleName
+                command.MiddleName,
+                command.TenantId
             );
 
         return accountId;

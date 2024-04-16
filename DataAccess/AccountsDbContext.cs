@@ -13,6 +13,8 @@ public class AccountsDbContext : DbContext
 
     public DbSet<AccountRole> AccountRoles { get; set; }
 
+    public DbSet<Tenant> Tenants { get; set; }
+
     public AccountsDbContext(DbContextOptions<AccountsDbContext> options)
         : base(options)
     {

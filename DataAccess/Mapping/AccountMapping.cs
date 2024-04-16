@@ -15,6 +15,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
         builder.Property(x => x.FirstName).HasMaxLength(50);
         builder.Property(x => x.LastName).HasMaxLength(50);
         builder.Property(x => x.MiddleName).HasMaxLength(50);
+        builder.Property(x => x.TenantId).HasDefaultValue(1L);
 
         builder.HasData(
                 new
@@ -26,6 +27,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
                     MiddleName = "Admin",
                     IsBlocked = false,
                     CreatedAt = Instant.FromDateTimeUtc(MappingData.AccountsCreatedAtUtc),
+                    TenantId = 1L
                 },
                 new
                 {
@@ -36,6 +38,7 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
                     MiddleName = "Ceo",
                     IsBlocked = false,
                     CreatedAt = Instant.FromDateTimeUtc(MappingData.AccountsCreatedAtUtc),
+                    TenantId = 1L
                 }
             );
     }

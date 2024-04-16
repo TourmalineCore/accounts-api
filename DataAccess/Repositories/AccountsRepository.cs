@@ -63,6 +63,7 @@ public class AccountsRepository : IAccountsRepository
             .QueryableAsNoTracking<Account>()
             .Include(x => x.AccountRoles)
             .ThenInclude(x => x.Role)
+            .Include(x => x.Tenant)
             .Where(x => x.DeletedAtUtc == null)
             .ToListAsync();
 
