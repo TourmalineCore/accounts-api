@@ -52,6 +52,7 @@ public class AccountsRepository : IAccountsRepository
     {
         return _context
             .Queryable<Account>()
+            .Include(x => x.Tenant)
             .Include(x => x.AccountRoles)
             .ThenInclude(x => x.Role)
             .GetByIdAsync(id);
