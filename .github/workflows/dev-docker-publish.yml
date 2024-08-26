@@ -1,9 +1,9 @@
-name: deploy service to dev k8s
+name: deploy service to prod k8s
 
 on:
   push:
     branches:
-      - develop
+      - master
   pull_request:
 
 env:
@@ -25,7 +25,7 @@ jobs:
 
   deploy-to-dev-k8s:
     needs: build-image
-    name: Deploy service to k8s for development environment
+    name: Deploy service to k8s for prod environment
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
     steps:
