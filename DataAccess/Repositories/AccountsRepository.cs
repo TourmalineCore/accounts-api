@@ -52,6 +52,7 @@ public class AccountsRepository : IAccountsRepository
     {
         return _context
             .Queryable<Account>()
+            .Include(x => x.Tenant)
             .Include(x => x.AccountRoles)
             .ThenInclude(x => x.Role)
             .GetByIdAsync(id);
@@ -63,6 +64,7 @@ public class AccountsRepository : IAccountsRepository
             .QueryableAsNoTracking<Account>()
             .Include(x => x.AccountRoles)
             .ThenInclude(x => x.Role)
+            .Include(x => x.Tenant)
             .Where(x => x.DeletedAtUtc == null)
             .ToListAsync();
 

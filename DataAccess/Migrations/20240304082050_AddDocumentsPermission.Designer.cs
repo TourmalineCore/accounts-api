@@ -3,6 +3,7 @@ using System;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace UserManagementService.DataAccess.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    partial class UsersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304082050_AddDocumentsPermission")]
+    partial class AddDocumentsPermission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,17 +60,10 @@ namespace UserManagementService.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<long>("TenantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(1L);
-
                     b.HasKey("Id");
 
                     b.HasIndex("CorporateEmail")
                         .IsUnique();
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Accounts");
 
@@ -81,8 +76,7 @@ namespace UserManagementService.DataAccess.Migrations
                             FirstName = "Admin",
                             IsBlocked = false,
                             LastName = "Admin",
-                            MiddleName = "Admin",
-                            TenantId = 1L
+                            MiddleName = "Admin"
                         },
                         new
                         {
@@ -92,8 +86,7 @@ namespace UserManagementService.DataAccess.Migrations
                             FirstName = "Ceo",
                             IsBlocked = false,
                             LastName = "Ceo",
-                            MiddleName = "Ceo",
-                            TenantId = 1L
+                            MiddleName = "Ceo"
                         });
                 });
 
@@ -149,54 +142,14 @@ namespace UserManagementService.DataAccess.Migrations
                         {
                             Id = 1L,
                             Name = "Admin",
-                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "CanRequestCompensations", "CanManageCompensations", "CanManageDocuments", "CanManageTenants", "IsTenantsHardDeleteAllowed" }
+                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "CanRequestCompensations", "CanManageCompensations", "CanManageDocuments" }
                         },
                         new
                         {
                             Id = 2L,
                             Name = "CEO",
-                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "CanRequestCompensations", "CanManageCompensations", "CanManageDocuments", "CanManageTenants", "IsTenantsHardDeleteAllowed" }
+                            Permissions = new[] { "ViewPersonalProfile", "ViewContacts", "ViewSalaryAndDocumentsData", "EditFullEmployeesData", "AccessAnalyticalForecastsPage", "ViewAccounts", "ManageAccounts", "ViewRoles", "ManageRoles", "CanRequestCompensations", "CanManageCompensations", "CanManageDocuments" }
                         });
-                });
-
-            modelBuilder.Entity("Core.Entities.Tenant", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "TourmalineCore"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "Test"
-                        });
-                });
-
-            modelBuilder.Entity("Core.Entities.Account", b =>
-                {
-                    b.HasOne("Core.Entities.Tenant", "Tenant")
-                        .WithMany("Accounts")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Core.Entities.AccountRole", b =>
@@ -226,11 +179,6 @@ namespace UserManagementService.DataAccess.Migrations
             modelBuilder.Entity("Core.Entities.Role", b =>
                 {
                     b.Navigation("AccountRoles");
-                });
-
-            modelBuilder.Entity("Core.Entities.Tenant", b =>
-                {
-                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

@@ -26,6 +26,7 @@ public static class DependencyInjection
 
         services.AddTransient<IAccountsRepository, AccountsRepository>();
         services.AddTransient<IRolesRepository, RolesRepository>();
+        services.AddTransient<ITenantsRepository, TenantsRepository>();
 
         return services;
     }
