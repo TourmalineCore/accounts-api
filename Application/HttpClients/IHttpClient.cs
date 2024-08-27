@@ -4,7 +4,7 @@ namespace Application.HttpClients;
 
 public interface IHttpClient
 {
-    Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail);
+    Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail, string token);
 
     Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId);
 

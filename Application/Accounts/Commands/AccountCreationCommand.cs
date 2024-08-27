@@ -10,7 +10,7 @@ using FluentValidation;
 
 namespace Application.Accounts.Commands;
 
-public readonly struct AccountCreationCommand
+public struct AccountCreationCommand
 {
     public string FirstName { get; init; }
 
@@ -23,6 +23,8 @@ public readonly struct AccountCreationCommand
     public List<long> RoleIds { get; init; }
 
     public long TenantId { get; init; }
+
+    public string AccessToken { get; set; }
 }
 
 public class AccountCreationCommandHandler : ICommandHandler<AccountCreationCommand, long>
@@ -67,7 +69,7 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
 
         var accountId = await _accountsRepository.CreateAsync(account);
 
-        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail);
+        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
 
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,

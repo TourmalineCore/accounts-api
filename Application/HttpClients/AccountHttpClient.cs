@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -16,8 +17,9 @@ public class AccountHttpClient : IHttpClient
         _urls = urls.Value;
     }
 
-    public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail)
+    public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail, string token)
     {
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/api/auth/register",
                 new
                 {

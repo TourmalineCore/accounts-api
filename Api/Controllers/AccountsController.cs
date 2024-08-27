@@ -82,6 +82,8 @@ public class AccountsController : Controller
     {
         try
         {
+            var jwtToken = GetJwtTokenAsync(HttpContext);
+            accountCreationCommand.AccessToken = jwtToken;
             await _accountCreationCommandHandler.HandleAsync(accountCreationCommand);
             return Ok();
         }
@@ -152,5 +154,19 @@ public class AccountsController : Controller
     private ObjectResult GetProblem(Exception exception)
     {
         return Problem(exception.Message, nameof(AccountsController), StatusCodes.Status500InternalServerError);
+    }
+
+    private string GetJwtTokenAsync(HttpContext context)
+    {
+        var authorizationHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+
+        if(authorizationHeader != null && authorizationHeader.StartsWith("Bearer "))
+        {
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            return token;
+        }
+
+        throw new Exception("Токен JWT не найден в заголовке Authorization.");
     }
 }
