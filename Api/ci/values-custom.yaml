@@ -2,7 +2,7 @@
 
 image:
   registry: ghcr.io
-  repository: tourmalinecore/real-world/real-world-auth-api
+  repository: tourmalinecore/inner-circle/account-management-api
   tag: "latest"
   pullPolicy: Always
   debug: true
