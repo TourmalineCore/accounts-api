@@ -14,7 +14,7 @@
 image:
   registry: ghcr.io
   repository: tourmalinecore/inner-circle/account-management-api
-  tag: "latest"
+  tag: latest
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -24,11 +24,13 @@ image:
   ##
   pullPolicy: Always
 
-  pullSecrets: []
+  pullSecrets:
+    []
     # https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_images.tpl#L49
     # - "{{ include \"common.names.fullname\" . }}-docker-secret"
 
-  pullCredentials: {}
+  pullCredentials:
+    {}
     # username: login
     # password: password
 
@@ -47,22 +49,24 @@ bindURLs: http://+:80
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations:
-  checksum/config: "{{ include (print $.Template.BasePath \"/extra-list.yaml\") . | sha256sum }}"
+  checksum/config: '{{ include (print $.Template.BasePath "/extra-list.yaml") . | sha256sum }}'
 
 # Here stored regular vars that passed to the pod environment
-extraConfigMapEnvVars: {}
+extraConfigMapEnvVars:
+  {}
   # Logging__LogLevel__Default: "Error"
 
 # Here stored secrets that passed to the pod environment. You should never store them in this file.
-extraSecretEnvVars: {}
+extraSecretEnvVars:
+  {}
   # Section1__SuperPuperSecretVar: mega-secret
   # Section2__Email: email@email.com
   # Section2__Login: login
 
 extraSecretEnvVarsEncoded: |
   {{- range $k, $v := .Values.extraSecretEnvVars }}
-  {{- if kindIs "int64" $v}}
-  {{ $k }}: {{ $v | quote | b64enc | quote}}
+  {{- if not (kindIs "string" $v) }}
+  {{ $k }}: {{ $v | toString | b64enc | quote}}
   {{- else}}
   {{ $k }}: {{ $v | b64enc | quote}}
   {{- end}}
@@ -70,12 +74,12 @@ extraSecretEnvVarsEncoded: |
 
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM: "{{ include \"common.names.fullname\" . }}"
+extraEnvVarsCM: '{{ include "common.names.fullname" . }}'
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 
-# If you need secrets, than use line below 
-extraEnvVarsSecret: "{{ include \"common.names.fullname\" . }}"
+# If you need secrets, than use line below
+extraEnvVarsSecret: '{{ include "common.names.fullname" . }}'
 # else use
 # extraEnvVarsSecret: ""
 
@@ -116,7 +120,6 @@ resources:
 ##
 containerPorts:
   http: 80
-
 
 ## Enable to download/build ASP.NET Core app from external git repository.
 ## Do not enable it if your docker image already includes your application
