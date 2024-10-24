@@ -100,12 +100,22 @@ replicaCount: 1
 ## @param resources.requests The requested resources for the ASP.NET Core container
 ##
 resources:
-  requests:
-    memory: "256Mi"
-    cpu: "250m"
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  ##
   limits:
-    memory: "512Mi"
-    cpu: "500m"
+    cpu: 150m
+    memory: 300Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  ##
+  requests:
+    cpu: 1m
+    memory: 250Mi
 ## @param containerPorts.http Port to expose at ASP.NET Core container level
 ##
 containerPorts:
