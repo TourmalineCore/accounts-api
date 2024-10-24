@@ -32,9 +32,9 @@ services:
       - HttpUrls__EmployeeServiceUrl=http://salary-service-api:80/api
     networks:
       - accounts-deb
-      - ic-backend-deb
+      # - ic-backend-deb
 
 networks:
   accounts-deb: {}
-  ic-backend-deb:
-    external: true
+  # ic-backend-deb:
+  #   external: true
