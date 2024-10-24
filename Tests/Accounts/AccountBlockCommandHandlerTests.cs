@@ -32,7 +32,8 @@ public class AccountBlockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                _roles
+                _roles,
+                1L
             );
 
         var command = new AccountBlockCommand
@@ -58,7 +59,8 @@ public class AccountBlockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                _roles
+                _roles,
+                1L
             );
 
         var command = new AccountBlockCommand

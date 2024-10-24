@@ -17,7 +17,8 @@ public class AdminAccountTests
             new List<Role>
             {
                 new(1, BaseRoleNames.Admin, TestData.ValidPermissions),
-            }
+            },
+            1L
         );
 
     private readonly AccountsRepository _accountsRepository;

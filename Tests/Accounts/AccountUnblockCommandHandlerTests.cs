@@ -26,7 +26,8 @@ public class AccountUnblockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         var command = new AccountUnblockCommand
@@ -53,7 +54,8 @@ public class AccountUnblockCommandHandlerTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         var command = new AccountUnblockCommand

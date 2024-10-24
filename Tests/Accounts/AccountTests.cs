@@ -14,7 +14,8 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Block("test@tourmalinecore.com"));
@@ -28,7 +29,8 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         account.Block("caller@tourmalinecore.com");
@@ -44,7 +46,8 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles, 
+                1L
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Update("firstName",
@@ -65,7 +68,8 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         var exception = Assert.Throws<AccountOperationException>(() => account.Update("test",
@@ -89,7 +93,8 @@ public class AccountTests
                     "test",
                     "test",
                     "test",
-                    new List<Role>()
+                    new List<Role>(),
+                    1L
                 )
             );
 
@@ -103,7 +108,8 @@ public class AccountTests
                 "test",
                 "test",
                 "test",
-                TestData.ValidAccountRoles
+                TestData.ValidAccountRoles,
+                1L
             );
 
         var exception = Assert.Throws<ArgumentException>(() => account.Update("test",
