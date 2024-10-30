@@ -24,6 +24,12 @@ image:
   ##
   pullPolicy: Always
 
+  livenessProbe:
+    enabled: false
+
+  readinessProbe:
+    enabled: false
+    
   pullSecrets:
     []
     # https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_images.tpl#L49
@@ -106,7 +112,7 @@ resources:
   ##    memory: 128Mi
   ##
   limits:
-    cpu: 150m
+    cpu: 50m
     memory: 300Mi
   ## Examples:
   ## requests:
