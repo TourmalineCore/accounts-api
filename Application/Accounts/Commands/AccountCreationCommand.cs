@@ -48,6 +48,9 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
 
     public async Task<long> HandleAsync(AccountCreationCommand command)
     {
+        var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
+        System.Console.WriteLine("*********** Email: ");
+        System.Console.Write(accountTest.CorporateEmail);
         var validationResult = await _validator.ValidateAsync(command);
 
         if (!validationResult.IsValid)

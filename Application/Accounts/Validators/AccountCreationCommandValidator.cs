@@ -30,7 +30,6 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
                                 async (corporateEmail, _) =>
                                 {
                                     var account = await accountsRepository.FindByCorporateEmailAsync(corporateEmail);
-                                    Console.WriteLine("**********" + account.CorporateEmail);
                                     return account == null;
                                 }
                             )
