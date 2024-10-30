@@ -83,7 +83,7 @@ public class AccountsController : Controller
         try
         {
             var jwtToken = GetJwtTokenAsync(HttpContext);
-            System.Console.WriteLine(jwtToken);
+            System.Console.WriteLine("**** JWT: " + jwtToken);
             await _accountCreationCommandHandler.HandleAsync(jwtToken, accountCreationCommand);
             return Ok();
         }
