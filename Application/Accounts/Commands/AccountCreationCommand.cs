@@ -74,9 +74,9 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
             );
 
         var accountId = await _accountsRepository.CreateAsync(account);
-
+        System.Console.WriteLine(command.AccessToken);
         await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
-
+        
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,
                 command.FirstName,
