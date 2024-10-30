@@ -49,12 +49,15 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
     public async Task<long> HandleAsync(AccountCreationCommand command)
     {
         var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
-        System.Console.WriteLine("*********** Email: ");
-        System.Console.Write(accountTest.CorporateEmail);
         var validationResult = await _validator.ValidateAsync(command);
 
         if (!validationResult.IsValid)
         {
+            System.Console.WriteLine("Exception occured, see the results:");
+            foreach(var exception in validationResult.Errors)
+            {
+                System.Console.WriteLine(exception.ErrorMessage);
+            }
             throw new ValidationException(validationResult.Errors[0].ErrorMessage);
         }
 
