@@ -17,9 +17,6 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
         RuleFor(x => x.FirstName).MaximumLength(50);
         RuleFor(x => x.LastName).MaximumLength(50);
         RuleFor(x => x.MiddleName).MaximumLength(50);
-        var account = await accountsRepository.FindByCorporateEmailAsync(corporateEmail);
-        Console.WriteLine("******** Check that this corporate email exist: ");
-        Console.WriteLine(account.CorporateEmail);
         When(_ => !_accountValidOptions.IgnoreCorporateDomainValidationRule,
                 () =>
                 {
@@ -32,6 +29,7 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
                                 async (corporateEmail, _) =>
                                 {
                                     var account = await accountsRepository.FindByCorporateEmailAsync(corporateEmail);
+                                    Console.WriteLine("**********" + account.CorporateEmail);
                                     return account == null;
                                 }
                             )
