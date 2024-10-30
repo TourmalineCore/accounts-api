@@ -24,10 +24,10 @@ public struct AccountCreationCommand
 
     public long TenantId { get; init; }
 
-    public string AccessToken { get; set; }
+    public string AccessToken { get; init; }
 }
 
-public class AccountCreationCommandHandler : ICommandHandler<AccountCreationCommand, long>
+public class AccountCreationCommandHandler : ICommandHandler<string, AccountCreationCommand, long>
 {
     private readonly IAccountsRepository _accountsRepository;
     private readonly IRolesRepository _rolesRepository;
@@ -46,18 +46,13 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
         _rolesRepository = rolesRepository;
     }
 
-    public async Task<long> HandleAsync(AccountCreationCommand command)
+    public async Task<long> HandleAsync(string? accessToken, AccountCreationCommand command)
     {
         var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
         var validationResult = await _validator.ValidateAsync(command);
 
         if (!validationResult.IsValid)
         {
-            System.Console.WriteLine("Exception occured, see the results:");
-            foreach(var exception in validationResult.Errors)
-            {
-                System.Console.WriteLine(exception.ErrorMessage);
-            }
             throw new ValidationException(validationResult.Errors[0].ErrorMessage);
         }
 
@@ -74,9 +69,10 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
             );
 
         var accountId = await _accountsRepository.CreateAsync(account);
-        System.Console.WriteLine(command.AccessToken);
-        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
-        
+        System.Console.WriteLine("********* Access token: ");
+        System.Console.WriteLine(accessToken);
+        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, accessToken);
+
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,
                 command.FirstName,

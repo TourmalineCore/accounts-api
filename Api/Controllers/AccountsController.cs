@@ -83,9 +83,7 @@ public class AccountsController : Controller
         try
         {
             var jwtToken = GetJwtTokenAsync(HttpContext);
-            accountCreationCommand.AccessToken = jwtToken;
-            System.Console.WriteLine("JWT token: " + jwtToken);
-            await _accountCreationCommandHandler.HandleAsync(accountCreationCommand);
+            await _accountCreationCommandHandler.HandleAsync(jwtToken, accountCreationCommand);
             return Ok();
         }
         catch (Exception ex)

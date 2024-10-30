@@ -7,7 +7,7 @@ public interface ICommandHandler<in TIn>
     Task HandleAsync(TIn command);
 }
 
-public interface ICommandHandler<in TIn, TOut>
+public interface ICommandHandler<in accessToken, in TIn, TOut>
 {
-    Task<TOut> HandleAsync(TIn command);
+    Task<TOut> HandleAsync(string accessToken, TIn command);
 }
