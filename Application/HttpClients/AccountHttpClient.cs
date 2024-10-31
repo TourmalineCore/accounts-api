@@ -19,14 +19,20 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail, string token)
     {
-        _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        var response = await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/api/auth/register",
-                new
-                {
-                    AccountId = accountId,
-                    CorporateEmail = corporateEmail,
-                }
-            );
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/register")
+        {
+            Content = JsonContent.Create(new
+            {
+                AccountId = accountId,
+                CorporateEmail = corporateEmail,
+            })
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _client.SendAsync(request);
+        // Debug
+        System.Console.WriteLine("******** AUTH HEADER: " + request.Headers.Authorization.ToString());
         System.Console.WriteLine("************ REGISTER access token: " + token);
         System.Console.WriteLine("******** Register result: ");
         System.Console.WriteLine("*** statuscode:" + response.StatusCode);
