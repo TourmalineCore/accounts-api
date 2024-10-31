@@ -74,7 +74,7 @@ public class AccountCreationCommandHandler : ICommandHandler<string, AccountCrea
         System.Console.WriteLine("********* Access token from command: ");
         System.Console.WriteLine(command.AccessToken);
         await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, accessToken);
-
+        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,
                 command.FirstName,
