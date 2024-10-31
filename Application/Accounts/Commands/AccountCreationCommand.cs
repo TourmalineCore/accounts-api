@@ -70,7 +70,6 @@ public class AccountCreationCommandHandler : ICommandHandler<string, AccountCrea
 
         var accountId = await _accountsRepository.CreateAsync(account);
         await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, accessToken);
-        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,
                 command.FirstName,

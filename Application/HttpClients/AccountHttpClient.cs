@@ -30,14 +30,7 @@ public class AccountHttpClient : IHttpClient
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await _client.SendAsync(request);
-        // Debug
-        System.Console.WriteLine("******** AUTH HEADER: " + request.Headers.Authorization.ToString());
-        System.Console.WriteLine("************ REGISTER access token: " + token);
-        System.Console.WriteLine("******** Register result: ");
-        System.Console.WriteLine("*** statuscode:" + response.StatusCode);
-        System.Console.WriteLine("*** content:" + response.Content.ToString());
-        System.Console.WriteLine("*** reason:" + response.ReasonPhrase);
+        await _client.SendAsync(request);
     }
 
     public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId)
