@@ -37,6 +37,7 @@ public class AccountHttpClient : IHttpClient
         System.Console.WriteLine("******** Register result: ");
         System.Console.WriteLine("*** statuscode:" + response.StatusCode);
         System.Console.WriteLine("*** content:" + response.Content.ToString());
+        System.Console.WriteLine("*** reason:" + response.ReasonPhrase);
     }
 
     public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId)
