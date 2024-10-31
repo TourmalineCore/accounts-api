@@ -81,9 +81,7 @@ public class AccountsController : Controller
     public Task<long> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
     {
         var jwtToken = GetJwtTokenAsync(HttpContext);
-        System.Console.WriteLine("**** JWT: " + jwtToken);
         accountCreationCommand.AccessToken = jwtToken;
-        System.Console.WriteLine("*** JWT in command: " + accountCreationCommand.AccessToken);
         return _accountCreationCommandHandler.HandleAsync(jwtToken, accountCreationCommand);
     }
 
