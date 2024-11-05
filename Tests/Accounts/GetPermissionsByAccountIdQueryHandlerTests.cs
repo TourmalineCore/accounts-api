@@ -39,7 +39,8 @@ public class GetPermissionsByAccountIdQueryHandlerTests
                 "test",
                 "test",
                 "test",
-                roles
+                roles,
+                1L
             );
 
         var query = new GetPermissionsByAccountIdQuery

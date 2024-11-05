@@ -19,14 +19,18 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail, string token)
     {
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        await _client.PostAsJsonAsync($"{_urls.AuthServiceUrl}/api/auth/register",
-                new
-                {
-                    AccountId = accountId,
-                    CorporateEmail = corporateEmail,
-                }
-            );
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/register")
+        {
+            Content = JsonContent.Create(new
+            {
+                AccountId = accountId,
+                CorporateEmail = corporateEmail,
+            })
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        await _client.SendAsync(request);
     }
 
     public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId)

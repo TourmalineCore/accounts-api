@@ -78,19 +78,11 @@ public class AccountsController : Controller
 
     [RequiresPermission(Permissions.ManageAccounts)]
     [HttpPost("create")]
-    public async Task<ActionResult> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
+    public Task<long> CreateAsync([FromBody] AccountCreationCommand accountCreationCommand)
     {
-        try
-        {
-            var jwtToken = GetJwtTokenAsync(HttpContext);
-            accountCreationCommand.AccessToken = jwtToken;
-            await _accountCreationCommandHandler.HandleAsync(accountCreationCommand);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+        var jwtToken = GetJwtTokenAsync(HttpContext);
+        accountCreationCommand.AccessToken = jwtToken;
+        return _accountCreationCommandHandler.HandleAsync(jwtToken, accountCreationCommand);
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]

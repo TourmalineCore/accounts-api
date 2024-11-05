@@ -27,7 +27,7 @@ public struct AccountCreationCommand
     public string AccessToken { get; set; }
 }
 
-public class AccountCreationCommandHandler : ICommandHandler<AccountCreationCommand, long>
+public class AccountCreationCommandHandler : ICommandHandler<string, AccountCreationCommand, long>
 {
     private readonly IAccountsRepository _accountsRepository;
     private readonly IRolesRepository _rolesRepository;
@@ -46,8 +46,9 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
         _rolesRepository = rolesRepository;
     }
 
-    public async Task<long> HandleAsync(AccountCreationCommand command)
+    public async Task<long> HandleAsync(string? accessToken, AccountCreationCommand command)
     {
+        var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
         var validationResult = await _validator.ValidateAsync(command);
 
         if (!validationResult.IsValid)
@@ -68,9 +69,7 @@ public class AccountCreationCommandHandler : ICommandHandler<AccountCreationComm
             );
 
         var accountId = await _accountsRepository.CreateAsync(account);
-
-        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, command.AccessToken);
-
+        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, accessToken);
         await _httpClient.SendRequestToCreateNewEmployeeAsync(
                 command.CorporateEmail,
                 command.FirstName,

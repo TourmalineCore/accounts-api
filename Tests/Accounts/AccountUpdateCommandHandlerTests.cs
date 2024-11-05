@@ -18,7 +18,8 @@ public class AccountUpdateCommandHandlerTests
             "test",
             "test",
             "test",
-            TestData.ValidAccountRoles
+            TestData.ValidAccountRoles,
+            1L
         );
 
     private readonly long _ceoRoleId = TestData

@@ -1,3 +1,4 @@
+using System;
 using Application.Accounts.Commands;
 using Application.Options;
 using Core.Contracts;
@@ -17,7 +18,6 @@ public class AccountCreationCommandValidator : AbstractValidator<AccountCreation
         RuleFor(x => x.FirstName).MaximumLength(50);
         RuleFor(x => x.LastName).MaximumLength(50);
         RuleFor(x => x.MiddleName).MaximumLength(50);
-
         When(_ => !_accountValidOptions.IgnoreCorporateDomainValidationRule,
                 () =>
                 {
