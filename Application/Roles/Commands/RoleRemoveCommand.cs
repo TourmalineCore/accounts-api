@@ -21,6 +21,6 @@ public class RoleRemoveCommandHandler : ICommandHandler<RoleRemoveCommand>
     public async Task HandleAsync(RoleRemoveCommand command)
     {
         var role = await _rolesRepository.GetByIdAsync(command.Id);
-        await _rolesRepository.RemoveAsync(role);
+        await _rolesRepository.DeleteAsync(role);
     }
 }

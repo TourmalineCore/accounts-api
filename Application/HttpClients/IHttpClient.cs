@@ -8,6 +8,10 @@ public interface IHttpClient
 
     Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId);
 
+    Task SendRequestToDeleteAccountAsync(string corporateEmail, string token);
+
+    Task SendRequestToDeleteEmployeeAsync(string corporateEmail, string token);
+
     Task SendRequestToBlockUserAsync(long accountId);
 
     Task SendRequestToUnblockUserAsync(long accountId);

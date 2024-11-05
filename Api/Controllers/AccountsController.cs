@@ -15,6 +15,7 @@ public class AccountsController : Controller
     private readonly GetAccountsQueryHandler _getAccountsQueryHandler;
     private readonly GetAccountByIdQueryHandler _getAccountByIdQueryHandler;
     private readonly AccountCreationCommandHandler _accountCreationCommandHandler;
+    private readonly AccountDeletionCommandHandler _accountDeletionCommandHandler;
     private readonly AccountUpdateCommandHandler _accountUpdateCommandHandler;
     private readonly AccountBlockCommandHandler _accountBlockCommandHandler;
     private readonly AccountUnblockCommandHandler _accountUnblockCommandHandler;
@@ -22,6 +23,7 @@ public class AccountsController : Controller
     public AccountsController(
         GetAccountsQueryHandler getAccountsQueryHandler,
         AccountCreationCommandHandler accountCreationCommandHandler,
+        AccountDeletionCommandHandler accountDeletionCommandHandler,
         AccountUpdateCommandHandler accountUpdateCommandHandler,
         GetAccountByIdQueryHandler getAccountByIdQueryHandler,
         AccountBlockCommandHandler accountBlockCommandHandler,
@@ -29,6 +31,7 @@ public class AccountsController : Controller
     {
         _getAccountsQueryHandler = getAccountsQueryHandler;
         _accountCreationCommandHandler = accountCreationCommandHandler;
+        _accountDeletionCommandHandler = accountDeletionCommandHandler;
         _accountUpdateCommandHandler = accountUpdateCommandHandler;
         _getAccountByIdQueryHandler = getAccountByIdQueryHandler;
         _accountBlockCommandHandler = accountBlockCommandHandler;
@@ -83,6 +86,15 @@ public class AccountsController : Controller
         var jwtToken = GetJwtTokenAsync(HttpContext);
         accountCreationCommand.AccessToken = jwtToken;
         return _accountCreationCommandHandler.HandleAsync(jwtToken, accountCreationCommand);
+    }
+
+    [RequiresPermission(Permissions.IsAccountsHardDeleteAllowed)]
+    [HttpPost("delete")]
+    public Task DeleteAsync([FromBody] AccountDeletionCommand accountDeletionCommand)
+    {
+        var jwtToken = GetJwtTokenAsync(HttpContext);
+        accountDeletionCommand.AccessToken = jwtToken;
+        return _accountDeletionCommandHandler.HandleAsync(jwtToken, accountDeletionCommand);
     }
 
     [RequiresPermission(Permissions.ManageAccounts)]

@@ -45,7 +45,7 @@ public class AdminAccountTests
     [Fact]
     public async Task CannotRemoveAdmin()
     {
-        var exception = await Assert.ThrowsAsync<AccountOperationException>(() => _accountsRepository.RemoveAsync(_adminAccount));
+        var exception = await Assert.ThrowsAsync<AccountOperationException>(() => _accountsRepository.DeleteAsync(_adminAccount));
         Assert.Equal("Can't remove admin", exception.Message);
     }
 }

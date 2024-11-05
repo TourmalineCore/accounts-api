@@ -13,7 +13,7 @@ public interface IRepository<TEntity> where TEntity : IEntity
 
     public Task<long> CreateAsync(TEntity role);
 
-    public Task RemoveAsync(TEntity entity);
+    public Task DeleteAsync(TEntity entity);
 
     public Task UpdateAsync(TEntity account);
 }
