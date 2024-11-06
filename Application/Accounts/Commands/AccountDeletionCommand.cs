@@ -37,7 +37,7 @@ public class AccountDeletionCommandHandler : ICommandHandler<string, AccountDele
 
         await _accountsRepository.DeleteAsync(account);
 
-        await _httpClient.SendRequestToDeleteAccountAsync(command.AccessToken, account.CorporateEmail);
-        await _httpClient.SendRequestToDeleteEmployeeAsync(command.AccessToken, command.CorporateEmail);
+        await _httpClient.SendRequestToDeleteAccountAsync(accessToken, account.CorporateEmail);
+        await _httpClient.SendRequestToDeleteEmployeeAsync(accessToken, command.CorporateEmail);
     }
 }
