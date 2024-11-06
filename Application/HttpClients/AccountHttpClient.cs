@@ -49,7 +49,7 @@ public class AccountHttpClient : IHttpClient
     }
     public async Task SendRequestToDeleteAccountAsync(string corporateEmail, string token)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/remove")
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/delete-user")
         {
             Content = JsonContent.Create(new
             {

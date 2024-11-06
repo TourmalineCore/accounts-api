@@ -89,7 +89,7 @@ public class AccountsController : Controller
     }
 
     [RequiresPermission(Permissions.IsAccountsHardDeleteAllowed)]
-    [HttpPost("delete")]
+    [HttpPost("delete-account")]
     public Task DeleteAsync([FromBody] AccountDeletionCommand accountDeletionCommand)
     {
         var jwtToken = GetJwtTokenAsync(HttpContext);
