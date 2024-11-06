@@ -59,8 +59,8 @@ public class AccountHttpClient : IHttpClient
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        await _client.SendAsync(request);
-
+        var resp = await _client.SendAsync(request);
+        System.Console.WriteLine("*** Auth response: " + resp.ReasonPhrase);
     }
     public async Task SendRequestToDeleteEmployeeAsync(string corporateEmail, string token)
     {
@@ -74,7 +74,8 @@ public class AccountHttpClient : IHttpClient
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        await _client.SendAsync(request);
+        var resp = await _client.SendAsync(request);
+        System.Console.WriteLine("*** Salary response: " + resp.ReasonPhrase);
     }
 
     public async Task SendRequestToBlockUserAsync(long accountId)
