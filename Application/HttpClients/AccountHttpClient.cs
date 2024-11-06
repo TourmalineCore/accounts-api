@@ -49,6 +49,7 @@ public class AccountHttpClient : IHttpClient
     }
     public async Task SendRequestToDeleteAccountAsync(string corporateEmail, string token)
     {
+        System.Console.WriteLine("[HttpClient] Access token from HttpClient (auth): " + token);
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/remove")
         {
             Content = JsonContent.Create(new
@@ -58,13 +59,14 @@ public class AccountHttpClient : IHttpClient
         };
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+        System.Console.WriteLine("[HttpClient] Request header (auth): " + request.Headers.Authorization.ToString());
         var resp = await _client.SendAsync(request);
         System.Console.WriteLine("*** Auth response: " + resp.ReasonPhrase);
     }
     public async Task SendRequestToDeleteEmployeeAsync(string corporateEmail, string token)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.EmployeeServiceUrl}/internal/delete-employee")
+        System.Console.WriteLine("[HttpClient] Access token from HttpClient (salary): " + token);
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_urls.EmployeeServiceUrl}/internal/delete-employee")
         {
             Content = JsonContent.Create(new
             {
@@ -73,7 +75,7 @@ public class AccountHttpClient : IHttpClient
         };
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+        System.Console.WriteLine("[HttpClient] Request header (salary): " + request.Headers.Authorization.ToString());
         var resp = await _client.SendAsync(request);
         System.Console.WriteLine("*** Salary response: " + resp.ReasonPhrase);
     }
