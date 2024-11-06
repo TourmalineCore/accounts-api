@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Core.Entities;
 using Microsoft.Extensions.Options;
 
 namespace Application.HttpClients;
@@ -45,6 +46,32 @@ public class AccountHttpClient : IHttpClient
                     TenantId = tenantId
                 }
             );
+    }
+    public async Task SendRequestToDeleteAccountAsync(string corporateEmail, string token)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/delete-user")
+        {
+            Content = JsonContent.Create(new
+            {
+                CorporateEmail = corporateEmail
+            })
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        await _client.SendAsync(request);
+    }
+    public async Task SendRequestToDeleteEmployeeAsync(string corporateEmail, string token)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_urls.EmployeeServiceUrl}/internal/delete-employee")
+        {
+            Content = JsonContent.Create(new
+            {
+                CorporateEmail = corporateEmail
+            })
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        await _client.SendAsync(request);
     }
 
     public async Task SendRequestToBlockUserAsync(long accountId)

@@ -54,7 +54,7 @@ public class RolesRepository : IRolesRepository
         return roles.Where(role => !role.IsAdmin);
     }
 
-    public Task RemoveAsync(Role role)
+    public Task DeleteAsync(Role role)
     {
         if (role.IsAdmin)
         {

@@ -35,7 +35,7 @@ public class AdminRoleTests
     [Fact]
     public async Task CannotRemoveAdmin()
     {
-        var exception = await Assert.ThrowsAsync<RoleOperationException>(() => _rolesRepository.RemoveAsync(_adminRole));
+        var exception = await Assert.ThrowsAsync<RoleOperationException>(() => _rolesRepository.DeleteAsync(_adminRole));
         Assert.Equal("Can't remove admin role", exception.Message);
     }
 }

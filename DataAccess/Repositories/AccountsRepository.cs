@@ -71,7 +71,7 @@ public class AccountsRepository : IAccountsRepository
         return accounts.Where(account => !account.IsAdmin);
     }
 
-    public Task RemoveAsync(Account account)
+    public Task DeleteAsync(Account account)
     {
         if (account.IsAdmin)
         {
