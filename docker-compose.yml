@@ -1,40 +1,39 @@
-version: "3.8"
-
 services:
-  accounts-db-debug:
+  accounts-db:
+    container_name: 'accounts-db'
+    profiles: ['MockForDevelopment', 'db-only']
     image: postgres:14.2-alpine
-    restart: always
-    container_name: 'accounts-db-debug'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Accounts
+      POSTGRES_DB: accounts-db
     ports:
       - 10001:5432
     networks:
-      - accounts-deb
+      - accounts-network
 
   accounts-api:
     container_name: 'accounts-api'
+    profiles: ['MockForDevelopment']
     depends_on:
-      - "accounts-db-debug"
+      - 'accounts-db'
     build:
       dockerfile: Api/Dockerfile
       context: .
     ports:
-      - 5015:80
+      - 10002:80
     environment:
-      - ASPNETCORE_ENVIRONMENT=Debug
+      - ASPNETCORE_ENVIRONMENT=MockForDevelopment
       - LOGS_PATH=/var/log/dev-accounts-api
-      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db-debug;port=5432;Database=Accounts
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db;port=5432;Database=accounts-db
       - AuthenticationOptions__PublicSigningKey=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAz+luHwhsNo4aQxYNCkaxcqL/HUcqWG1zz3pCpbyW5nbgxoo+Xw0jwAqVeRlrWHZf0WszbPObyCpmGVifyj6n0PSp5Np7431zjUhRUkxwyNSyVE5BWw5aJLyLB5EF9HH39CqtxdtWmYuLzhBS5fZT4tyR4xlQffNTxylg7xZgLfunUDRuLxdqR0JO3sjebgogrDVvHj3sif46uitipeTfUyCtqBG/JngPkMbDMNRkTH6QXnXfLgpX5Lr21O4PZPIBwCXzPCTCDMgbXHLvAzdlqgVYJcLf9xXPtVkPGOv8y+hbSTAyCNLViOLKKm2a2W4bPiElDIDwbtbHesj8zHPlpP5Q7QMtT168UxetgUeKsr5kfpxtLpE/QO4GkkqTA6rV7PQKrCTY0B5V8ZD8Ir/hlOKk8jxGe9NLui+8rLnnwJUZErT7Swp9yQL1eed2YtdrcR3q5eOE8+2pkzwjbEoFuIQidDKOghrZOwf6j217fme/xE+aEP0OPv5z07kJr2torh7tUefrVerT4Krj5LVl4DgdlkHAuILWOaYdSoLnRrsrfFa9Y1alM2D/juH9+YtaR/YjNWOhdZNMNyoDT08SbgE81ZbKmVgLGaWFLcMn/LBD6DBeRb5dRx12QZnv0jGJLVVgjTe9EqrjVF92ahGRljDIGjNzEI2f2syc0/qKS4sCAwEAAQ==
-      - HttpUrls__AuthServiceUrl=http://auth-service-api:80
-      - HttpUrls__EmployeeServiceUrl=http://salary-service-api:80/api
+      - HttpUrls__AuthServiceUrl=http://auth-api:80
+      - HttpUrls__EmployeeServiceUrl=http://employees-api:80/api
     networks:
-      - accounts-deb
-      # - ic-backend-deb
+      - accounts-network
+      - ic-backend-deb
 
 networks:
-  accounts-deb: {}
-  # ic-backend-deb:
-  #   external: true
+  accounts-network: {}
+  ic-backend-deb:
+    external: true
