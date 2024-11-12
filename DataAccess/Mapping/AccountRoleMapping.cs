@@ -9,10 +9,10 @@ internal class AccountRoleMapping : IEntityTypeConfiguration<AccountRole>
     public void Configure(EntityTypeBuilder<AccountRole> builder)
     {
         builder.HasKey(x => new
-                {
-                    x.AccountId,
-                    x.RoleId,
-                }
+        {
+            x.AccountId,
+            x.RoleId,
+        }
             );
 
         builder.HasOne(x => x.Account)
