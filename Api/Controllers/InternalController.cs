@@ -21,9 +21,9 @@ public class InternalController : Controller
     public async Task<IEnumerable<string>> GetPermissionsByAccountIdAsync(long accountId)
     {
         return await _getPermissionsByAccountIdQueryHandler.HandleAsync(new GetPermissionsByAccountIdQuery
-                {
-                    Id = accountId,
-                }
+        {
+            Id = accountId,
+        }
             );
     }
 

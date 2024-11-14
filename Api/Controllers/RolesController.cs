@@ -54,9 +54,9 @@ public class RolesController : Controller
         try
         {
             var role = await _getRoleByIdQueryHandler.HandleAsync(new GetRoleByIdQuery
-                    {
-                        Id = roleId,
-                    }
+            {
+                Id = roleId,
+            }
                 );
 
             return Ok(role);
@@ -104,9 +104,9 @@ public class RolesController : Controller
         try
         {
             await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand
-                    {
-                        Id = roleId,
-                    }
+            {
+                Id = roleId,
+            }
                 );
 
             return Ok();

@@ -1,16 +1,16 @@
-using Application.Accounts.Commands;
-using Application.Accounts.Validators;
-using Core.Contracts;
-using Core.Entities;
-using FluentValidation;
-using Moq;
-using Xunit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Accounts.Commands;
+using Application.Accounts.Validators;
 using Application.HttpClients;
+using Core.Contracts;
+using Core.Entities;
 using Core.Models;
+using FluentValidation;
+using Moq;
 using Tests.TestsData;
+using Xunit;
 
 namespace Tests.Accounts;
 
@@ -19,11 +19,11 @@ public class AccountDeletionCommandHandlerTests
     private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
     private readonly Mock<IRolesRepository> _roleRepositoryMock = new();
     private readonly Account _testAccount = new(
-        "test@tourmalinecore.com", 
-        "test", 
-        "test", 
+        "test@tourmalinecore.com",
         "test",
-        TestData.ValidAccountRoles, 
+        "test",
+        "test",
+        TestData.ValidAccountRoles,
         1L);
 
     public AccountDeletionCommandHandlerTests()

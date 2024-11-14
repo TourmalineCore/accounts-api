@@ -22,9 +22,9 @@ public class AccountCreationCommandValidatorTests
 
         accountValidOptionsMock.Setup(x => x.Value)
             .Returns(new AccountValidationOptions
-                    {
-                        CorporateEmailDomain = "@tourmalinecore.com",
-                    }
+            {
+                CorporateEmailDomain = "@tourmalinecore.com",
+            }
                 );
         var roleRepositoryMock = new Mock<IRolesRepository>();
         _accountRepositoryMock = new Mock<IAccountsRepository>();
