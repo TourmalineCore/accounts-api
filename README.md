@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-- [TourmalineCore.AccountsApi](#tourmalinecoreaccountsapi)
+- [accounts-api](#accounts-api)
   * [Brief description](#brief-description)
   * [Launch docker containers](#launch-docker-containers)
   * [Configurations](#configurations)
