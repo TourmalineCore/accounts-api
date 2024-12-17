@@ -22,9 +22,9 @@ Note: If you already has this network, skip this step.
 erDiagram
     Accounts{
         int8 Id PK "Not null."
-        varchar FirstName "Not null. Default is ''."
-        varchar MiddleName "Default is ''."
-        varchar LastName "Not null."
+        varchar FirstName "Not null. Default is ''. Max length - 50."
+        varchar MiddleName "Default is ''. Max length - 50."
+        varchar LastName "Not null. Max length - 50."
         timestamptz CreatedAt "Not null. Default is '1970-01-01 05:00:00+05'."
         timestamptz DeletedAtUtc 
         text CorporateEmail "Not null. Default is ''."
