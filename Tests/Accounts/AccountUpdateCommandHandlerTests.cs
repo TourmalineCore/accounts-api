@@ -1,5 +1,6 @@
 using Application.Accounts.Commands;
 using Application.Accounts.Validators;
+using Application.HttpClients;
 using Core.Contracts;
 using Core.Entities;
 using FluentValidation;
@@ -58,7 +59,7 @@ public class AccountUpdateCommandHandlerTests
             },
         };
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         var exception = await Assert.ThrowsAsync<NullReferenceException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Account not found", exception.Message);
@@ -84,7 +85,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         var exception = await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
 
         Assert.Equal("Incorrect role ids. Probably you tried to set unavailable role id", exception.Message);
@@ -109,7 +110,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
@@ -132,7 +133,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await accountUpdateCommandHandler.HandleAsync(command);
 
         var account = await _accountRepositoryMock.Object.FindByIdAsync(1);
@@ -162,7 +163,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
@@ -184,7 +185,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
@@ -207,7 +208,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 
@@ -227,7 +228,7 @@ public class AccountUpdateCommandHandlerTests
             .Setup(x => x.FindByIdAsync(It.IsAny<long>()))
             .ReturnsAsync(_testAccount);
 
-        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object);
+        var accountUpdateCommandHandler = new AccountUpdateCommandHandler(_accountRepositoryMock.Object, new AccountUpdateCommandValidator(_roleRepositoryMock.Object), _roleRepositoryMock.Object, new Mock<IHttpClient>().Object);
         await Assert.ThrowsAsync<ValidationException>(() => accountUpdateCommandHandler.HandleAsync(command));
     }
 }

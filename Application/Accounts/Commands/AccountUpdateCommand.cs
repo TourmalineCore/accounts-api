@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Accounts.Validators;
 using Application.Contracts;
+using Application.HttpClients;
 using Core.Contracts;
 using FluentValidation;
 
@@ -28,12 +29,14 @@ public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
     private readonly IAccountsRepository _accountsRepository;
     private readonly IRolesRepository _rolesRepository;
     private readonly AccountUpdateCommandValidator _validator;
+    private readonly IHttpClient _httpClient;
 
-    public AccountUpdateCommandHandler(IAccountsRepository accountsRepository, AccountUpdateCommandValidator accountUpdateCommandValidator, IRolesRepository rolesRepository)
+    public AccountUpdateCommandHandler(IAccountsRepository accountsRepository, AccountUpdateCommandValidator accountUpdateCommandValidator, IRolesRepository rolesRepository, IHttpClient httpClient)
     {
         _accountsRepository = accountsRepository;
         _validator = accountUpdateCommandValidator;
         _rolesRepository = rolesRepository;
+        _httpClient = httpClient;
     }
 
     public async Task HandleAsync(AccountUpdateCommand command)
@@ -60,6 +63,12 @@ public class AccountUpdateCommandHandler : ICommandHandler<AccountUpdateCommand>
                 command.MiddleName,
                 newAccountRoles,
                 command.CallerCorporateEmail
+            );
+
+        await _httpClient.SendRequestToUpdateEmployeePersonalInfoAsync(account.CorporateEmail,
+                command.FirstName,
+                command.LastName,
+                command.MiddleName
             );
 
         await _accountsRepository.UpdateAsync(account);
