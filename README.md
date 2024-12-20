@@ -1,4 +1,17 @@
-# TourmalineCore.AccountsApi
+# accounts-api
+
+## Table of contents
+
+- [accounts-api](#accounts-api)
+  * [Brief description](#brief-description)
+  * [Launch docker containers](#launch-docker-containers)
+  * [Configurations](#configurations)
+  * [Database scheme](#database-scheme)
+
+## Brief description
+
+API service that works with information about accounts registered in the system. 
+Each account is attached to a tenant in the system according to multi-tenancy approach. An account can have a role, permissions are attached to the role.
 
 ## Launch docker containers
 
