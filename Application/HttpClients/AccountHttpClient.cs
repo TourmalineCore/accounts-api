@@ -47,6 +47,19 @@ public class AccountHttpClient : IHttpClient
                 }
             );
     }
+
+    public async Task SendRequestToUpdateEmployeePersonalInfoAsync(string corporateEmail, string firstName, string lastName, string? middleName)
+    {
+        await _client.PostAsJsonAsync($"{_urls.EmployeeServiceUrl}/internal/update-employee-personal-info",
+                new
+                {
+                    CorporateEmail = corporateEmail,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    MiddleName = middleName
+                }
+            );
+    }
     public async Task SendRequestToDeleteAccountAsync(string corporateEmail, string token)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/delete-user")

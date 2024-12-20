@@ -15,4 +15,6 @@ public interface IHttpClient
     Task SendRequestToBlockUserAsync(long accountId);
 
     Task SendRequestToUnblockUserAsync(long accountId);
+
+    Task SendRequestToUpdateEmployeePersonalInfoAsync(string corporateEmail, string firstName, string lastName, string? middleName);
 }
