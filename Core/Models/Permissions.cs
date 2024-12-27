@@ -17,10 +17,12 @@ public static class Permissions
     public const string ManageRoles = "ManageRoles";
     public const string CanRequestCompensations = "CanRequestCompensations";
     public const string CanManageCompensations = "CanManageCompensations";
+    public const string CanManageBooks = "CanManageBooks";
     public const string CanManageDocuments = "CanManageDocuments";
     public const string CanManageTenants = "CanManageTenants";
     public const string IsTenantsHardDeleteAllowed = "IsTenantsHardDeleteAllowed";
     public const string IsAccountsHardDeleteAllowed = "IsAccountsHardDeleteAllowed";
+    public const string IsBooksHardDeleteAllowed = "IsBooksHardDeleteAllowed";
 
     public static bool IsPermissionExists(string permissionName)
     {

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/* # for checking that it works correctly
   pull_request:
 
 env:
