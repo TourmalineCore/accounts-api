@@ -1,0 +1,63 @@
+[
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/auth/login"
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "body": "{\"accessToken\": { \"value\": \"eyJuYW1lSWRlbnRpZmllciI6Im1haWxAbWFpbC5ydSIsImNvcnBvcmF0ZUVtYWlsIjoibWFpbEBtYWlsLnJ1IiwidGVuYW50SWQiOiIxIiwiYWNjb3VudElkIjoiMyIsImVtcGxveWVlSWQiOiIyIiwgICJwZXJtaXNzaW9ucyI6IFsiVmlld1BlcnNvbmFsUHJvZmlsZSIsIlZpZXdDb250YWN0cyIsIlZpZXdTYWxhcnlBbmREb2N1bWVudHNEYXRhIiwiRWRpdEZ1bGxFbXBsb3llZXNEYXRhIiwiQWNjZXNzQW5hbHl0aWNhbEZvcmVjYXN0c1BhZ2UiLCJWaWV3QWNjb3VudHMiLCJNYW5hZ2VBY2NvdW50cyIsIlZpZXdSb2xlcyIsIk1hbmFnZVJvbGVzIiwiQ2FuUmVxdWVzdENvbXBlbnNhdGlvbnMiLCJDYW5NYW5hZ2VDb21wZW5zYXRpb25zIiwiQ2FuTWFuYWdlQm9va3MiLCJDYW5NYW5hZ2VEb2N1bWVudHMiLCJDYW5NYW5hZ2VUZW5hbnRzIiwiSXNUZW5hbnRzSGFyZERlbGV0ZUFsbG93ZWQiLCJJc0FjY291bnRzSGFyZERlbGV0ZUFsbG93ZWQiLCJJc0Jvb2tzSGFyZERlbGV0ZUFsbG93ZWQiXX0=\" }}",
+        "headers": {
+            "Content-Type": [ "application/json" ]
+        }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/auth/register"
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": [ "application/json" ]
+        }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/internal/create-employee"
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": [ "application/json" ]
+        }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/auth/delete-user"
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": [ "application/json" ]
+        }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/internal/delete-employee"
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": [ "application/json" ]
+        }
+    }
+  }
+]
