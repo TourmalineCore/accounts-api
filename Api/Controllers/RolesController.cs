@@ -98,6 +98,25 @@ public class RolesController : Controller
     }
 
     [RequiresPermission(Permissions.ManageRoles)]
+    [HttpDelete("{id}/hard-delete")]
+    public async Task<ActionResult> DeleteRoleAsync([FromRoute] long id)
+    {
+        try
+        {
+            await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand()
+                    {
+                        Id = id,
+                    }
+                );
+            return Ok();
+        }
+        catch(Exception ex)
+        {
+            return GetProblem(ex);
+        }
+    }
+
+    [RequiresPermission(Permissions.ManageRoles)]
     [HttpDelete("{roleId:long}")]
     public async Task<ActionResult> RemoveAsync(long roleId)
     {
