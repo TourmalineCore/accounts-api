@@ -21,6 +21,7 @@ public static class Permissions
     public const string CanManageTenants = "CanManageTenants";
     public const string IsTenantsHardDeleteAllowed = "IsTenantsHardDeleteAllowed";
     public const string IsAccountsHardDeleteAllowed = "IsAccountsHardDeleteAllowed";
+    public const string IsCompensationsHardDeleteAllowed = "IsCompensationsHardDeleteAllowed";
 
     public static bool IsPermissionExists(string permissionName)
     {
