@@ -21,7 +21,7 @@ Note: If you already has this network, skip this step.
 ```mermaid
 erDiagram
     Accounts{
-        int8 Id PK "Not null."
+        bigint Id PK "Not null."
         varchar FirstName "Not null. Default is ''. Max length - 50."
         varchar MiddleName "Default is ''. Max length - 50."
         varchar LastName "Not null. Max length - 50."
@@ -29,24 +29,24 @@ erDiagram
         timestamptz DeletedAtUtc 
         text CorporateEmail "Not null. Default is ''."
         bool IsBlocked "Not null. Default is False."
-        int8 TenantId FK "Not null. Default is 1."
+        bigint TenantId FK "Not null. Default is 1."
     }
 
     Roles{
-        int8 Id PK "Not null."
+        bigint Id PK "Not null."
         text Name "Not null."
         _text Permissions "Not null."
 
     }
 
     Tenants{
-        int8 Id PK "Not null."
+        bigint Id PK "Not null."
         text Name "Not null."
     }
 
     AccountRoles{
-        int8 AccountId FK "Not null."
-        int8 RoleId FK "Not null."
+        bigint AccountId FK "Not null."
+        bigint RoleId FK "Not null."
     }
 
 
