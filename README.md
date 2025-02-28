@@ -28,3 +28,43 @@ Note: If you already has this network, skip this step.
 - LocalEnvForDevelopment - used locally when you run the service in Visual Studio and you want to connect to its external deps from Local Env
 - ProdForDevelopment - used locally when you run the service in Visual Studio and want to connect to its external deps from Prod specially dedicated Local Development Tenant
 - ProdForDeployment - used when we run the service in Prod, it shouldn't contain any secrets, it should be a Release build, using real Prod external deps
+
+## Database scheme 
+
+```mermaid
+erDiagram
+    Accounts{
+        bigint Id PK "Not null."
+        varchar FirstName "Not null. Default is ''. Max length - 50."
+        varchar MiddleName "Default is ''. Max length - 50."
+        varchar LastName "Not null. Max length - 50."
+        timestamptz CreatedAt "Not null. Default is '1970-01-01 05:00:00+05'."
+        timestamptz DeletedAtUtc 
+        text CorporateEmail "Not null. Default is ''."
+        bool IsBlocked "Not null. Default is False."
+        bigint TenantId FK "Not null. Default is 1."
+    }
+
+    Roles{
+        bigint Id PK "Not null."
+        text Name "Not null."
+        _text Permissions "Not null."
+
+    }
+
+    Tenants{
+        bigint Id PK "Not null."
+        text Name "Not null."
+    }
+
+    AccountRoles{
+        bigint AccountId FK "Not null."
+        bigint RoleId FK "Not null."
+    }
+
+
+    Accounts ||--|{ AccountRoles : has
+    Roles ||--|{ AccountRoles : belongs
+    Accounts ||--|| Tenants : contains
+
+```
