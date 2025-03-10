@@ -52,6 +52,14 @@ Scenario: CRUD operations test flow
     Then status 200
     * def accountId = response
 
+    Given path '/api/accounts/findById/' + accountId
+    And header Authorization = accessTokenForExternalDeps
+    When method get
+    Then status 200
+    * def ResponseTenantId = response.tenantId.toString()
+    * match ResponseTenantId == tenantId
+    * match response.roles[0].id == 5
+
     Given path '/api/accounts/delete-account'
     And header Authorization = accessTokenForExternalDeps
     And request { corporateEmail: '#(corporateEmail)'}
