@@ -24,7 +24,6 @@ Scenario: CRUD operations test flow
     * def accessToken = karate.toMap(response.accessToken.value)
 
     * def accessTokenForExternalDeps = karate.toMap('Bearer ' + response.accessToken.value)
-
     * print(accessTokenForExternalDeps)
 
     * configure headers = jsUtils().getAuthHeaders(accessToken)
