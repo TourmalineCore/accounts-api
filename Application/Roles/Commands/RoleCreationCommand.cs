@@ -21,7 +21,7 @@ public readonly struct RoleCreationCommand
     }
 }
 
-public class RoleCreationCommandHandler : ICommandHandler<RoleCreationCommand>
+public class RoleCreationCommandHandler : ICommandCreateRoleHandler<RoleCreationCommand, long>
 {
     private readonly IRolesRepository _rolesRepository;
 
@@ -30,10 +30,10 @@ public class RoleCreationCommandHandler : ICommandHandler<RoleCreationCommand>
         _rolesRepository = rolesRepository;
     }
 
-    public async Task HandleAsync(RoleCreationCommand command)
+    public async Task<long> HandleAsync(RoleCreationCommand command)
     {
         await ValidateRoleNameAsync(command.Name);
-        await _rolesRepository.CreateAsync(new Role(command.Name, command.GetRolePermissions()));
+        return await _rolesRepository.CreateAsync(new Role(command.Name, command.GetRolePermissions()));
     }
 
     private async Task ValidateRoleNameAsync(string name)

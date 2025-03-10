@@ -69,17 +69,9 @@ public class RolesController : Controller
 
     [RequiresPermission(Permissions.ManageRoles)]
     [HttpPost("create")]
-    public async Task<ActionResult> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
+    public async Task<long> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
     {
-        try
-        {
-            await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+        return await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
     }
 
     [RequiresPermission(Permissions.ManageRoles)]

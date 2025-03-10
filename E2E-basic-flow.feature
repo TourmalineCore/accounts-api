@@ -27,6 +27,7 @@ Scenario: CRUD operations test flow
 
     * configure headers = jsUtils().getAuthHeaders(accessToken)
 
+    # create tenant
     Given url apiRootUrl
     Given path '/api/tenants'
     * def tenantName = 'Test tenant' + Math.random()
@@ -35,41 +36,49 @@ Scenario: CRUD operations test flow
     Then status 200
     * def tenantId = response
 
+    # create role
     Given path '/api/roles/create'
     * def roleName = 'Test role' + Math.random()
     And request { name: '#(roleName)', permissions: ["ViewAccounts"] }
     When method post
     Then status 200
+    * def roleId = response
     
+    # create account
     Given path '/api/accounts/create'
     * def firstName = 'test-' + Math.random()
     * def lastName = 'test-' + Math.random()
     * def middleName = 'test-' + Math.random()
     * def corporateEmail = 'test-' + java.util.UUID.randomUUID().toString() + '@tourmalinecore.com'
-    And request { firstName: '#(firstName)', lastName: '#(lastName)', middleName: '#(middleName)', corporateEmail: '#(corporateEmail)', roleIds: [ 5 ], tenantId: '#(tenantId)' }
+    And request { firstName: '#(firstName)', lastName: '#(lastName)', middleName: '#(middleName)', corporateEmail: '#(corporateEmail)', roleIds: ['#(roleId)'], tenantId: '#(tenantId)' }
     And header Authorization = accessTokenForExternalDeps
     When method post
     Then status 200
     * def accountId = response
 
+    # verify the account has created roleId and tenantId
     Given path '/api/accounts/findById/' + accountId
     And header Authorization = accessTokenForExternalDeps
     When method get
     Then status 200
-    * def ResponseTenantId = response.tenantId.toString()
-    * match ResponseTenantId == tenantId
-    * match response.roles[0].id == 5
+    * def responseTenantId = response.tenantId.toString()
+    * match responseTenantId == tenantId
+    * def responseRoleId = response.roles[0].id.toString()
+    * match responseRoleId == roleId
 
+    # delete account
     Given path '/api/accounts/delete-account'
     And header Authorization = accessTokenForExternalDeps
     And request { corporateEmail: '#(corporateEmail)'}
     When method post
     Then status 200
 
-    Given path '/api/roles/5'
+    # delete role
+    Given path '/api/roles/' + roleId
     When method delete
     Then status 200
 
+    # delete tenant
     Given path '/api/tenants/' + tenantId
     When method delete
     Then status 200
