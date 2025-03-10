@@ -39,7 +39,7 @@ Scenario: CRUD operations test flow
 
     Given path '/api/roles/create'
     * def roleName = 'Test role' + Math.random()
-    And request { name: '#(roleName)', permissions:["ViewAccounts"] }
+    And request { name: '#(roleName)', permissions: ["ViewAccounts"] }
     When method post
     Then status 200
     
