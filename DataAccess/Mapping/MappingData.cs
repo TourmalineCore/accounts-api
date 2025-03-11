@@ -25,6 +25,7 @@ internal static class MappingData
         new Permission(Permissions.ManageRoles),
         new Permission(Permissions.CanRequestCompensations),
         new Permission(Permissions.CanManageCompensations),
+        new Permission(Permissions.CanViewBooks),
         new Permission(Permissions.CanManageBooks),
         new Permission(Permissions.CanManageDocuments),
         new Permission(Permissions.CanManageTenants),
