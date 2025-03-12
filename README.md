@@ -29,6 +29,35 @@ Note: If you already has this network, skip this step.
 - ProdForDevelopment - used locally when you run the service in Visual Studio and want to connect to its external deps from Prod specially dedicated Local Development Tenant
 - ProdForDeployment - used when we run the service in Prod, it shouldn't contain any secrets, it should be a Release build, using real Prod external deps
 
+## How add new migration
+
+When you have made all the changes and are ready to add new migration, you need to follow these steps
+
+1. You need to run db in docker, using command
+
+```
+docker compose --profile db-only up -d
+```
+
+2. Then add new migration, using the following command and dont forget to change `YourNewMigrationName`
+
+```
+dotnet ef migrations add YourNewMigrationName --startup-project Api/ --project DataAccess/ -- --environment MockForDevelopment
+```
+
+3. After adding your new migration you need to update db, using the following command
+
+```
+dotnet ef database update --startup-project Api/ --project DataAccess/ -- --environment MockForDevelopment
+```
+
+4. If you want to remove `last` migration, use the following command
+
+```
+dotnet ef migrations remove --startup-project Api/ --project DataAccess/ -- --environment MockForDevelopment
+```
+
+
 ## Database scheme 
 
 ```mermaid
