@@ -39,6 +39,8 @@ When you have made all the changes and are ready to add new migration, you need 
 docker compose --profile db-only up -d
 ```
 
+### for MacOS
+
 2. Then add new migration, using the following command and dont forget to change `YourNewMigrationName`
 
 ```
@@ -57,6 +59,27 @@ dotnet ef database update --startup-project Api/ --project DataAccess/ -- --envi
 dotnet ef migrations remove --startup-project Api/ --project DataAccess/ -- --environment MockForDevelopment
 ```
 
+### for Windows
+
+#### TODO: Most likely it will be so, but it is necessary to check on Windows the correctness of the work and if something is wrong here, then correct the README
+
+2. Then add new migration, using the following command and dont forget to change `YourNewMigrationName`
+
+```
+dotnet ef migrations add YourNewMigrationName -- --environment MockForDevelopment
+```
+
+3. After adding your new migration you need to update db, using the following command
+
+```
+dotnet ef database update -- --environment MockForDevelopment
+```
+
+4. If you want to remove `last` migration, use the following command
+
+```
+dotnet ef migrations remove -- --environment MockForDevelopment
+```
 
 ## Database scheme 
 
