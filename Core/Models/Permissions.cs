@@ -17,7 +17,6 @@ public static class Permissions
     public const string ManageRoles = "ManageRoles";
     public const string CanRequestCompensations = "CanRequestCompensations";
     public const string CanManageCompensations = "CanManageCompensations";
-    public const string CanViewBooks = "CanViewBooks";
     public const string CanManageBooks = "CanManageBooks";
     public const string CanManageDocuments = "CanManageDocuments";
     public const string CanManageTenants = "CanManageTenants";
