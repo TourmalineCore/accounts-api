@@ -18,7 +18,7 @@ services:
     depends_on:
       - 'accounts-db'
     build:
-      dockerfile: Api/Dockerfile
+      dockerfile: Dockerfile
       context: .
     ports:
       - 10002:80
