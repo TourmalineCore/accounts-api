@@ -3,9 +3,9 @@ repositories:
     url: https://charts.bitnami.com/bitnami
 
 releases:
-  - name: accounts-api
+  - name: inner-circle-accounts-api
     labels:
-      app: accounts-api
+      app: inner-circle-accounts-api
     wait: true
     chart: bitnami/aspnet-core
     version: 4.4.7
