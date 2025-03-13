@@ -61,10 +61,18 @@ Scenario: CRUD operations test flow
     And header Authorization = accessTokenForExternalDeps
     When method get
     Then status 200
-    * def responseTenantId = response.tenantId.toString()
-    * match responseTenantId == tenantId
+    * def responseFirstName = response.firstName.toString()
+    * match responseFirstName == firstName
+    * def responseLastName = response.lastName.toString()
+    * match responseLastName == lastName
+    * def responseMiddleName = response.middleName.toString()
+    * match responseMiddleName == middleName
+    * def responseEmail = response.corporateEmail.toString()
+    * match responseEmail == corporateEmail
     * def responseRoleId = response.roles[0].id.toString()
     * match responseRoleId == roleId
+    * def responseTenantId = response.tenantId.toString()
+    * match responseTenantId == tenantId
 
     # delete account
     Given path '/api/accounts/delete-account'
