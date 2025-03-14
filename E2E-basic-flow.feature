@@ -32,7 +32,7 @@ Scenario: CRUD operations test flow
     Given path '/api/tenants'
     * def tenantName = 'Test tenant' + Math.random()
     And request { name: '#(tenantName)' }
-    When method post
+    When method POST
     Then status 200
     * def tenantId = response
 
