@@ -29,7 +29,7 @@ Scenario: CRUD operations test flow
 
     # create tenant
     Given url apiRootUrl
-    Given path '/account-managemet/tenants'
+    Given path '/account-management/tenants'
     * def tenantName = 'Test tenant' + Math.random()
     And request { name: '#(tenantName)' }
     When method POST
