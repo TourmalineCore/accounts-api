@@ -61,6 +61,22 @@ services:
       MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializer.json
     networks:
       - accounts-network
+    
+  production-karate-tests:
+    container_name: 'production-karate-tests'
+    profiles: ['production-e2e-tests']
+    build:
+      dockerfile: KarateDockerfile
+      context: .
+    command: ["karate", "/karate"]
+    volumes:
+      - .:/karate
+    environment:
+      AUTH_API_ROOT_URL: "https://innercircle.tourmalinecore.com/api"
+      API_ROOT_URL: "https://innercircle.tourmalinecore.com"
+      SHOULD_USE_FAKE_EXTERNAL_DEPENDENCIES: "false"
+      AUTH_LOGIN: ${AUTH_LOGIN}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
 
 networks:
   accounts-network: {}

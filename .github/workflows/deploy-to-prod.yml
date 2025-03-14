@@ -37,8 +37,8 @@ jobs:
             apply --namespace dev-inner-circle -f Api/ci/helmfile.yaml 
             --state-values-set image.tag=sha-${{ github.sha }} 
             --state-values-set ingress.hostname=${{ secrets.HOST }}
-            --state-values-set extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.POSTGRESQL_CONNECTION_STRING }}
-            --state-values-set extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.PUBLIC_SIGNING_KEY }}
+            --state-values-set extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}
+            --state-values-set extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_AUTH_PUBLIC_SIGNING_KEY }}
             --state-values-set extraSecretEnvVars.HttpUrls__AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}
             --state-values-set extraSecretEnvVars.HttpUrls__EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}
             --state-values-set extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain=${{ secrets.DEV_CORPORATE_EMAIL_DOMAIN }}
