@@ -62,5 +62,6 @@ jobs:
         env:
           AUTH_API_ROOT_URL: "http://localhost:40100/api"
           API_ROOT_URL: "http://localhost:40100"
+          SHOULD_USE_FAKE_EXTERNAL_DEPENDENCIES: "false"
           AUTH_LOGIN: "ceo@tourmalinecore.com"
           AUTH_PASSWORD: "cEoPa$$wo1d"
