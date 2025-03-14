@@ -41,7 +41,7 @@ jobs:
           # this should properly fill the feature branch name in spite of the pipeline trigger source (PR, commit, etc.)
           # https://stackoverflow.com/a/71158878
           env: |
-            INNER_CIRCLE_ACCOUNTS_API_BRANCH=${{ github.head_ref || github.ref_name }}
+            ACCOUNTS_API_BRANCH=${{ github.head_ref || github.ref_name }}
 
       - name: Checkout api
         uses: actions/checkout@v4
