@@ -3,9 +3,9 @@ repositories:
     url: https://charts.bitnami.com/bitnami
 
 releases:
-  - name: inner-circle-accounts-api
+  - name: accounts-api
     labels:
-      app: inner-circle-accounts-api
+      app: accounts-api
     wait: true
     chart: bitnami/aspnet-core
     version: 4.4.7
@@ -18,3 +18,7 @@ releases:
       - extraSecretEnvVars:
           ConnectionStrings__DefaultConnection: "{{ .StateValues.extraSecretEnvVars.ConnectionStrings__DefaultConnection }}"
           AuthenticationOptions__PublicSigningKey: "{{ .StateValues.extraSecretEnvVars.AuthenticationOptions__PublicSigningKey }}"
+          HttpUrls__AuthServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__AuthServiceUrl }}"
+          HttpUrls__EmployeeServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__EmployeeServiceUrl }}"
+          AccountValidationOptions__CorporateEmailDomain: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain }}"
+          AccountValidationOptions__IgnoreCorporateDomainValidationRule: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule }}"
