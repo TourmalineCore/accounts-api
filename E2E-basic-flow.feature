@@ -45,7 +45,7 @@ Scenario: CRUD operations test flow
     * def roleId = response
     
     # create account
-    Given path '/accounts/create'
+    Given path '/account-management/accounts/create'
     * def firstName = 'test-' + Math.random()
     * def lastName = 'test-' + Math.random()
     * def middleName = 'test-' + Math.random()
