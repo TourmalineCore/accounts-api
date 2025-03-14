@@ -37,7 +37,7 @@ Scenario: CRUD operations test flow
     * def tenantId = response
 
     # create role
-    Given path '/roles/create'
+    Given path '/account-management/roles/create'
     * def roleName = 'Test role' + Math.random()
     And request { name: '#(roleName)', permissions: ["ViewAccounts"] }
     When method POST
@@ -45,7 +45,7 @@ Scenario: CRUD operations test flow
     * def roleId = response
     
     # create account
-    Given path '/accounts/create'
+    Given path '/account-management/accounts/create'
     * def firstName = 'test-' + Math.random()
     * def lastName = 'test-' + Math.random()
     * def middleName = 'test-' + Math.random()
@@ -57,7 +57,7 @@ Scenario: CRUD operations test flow
     * def accountId = response
 
     # verify the account has created roleId and tenantId
-    Given path '/accounts/findById/' + accountId
+    Given path '/account-management/accounts/findById/' + accountId
     And header Authorization = accessTokenForExternalDeps
     When method GET
     Then status 200
@@ -75,18 +75,18 @@ Scenario: CRUD operations test flow
     * match responseTenantId == tenantId
 
     # delete account
-    Given path '/accounts/delete-account'
+    Given path '/account-management/accounts/delete-account'
     And header Authorization = accessTokenForExternalDeps
     And request { corporateEmail: '#(corporateEmail)'}
     When method POST
     Then status 200
 
     # delete role
-    Given path '/roles/' + roleId
+    Given path '/account-management/roles/' + roleId
     When method DELETE
     Then status 200
 
     # delete tenant
-    Given path '/tenants/' + tenantId
+    Given path '/account-management/tenants/' + tenantId
     When method DELETE
     Then status 200
