@@ -16,7 +16,7 @@ Scenario: CRUD operations test flow
 
     # Authentication
     Given url authApiRootUrl
-    And path '/auth/login'
+    And path '/login'
     And request {"login": #(authLogin), "password": #(authPassword)}
     And method POST
     Then status 200
@@ -29,7 +29,7 @@ Scenario: CRUD operations test flow
 
     # create tenant
     Given url apiRootUrl
-    Given path '/api/tenants'
+    Given path '/account-managenet/tenants'
     * def tenantName = 'Test tenant' + Math.random()
     And request { name: '#(tenantName)' }
     When method POST
@@ -37,7 +37,7 @@ Scenario: CRUD operations test flow
     * def tenantId = response
 
     # create role
-    Given path '/api/roles/create'
+    Given path '/roles/create'
     * def roleName = 'Test role' + Math.random()
     And request { name: '#(roleName)', permissions: ["ViewAccounts"] }
     When method POST
@@ -45,7 +45,7 @@ Scenario: CRUD operations test flow
     * def roleId = response
     
     # create account
-    Given path '/api/accounts/create'
+    Given path '/accounts/create'
     * def firstName = 'test-' + Math.random()
     * def lastName = 'test-' + Math.random()
     * def middleName = 'test-' + Math.random()
@@ -57,7 +57,7 @@ Scenario: CRUD operations test flow
     * def accountId = response
 
     # verify the account has created roleId and tenantId
-    Given path '/api/accounts/findById/' + accountId
+    Given path '/accounts/findById/' + accountId
     And header Authorization = accessTokenForExternalDeps
     When method GET
     Then status 200
@@ -75,18 +75,18 @@ Scenario: CRUD operations test flow
     * match responseTenantId == tenantId
 
     # delete account
-    Given path '/api/accounts/delete-account'
+    Given path '/accounts/delete-account'
     And header Authorization = accessTokenForExternalDeps
     And request { corporateEmail: '#(corporateEmail)'}
     When method POST
     Then status 200
 
     # delete role
-    Given path '/api/roles/' + roleId
+    Given path '/roles/' + roleId
     When method DELETE
     Then status 200
 
     # delete tenant
-    Given path '/api/tenants/' + tenantId
+    Given path '/tenants/' + tenantId
     When method DELETE
     Then status 200
