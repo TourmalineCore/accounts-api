@@ -73,8 +73,8 @@ public class RolesController : Controller
     {
         try
         {
-            await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
-            return Ok();
+            var roleId = await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
+            return Ok(roleId);
         }
         catch (Exception ex)
         {

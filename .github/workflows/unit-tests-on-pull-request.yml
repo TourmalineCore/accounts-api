@@ -1,0 +1,22 @@
+name: Run Unit Tests in PR
+
+on:
+  push:
+    branches: [ feature/* ]
+
+jobs:
+  run-unit-tests:
+    name: Run unit tests
+    runs-on: ubuntu-22.04
+    steps:
+        - name: Check out the repo
+          uses: actions/checkout@v4 
+
+        - name: Restore application dependencies
+          run: dotnet restore 
+
+        - name: Build application
+          run: dotnet build
+          
+        - name: Run unit-tests
+          run: dotnet test  

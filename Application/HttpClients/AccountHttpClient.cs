@@ -36,7 +36,7 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToCreateNewEmployeeAsync(string corporateEmail, string firstName, string lastName, string? middleName, long tenantId)
     {
-        await _client.PostAsJsonAsync($"{_urls.EmployeeServiceUrl}/internal/create-employee",
+        await _client.PostAsJsonAsync($"{_urls.EmployeesServiceUrl}/internal/create-employee",
                 new
                 {
                     CorporateEmail = corporateEmail,
@@ -50,7 +50,7 @@ public class AccountHttpClient : IHttpClient
 
     public async Task SendRequestToUpdateEmployeePersonalInfoAsync(string corporateEmail, string firstName, string lastName, string? middleName)
     {
-        await _client.PostAsJsonAsync($"{_urls.EmployeeServiceUrl}/internal/update-employee-personal-info",
+        await _client.PostAsJsonAsync($"{_urls.EmployeesServiceUrl}/internal/update-employee-personal-info",
                 new
                 {
                     CorporateEmail = corporateEmail,
@@ -75,7 +75,7 @@ public class AccountHttpClient : IHttpClient
     }
     public async Task SendRequestToDeleteEmployeeAsync(string corporateEmail, string token)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_urls.EmployeeServiceUrl}/internal/delete-employee")
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_urls.EmployeesServiceUrl}/internal/delete-employee")
         {
             Content = JsonContent.Create(new
             {
