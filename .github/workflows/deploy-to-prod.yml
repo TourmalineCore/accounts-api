@@ -41,8 +41,8 @@ jobs:
             --state-values-set extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_AUTH_PUBLIC_SIGNING_KEY }}
             --state-values-set extraSecretEnvVars.HttpUrls__AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}
             --state-values-set extraSecretEnvVars.HttpUrls__EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}
-            --state-values-set extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain=${{ secrets.DEV_CORPORATE_EMAIL_DOMAIN }}
-            --state-values-set extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule=${{ secrets.DEV_IGNORE_CORPORATE_DOMAIN_VALIDATION_RULE }}
+            --state-values-set extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain='@tourmalinecore.com'
+            --state-values-set extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule='true'
           helmfile-auto-init: "false"
 
   e2e-test-prod:
@@ -55,8 +55,8 @@ jobs:
       # Get secrets to sign in
       - name: Set up Docker Compose environment variables
         run: |
-          echo AUTH_LOGIN=${{ secrets.AUTH_LOGIN }} >> .env
-          echo AUTH_PASSWORD=${{ secrets.AUTH_PASSWORD }} >> .env
+          echo AUTH_LOGIN=${{ secrets.DEV_E2E_AUTO_TEST_LOGIN }} >> .env
+          echo AUTH_PASSWORD=${{ secrets.DEV_E2E_AUTO_TEST_PASSWORD }} >> .env
       
       - name: Run service via docker-compose and run Karate-tests
         run: |
