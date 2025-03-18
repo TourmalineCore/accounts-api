@@ -43,7 +43,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=MockForDevelopment
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db;port=5432;Database=accounts-db
       - HttpUrls__AuthServiceUrl=http://auth-api:80
-      - HttpUrls__EmployeeServiceUrl=http://employees-api:80/api
+      - HttpUrls__EmployeesServiceUrl=http://employees-api:80/api
     networks:
       - accounts-network
       - ic-backend-deb

@@ -19,6 +19,6 @@ releases:
           ConnectionStrings__DefaultConnection: "{{ .StateValues.extraSecretEnvVars.ConnectionStrings__DefaultConnection }}"
           AuthenticationOptions__PublicSigningKey: "{{ .StateValues.extraSecretEnvVars.AuthenticationOptions__PublicSigningKey }}"
           HttpUrls__AuthServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__AuthServiceUrl }}"
-          HttpUrls__EmployeeServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__EmployeeServiceUrl }}"
+          HttpUrls__EmployeesServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__EmployeesServiceUrl }}"
           AccountValidationOptions__CorporateEmailDomain: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain }}"
           AccountValidationOptions__IgnoreCorporateDomainValidationRule: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule }}"

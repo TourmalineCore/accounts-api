@@ -40,7 +40,7 @@ jobs:
             --state-values-set extraSecretEnvVars.ConnectionStrings__DefaultConnection=${{ secrets.DEV_POSTGRESQL_CONNECTION_STRING }}
             --state-values-set extraSecretEnvVars.AuthenticationOptions__PublicSigningKey=${{ secrets.DEV_AUTH_PUBLIC_SIGNING_KEY }}
             --state-values-set extraSecretEnvVars.HttpUrls__AuthServiceUrl=${{ secrets.DEV_AUTH_SERVICE_URL }}
-            --state-values-set extraSecretEnvVars.HttpUrls__EmployeeServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}
+            --state-values-set extraSecretEnvVars.HttpUrls__EmployeesServiceUrl=${{ secrets.DEV_EMPLOYEE_SERVICE_URL }}
             --state-values-set extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain='@tourmalinecore.com'
             --state-values-set extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule='true'
           helmfile-auto-init: "false"
