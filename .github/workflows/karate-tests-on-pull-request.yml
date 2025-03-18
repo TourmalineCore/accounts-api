@@ -38,10 +38,10 @@ jobs:
           push: never
           # this variable is used by local-env helmfile to use current feature branch helm chart values.yaml file
           # this is needed for a case when as part of the feature the chart was changed and is different from master branch
-         # this should properly fill the feature branch name in spite of the pipeline trigger source (PR, commit, etc.)
-         # https://stackoverflow.com/a/71158878
-         env: |
-           ACCOUNTS_API_BRANCH=${{ github.head_ref || github.ref_name }}
+          # this should properly fill the feature branch name in spite of the pipeline trigger source (PR, commit, etc.)
+          # https://stackoverflow.com/a/71158878
+          env: |
+            ACCOUNTS_API_BRANCH=${{ github.head_ref || github.ref_name }}
   
       - name: Checkout api
         uses: actions/checkout@v4
