@@ -1,7 +1,7 @@
 services:
   accounts-db:
     container_name: 'accounts-db'
-    profiles: ['MockForDevelopment', 'db-only']
+    profiles: ['MockForDevelopment', 'MockForPullRequest', 'db-only']
     image: postgres:14.2-alpine
     environment:
       POSTGRES_USER: postgres
@@ -14,24 +14,69 @@ services:
 
   accounts-api:
     container_name: 'accounts-api'
-    profiles: ['MockForDevelopment']
+    profiles: ['default']
     depends_on:
       - 'accounts-db'
     build:
-      dockerfile: Api/Dockerfile
+      dockerfile: Dockerfile
       context: .
     ports:
       - 10002:80
+
+  accounts-api-for-e2e:
+    container_name: 'accounts-api-for-e2e'
+    profiles: ['MockForPullRequest']
+    extends:
+      service: accounts-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=MockForPullRequest
+      - ASPNETCORE_HTTP_PORTS=80
+    networks:
+      - accounts-network
+  
+  accounts-api-for-docker-run:
+    container_name: 'accounts-api-for-docker-run'
+    profiles: ['MockForDevelopment']
+    extends:
+      service: accounts-api
     environment:
       - ASPNETCORE_ENVIRONMENT=MockForDevelopment
-      - LOGS_PATH=/var/log/dev-accounts-api
       - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Host=accounts-db;port=5432;Database=accounts-db
-      - AuthenticationOptions__PublicSigningKey=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAz+luHwhsNo4aQxYNCkaxcqL/HUcqWG1zz3pCpbyW5nbgxoo+Xw0jwAqVeRlrWHZf0WszbPObyCpmGVifyj6n0PSp5Np7431zjUhRUkxwyNSyVE5BWw5aJLyLB5EF9HH39CqtxdtWmYuLzhBS5fZT4tyR4xlQffNTxylg7xZgLfunUDRuLxdqR0JO3sjebgogrDVvHj3sif46uitipeTfUyCtqBG/JngPkMbDMNRkTH6QXnXfLgpX5Lr21O4PZPIBwCXzPCTCDMgbXHLvAzdlqgVYJcLf9xXPtVkPGOv8y+hbSTAyCNLViOLKKm2a2W4bPiElDIDwbtbHesj8zHPlpP5Q7QMtT168UxetgUeKsr5kfpxtLpE/QO4GkkqTA6rV7PQKrCTY0B5V8ZD8Ir/hlOKk8jxGe9NLui+8rLnnwJUZErT7Swp9yQL1eed2YtdrcR3q5eOE8+2pkzwjbEoFuIQidDKOghrZOwf6j217fme/xE+aEP0OPv5z07kJr2torh7tUefrVerT4Krj5LVl4DgdlkHAuILWOaYdSoLnRrsrfFa9Y1alM2D/juH9+YtaR/YjNWOhdZNMNyoDT08SbgE81ZbKmVgLGaWFLcMn/LBD6DBeRb5dRx12QZnv0jGJLVVgjTe9EqrjVF92ahGRljDIGjNzEI2f2syc0/qKS4sCAwEAAQ==
       - HttpUrls__AuthServiceUrl=http://auth-api:80
-      - HttpUrls__EmployeeServiceUrl=http://employees-api:80/api
+      - HttpUrls__EmployeesServiceUrl=http://employees-api:80/api
     networks:
       - accounts-network
       - ic-backend-deb
+
+  accountsMockServer:
+    container_name: 'accountsMockServer'
+    profiles: ['MockForPullRequest']
+    image: mockserver/mockserver:5.15.0
+    command: -logLevel INFO
+    ports:
+      - 1080:1080
+    volumes:
+      - ./initializer.json:/config/initializer.json
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializer.json
+    networks:
+      - accounts-network
+    
+  production-karate-tests:
+    container_name: 'production-karate-tests'
+    profiles: ['production-e2e-tests']
+    build:
+      dockerfile: KarateDockerfile
+      context: .
+    command: ["karate", "/karate"]
+    volumes:
+      - .:/karate
+    environment:
+      AUTH_API_ROOT_URL: "https://innercircle.tourmalinecore.com/api/auth"
+      API_ROOT_URL: "https://innercircle.tourmalinecore.com/api"
+      SHOULD_USE_FAKE_EXTERNAL_DEPENDENCIES: "false"
+      AUTH_LOGIN: ${AUTH_LOGIN}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
 
 networks:
   accounts-network: {}
