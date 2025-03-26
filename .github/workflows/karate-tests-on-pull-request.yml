@@ -60,8 +60,8 @@ jobs:
         run: |
           java -jar karate.jar .
         env:
-          AUTH_API_ROOT_URL: "http://localhost:40100/api/auth"
-          API_ROOT_URL: "http://localhost:40100/api"
+          AUTH_API_ROOT_URL: "http://localhost:30090/api/auth"
+          API_ROOT_URL: "http://localhost:30090/api"
           AUTH_LOGIN: "ceo@tourmalinecore.com"
           AUTH_PASSWORD: "cEoPa$$wo1d"
           SHOULD_USE_FAKE_EXTERNAL_DEPENDENCIES: "false"
