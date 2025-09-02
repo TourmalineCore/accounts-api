@@ -33,6 +33,11 @@ internal class AccountRoleMapping : IEntityTypeConfiguration<AccountRole>
                 {
                     AccountId = MappingData.CeoAccountId,
                     RoleId = MappingData.CeoRoleId,
+                },
+                new
+                {
+                    AccountId = MappingData.TrialAccountId,
+                    RoleId = MappingData.CeoRoleId,
                 }
             );
     }
