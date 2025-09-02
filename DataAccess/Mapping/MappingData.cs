@@ -8,6 +8,8 @@ internal static class MappingData
 {
     public const long AdminAccountId = 2L;
     public const long CeoAccountId = 1L;
+    public const long TrialAccountId = 3L;
+
 
     public const long AdminRoleId = 1L;
     public const long CeoRoleId = 2L;

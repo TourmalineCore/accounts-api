@@ -39,6 +39,17 @@ internal class AccountMapping : IEntityTypeConfiguration<Account>
                     IsBlocked = false,
                     CreatedAt = Instant.FromDateTimeUtc(MappingData.AccountsCreatedAtUtc),
                     TenantId = 1L
+                },
+                new
+                {
+                    Id = MappingData.TrialAccountId,
+                    CorporateEmail = "trial@tourmalinecore.com",
+                    FirstName = "Trial",
+                    LastName = "Trial",
+                    MiddleName = "Trial",
+                    IsBlocked = false,
+                    CreatedAt = Instant.FromDateTimeUtc(MappingData.AccountsCreatedAtUtc),
+                    TenantId = 1L
                 }
             );
     }
