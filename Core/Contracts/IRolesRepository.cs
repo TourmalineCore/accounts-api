@@ -6,5 +6,5 @@ namespace Core.Contracts;
 
 public interface IRolesRepository : IRepository<Role>
 {
-    public Task<List<Role>> FindAsync(IEnumerable<long> roleIds);
+  public Task<List<Role>> FindAsync(IEnumerable<long> roleIds);
 }

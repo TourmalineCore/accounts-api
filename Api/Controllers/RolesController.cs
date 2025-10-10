@@ -12,132 +12,130 @@ namespace Api.Controllers;
 [Route("api/roles")]
 public class RolesController : Controller
 {
-    private readonly GetRolesQueryHandler _getRolesQueryHandler;
-    private readonly RoleCreationCommandHandler _roleCreationCommandHandler;
-    private readonly RoleUpdateCommandHandler _roleUpdateCommandHandler;
-    private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
-    private readonly RoleRemoveCommandHandler _roleRemoveCommandHandler;
+  private readonly GetRolesQueryHandler _getRolesQueryHandler;
+  private readonly RoleCreationCommandHandler _roleCreationCommandHandler;
+  private readonly RoleUpdateCommandHandler _roleUpdateCommandHandler;
+  private readonly GetRoleByIdQueryHandler _getRoleByIdQueryHandler;
+  private readonly RoleRemoveCommandHandler _roleRemoveCommandHandler;
 
-    public RolesController(
-        GetRolesQueryHandler getRolesQueryHandler,
-        GetRoleByIdQueryHandler getRoleByIdQueryHandler,
-        RoleRemoveCommandHandler roleRemoveCommandHandler,
-        RoleCreationCommandHandler roleCreationCommandHandler,
-        RoleUpdateCommandHandler roleUpdateCommandHandler)
+  public RolesController(
+    GetRolesQueryHandler getRolesQueryHandler,
+    GetRoleByIdQueryHandler getRoleByIdQueryHandler,
+    RoleRemoveCommandHandler roleRemoveCommandHandler,
+    RoleCreationCommandHandler roleCreationCommandHandler,
+    RoleUpdateCommandHandler roleUpdateCommandHandler)
+  {
+    _getRolesQueryHandler = getRolesQueryHandler;
+    _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
+    _roleRemoveCommandHandler = roleRemoveCommandHandler;
+    _roleCreationCommandHandler = roleCreationCommandHandler;
+    _roleUpdateCommandHandler = roleUpdateCommandHandler;
+  }
+
+  [RequiresPermission(Permissions.ViewRoles)]
+  [HttpGet]
+  public async Task<ActionResult<IEnumerable<RoleDto>>> GetAllAsync()
+  {
+    try
     {
-        _getRolesQueryHandler = getRolesQueryHandler;
-        _getRoleByIdQueryHandler = getRoleByIdQueryHandler;
-        _roleRemoveCommandHandler = roleRemoveCommandHandler;
-        _roleCreationCommandHandler = roleCreationCommandHandler;
-        _roleUpdateCommandHandler = roleUpdateCommandHandler;
+      var roles = await _getRolesQueryHandler.HandleAsync();
+      return Ok(roles);
     }
-
-    [RequiresPermission(Permissions.ViewRoles)]
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<RoleDto>>> GetAllAsync()
+    catch (Exception ex)
     {
-        try
-        {
-            var roles = await _getRolesQueryHandler.HandleAsync();
-            return Ok(roles);
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      return GetProblem(ex);
     }
+  }
 
-    [RequiresPermission(Permissions.ViewRoles)]
-    [HttpGet("find/{roleId:long}")]
-    public async Task<ActionResult<RoleDto>> GetByIdAsync(long roleId)
+  [RequiresPermission(Permissions.ViewRoles)]
+  [HttpGet("find/{roleId:long}")]
+  public async Task<ActionResult<RoleDto>> GetByIdAsync(long roleId)
+  {
+    try
     {
-        try
-        {
-            var role = await _getRoleByIdQueryHandler.HandleAsync(new GetRoleByIdQuery
-            {
-                Id = roleId,
-            }
-                );
+      var role = await _getRoleByIdQueryHandler.HandleAsync(new GetRoleByIdQuery
+      {
+        Id = roleId,
+      });
 
-            return Ok(role);
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      return Ok(role);
     }
-
-    [RequiresPermission(Permissions.ManageRoles)]
-    [HttpPost("create")]
-    public async Task<ActionResult> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
+    catch (Exception ex)
     {
-        try
-        {
-            var roleId = await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
-            return Ok(roleId);
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      return GetProblem(ex);
     }
+  }
 
-    [RequiresPermission(Permissions.ManageRoles)]
-    [HttpPost("edit")]
-    public async Task<ActionResult> UpdateRoleAsync([FromBody] RoleUpdateCommand roleUpdateCommand)
+  [RequiresPermission(Permissions.ManageRoles)]
+  [HttpPost("create")]
+  public async Task<ActionResult> CreateNewRoleAsync([FromBody] RoleCreationCommand roleCreationCommand)
+  {
+    try
     {
-        try
-        {
-            await _roleUpdateCommandHandler.HandleAsync(roleUpdateCommand);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      var roleId = await _roleCreationCommandHandler.HandleAsync(roleCreationCommand);
+      return Ok(roleId);
     }
-
-    [RequiresPermission(Permissions.ManageRoles)]
-    [HttpDelete("{id}/hard-delete")]
-    public async Task<ActionResult> DeleteRoleAsync([FromRoute] long id)
+    catch (Exception ex)
     {
-        try
-        {
-            await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand()
-                    {
-                        Id = id,
-                    }
-                );
-            return Ok();
-        }
-        catch(Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      return GetProblem(ex);
     }
+  }
 
-    [RequiresPermission(Permissions.ManageRoles)]
-    [HttpDelete("{roleId:long}")]
-    public async Task<ActionResult> RemoveAsync(long roleId)
+  [RequiresPermission(Permissions.ManageRoles)]
+  [HttpPost("edit")]
+  public async Task<ActionResult> UpdateRoleAsync([FromBody] RoleUpdateCommand roleUpdateCommand)
+  {
+    try
     {
-        try
-        {
-            await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand
-            {
-                Id = roleId,
-            }
-                );
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return GetProblem(ex);
-        }
+      await _roleUpdateCommandHandler.HandleAsync(roleUpdateCommand);
+      return Ok();
     }
-
-    private ObjectResult GetProblem(Exception exception)
+    catch (Exception ex)
     {
-        return Problem(exception.Message, nameof(RolesController), StatusCodes.Status500InternalServerError);
+      return GetProblem(ex);
     }
+  }
+
+  [RequiresPermission(Permissions.ManageRoles)]
+  [HttpDelete("{id}/hard-delete")]
+  public async Task<ActionResult> DeleteRoleAsync([FromRoute] long id)
+  {
+    try
+    {
+      await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand()
+      {
+        Id = id,
+      });
+
+      return Ok();
+    }
+    catch (Exception ex)
+    {
+      return GetProblem(ex);
+    }
+  }
+
+  [RequiresPermission(Permissions.ManageRoles)]
+  [HttpDelete("{roleId:long}")]
+  public async Task<ActionResult> RemoveAsync(long roleId)
+  {
+    try
+    {
+      await _roleRemoveCommandHandler.HandleAsync(new RoleRemoveCommand
+      {
+        Id = roleId,
+      });
+
+      return Ok();
+    }
+    catch (Exception ex)
+    {
+      return GetProblem(ex);
+    }
+  }
+
+  private ObjectResult GetProblem(Exception exception)
+  {
+    return Problem(exception.Message, nameof(RolesController), StatusCodes.Status500InternalServerError);
+  }
 }

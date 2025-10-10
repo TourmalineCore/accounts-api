@@ -9,67 +9,67 @@ namespace Core.Entities;
 
 public class Role : IEntity
 {
-    public long Id { get; private set; }
+  public long Id { get; private set; }
 
-    public List<AccountRole> AccountRoles { get; private set; }
+  public List<AccountRole> AccountRoles { get; private set; }
 
-    public string[] Permissions { get; private set; } = Array.Empty<string>();
+  public string[] Permissions { get; private set; } = Array.Empty<string>();
 
-    public bool IsAdmin => Name == BaseRoleNames.Admin;
+  public bool IsAdmin => Name == BaseRoleNames.Admin;
 
-    public string Name
+  public string Name
+  {
+    get => _name;
+    private set
     {
-        get => _name;
-        private set
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException("The role name can't be empty or consist only of spaces");
-            }
+      if (string.IsNullOrWhiteSpace(value))
+      {
+        throw new ArgumentException("The role name can't be empty or consist only of spaces");
+      }
 
-            _name = value;
-        }
+      _name = value;
+    }
+  }
+
+  private string _name;
+
+  public Role(long id, string name, IEnumerable<Permission> permissions)
+  {
+    Id = id;
+    Name = name;
+    SetPermissions(permissions);
+  }
+
+  public Role(string name, IEnumerable<Permission> permissions)
+  {
+    Name = name;
+    SetPermissions(permissions);
+  }
+
+  public void Update(string name, IEnumerable<Permission> permissions)
+  {
+    if (IsAdmin)
+    {
+      throw new RoleOperationException("Can't update admin role");
     }
 
-    private string _name;
-
-    public Role(long id, string name, IEnumerable<Permission> permissions)
+    if (name == BaseRoleNames.Admin)
     {
-        Id = id;
-        Name = name;
-        SetPermissions(permissions);
+      throw new RoleOperationException("Can't set admin role");
     }
 
-    public Role(string name, IEnumerable<Permission> permissions)
-    {
-        Name = name;
-        SetPermissions(permissions);
-    }
+    Name = name;
+    SetPermissions(permissions);
+  }
 
-    public void Update(string name, IEnumerable<Permission> permissions)
-    {
-        if (IsAdmin)
-        {
-            throw new RoleOperationException("Can't update admin role");
-        }
+  private void SetPermissions(IEnumerable<Permission> permissions)
+  {
+    var rolePermissions = permissions.Select(x => x.Name).ToArray();
+    RolePermissionsValidator.ValidatePermissions(rolePermissions);
+    Permissions = rolePermissions;
+  }
 
-        if (name == BaseRoleNames.Admin)
-        {
-            throw new RoleOperationException("Can't set admin role");
-        }
-
-        Name = name;
-        SetPermissions(permissions);
-    }
-
-    private void SetPermissions(IEnumerable<Permission> permissions)
-    {
-        var rolePermissions = permissions.Select(x => x.Name).ToArray();
-        RolePermissionsValidator.ValidatePermissions(rolePermissions);
-        Permissions = rolePermissions;
-    }
-
-    private Role()
-    {
-    }
+  private Role()
+  {
+  }
 }

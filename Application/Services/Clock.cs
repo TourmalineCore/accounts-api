@@ -1,13 +1,12 @@
 using System;
 using NodaTime;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class Clock : IClock
 {
-    public class Clock : IClock
-    {
-        public Instant GetCurrentInstant()
-        {
-            return Instant.FromDateTimeUtc(DateTime.UtcNow);
-        }
-    }
+  public Instant GetCurrentInstant()
+  {
+    return Instant.FromDateTimeUtc(DateTime.UtcNow);
+  }
 }

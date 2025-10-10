@@ -2,7 +2,7 @@ namespace Application.Options;
 
 public class AccountValidationOptions
 {
-    public string CorporateEmailDomain { get; set; }
+  public string CorporateEmailDomain { get; set; }
 
-    public bool IgnoreCorporateDomainValidationRule { get; set; }
+  public bool IgnoreCorporateDomainValidationRule { get; set; }
 }

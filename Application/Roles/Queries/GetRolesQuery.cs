@@ -8,19 +8,19 @@ namespace Application.Roles.Queries;
 
 public class GetRolesQueryHandler : IQueryHandler<IEnumerable<RoleDto>>
 {
-    private readonly IRolesRepository _rolesRepository;
+  private readonly IRolesRepository _rolesRepository;
 
-    public GetRolesQueryHandler(IRolesRepository rolesRepository)
-    {
-        _rolesRepository = rolesRepository;
-    }
+  public GetRolesQueryHandler(IRolesRepository rolesRepository)
+  {
+    _rolesRepository = rolesRepository;
+  }
 
-    public async Task<IEnumerable<RoleDto>> HandleAsync()
-    {
-        var roles = await _rolesRepository.GetAllAsync();
+  public async Task<IEnumerable<RoleDto>> HandleAsync()
+  {
+    var roles = await _rolesRepository.GetAllAsync();
 
-        return roles
-            .Select(role => new RoleDto(role))
-            .OrderBy(x => x.Id);
-    }
+    return roles
+      .Select(role => new RoleDto(role))
+      .OrderBy(x => x.Id);
+  }
 }

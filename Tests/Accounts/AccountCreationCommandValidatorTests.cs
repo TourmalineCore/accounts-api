@@ -3,7 +3,6 @@ using Application.Accounts.Validators;
 using Application.Options;
 using Core.Contracts;
 using Core.Entities;
-using Core.Models;
 using Microsoft.Extensions.Options;
 using Moq;
 using Tests.TestsData;
@@ -12,242 +11,245 @@ namespace Tests.Accounts;
 
 public class AccountCreationCommandValidatorTests
 {
-    private readonly AccountCreationCommandValidator _validator;
-    private readonly Mock<IAccountsRepository> _accountRepositoryMock;
-    private readonly string _longString = new('a', 51);
+  private readonly AccountCreationCommandValidator _validator;
+  private readonly Mock<IAccountsRepository> _accountRepositoryMock;
+  private readonly string _longString = new('a', 51);
 
-    public AccountCreationCommandValidatorTests()
+  public AccountCreationCommandValidatorTests()
+  {
+    var accountValidOptionsMock = new Mock<IOptions<AccountValidationOptions>>();
+
+    accountValidOptionsMock
+      .Setup(x => x.Value)
+      .Returns(new AccountValidationOptions
+      {
+        CorporateEmailDomain = "@tourmalinecore.com",
+      });
+
+    var roleRepositoryMock = new Mock<IRolesRepository>();
+    _accountRepositoryMock = new Mock<IAccountsRepository>();
+
+    roleRepositoryMock
+      .Setup(x => x.GetAllAsync())
+      .ReturnsAsync(TestData.AllRoles);
+
+    _validator = new AccountCreationCommandValidator
+    (
+      roleRepositoryMock.Object,
+      _accountRepositoryMock.Object,
+      accountValidOptionsMock.Object
+    );
+  }
+
+  [Fact]
+  public async Task AllParamsAreValid_ReturnTrue()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountValidOptionsMock = new Mock<IOptions<AccountValidationOptions>>();
+      FirstName = "Ivan",
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        1,
+      },
+    };
 
-        accountValidOptionsMock.Setup(x => x.Value)
-            .Returns(new AccountValidationOptions
-            {
-                CorporateEmailDomain = "@tourmalinecore.com",
-            }
-                );
-        var roleRepositoryMock = new Mock<IRolesRepository>();
-        _accountRepositoryMock = new Mock<IAccountsRepository>();
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.True(validationResult.IsValid);
+  }
 
-        roleRepositoryMock
-            .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(TestData.AllRoles);
-
-        _validator = new AccountCreationCommandValidator(
-                roleRepositoryMock.Object,
-                _accountRepositoryMock.Object,
-                accountValidOptionsMock.Object
-            );
-    }
-
-    [Fact]
-    public async Task AllParamsAreValid_ReturnTrue()
+  [Fact]
+  public async Task CorporateEmailAlreadyExists_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                1,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        3,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.True(validationResult.IsValid);
-    }
+    _accountRepositoryMock
+      .Setup(x => x.FindByCorporateEmailAsync(It.IsAny<string>()))
+      .ReturnsAsync(new Account
+      (
+        "ivan@tourmalinecore.com",
+        "Ivan",
+        "Smith",
+        "Alexandrovich",
+        TestData.ValidAccountRoles,
+        1L
+      ));
 
-    [Fact]
-    public async Task CorporateEmailAlreadyExists_ReturnFalse()
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
+
+  [Fact]
+  public async Task ParamsAreEmpty_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                3,
-            },
-        };
+      FirstName = "",
+      LastName = "",
+      CorporateEmail = "",
+      RoleIds = new List<long>
+      {
+        1,
+      },
+    };
 
-        _accountRepositoryMock
-            .Setup(x => x.FindByCorporateEmailAsync(It.IsAny<string>()))
-            .ReturnsAsync(new Account("ivan@tourmalinecore.com",
-                        "Ivan",
-                        "Smith",
-                        "Alexandrovich",
-                        TestData.ValidAccountRoles,
-                        1L
-                    )
-                );
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
-
-    [Fact]
-    public async Task ParamsAreEmpty_ReturnFalse()
+  [Fact]
+  public async Task CorporateEmailIsInvalid_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "",
-            LastName = "",
-            CorporateEmail = "",
-            RoleIds = new List<long>
-            {
-                1,
-            },
-        };
+      FirstName = "John",
+      LastName = "Doe",
+      CorporateEmail = "invalidmail.com",
+      RoleIds = new List<long>
+      {
+        1,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task CorporateEmailIsInvalid_ReturnFalse()
+  [Fact]
+  public async Task RoleIdIsNegative_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "John",
-            LastName = "Doe",
-            CorporateEmail = "invalidmail.com",
-            RoleIds = new List<long>
-            {
-                1,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        -1,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task RoleIdIsNegative_ReturnFalse()
+  [Fact]
+  public async Task RoleIdIsNotExist_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                -1,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        100,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task RoleIdIsNotExist_ReturnFalse()
+  [Fact]
+  public async Task RoleIdsHaveDuplicates_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                100,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        1,
+        1,
+        1,
+        1,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task RoleIdsHaveDuplicates_ReturnFalse()
+  [Fact]
+  public async Task FirstNameLengthMoreThan50_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                1,
-                1,
-                1,
-                1,
-            },
-        };
+      FirstName = _longString,
+      LastName = "Smith",
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        2,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task FirstNameLengthMoreThan50_ReturnFalse()
+  [Fact]
+  public async Task LastNameLengthMoreThan50_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = _longString,
-            LastName = "Smith",
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                2,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = _longString,
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        2,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task LastNameLengthMoreThan50_ReturnFalse()
+  [Fact]
+  public async Task MiddleNameLengthMoreThan50_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = _longString,
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                2,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      MiddleName = _longString,
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>
+      {
+        2,
+      },
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 
-    [Fact]
-    public async Task MiddleNameLengthMoreThan50_ReturnFalse()
+  [Fact]
+  public async Task RoleIdsAreEmpty_ReturnFalse()
+  {
+    var accountCreationCommand = new AccountCreationCommand
     {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            MiddleName = _longString,
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>
-            {
-                2,
-            },
-        };
+      FirstName = "Ivan",
+      LastName = "Smith",
+      MiddleName = _longString,
+      CorporateEmail = "ivan@tourmalinecore.com",
+      RoleIds = new List<long>(),
+    };
 
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
-
-    [Fact]
-    public async Task RoleIdsAreEmpty_ReturnFalse()
-    {
-        var accountCreationCommand = new AccountCreationCommand
-        {
-            FirstName = "Ivan",
-            LastName = "Smith",
-            MiddleName = _longString,
-            CorporateEmail = "ivan@tourmalinecore.com",
-            RoleIds = new List<long>(),
-        };
-
-        var validationResult = await _validator.ValidateAsync(accountCreationCommand);
-        Assert.False(validationResult.IsValid);
-    }
+    var validationResult = await _validator.ValidateAsync(accountCreationCommand);
+    Assert.False(validationResult.IsValid);
+  }
 }

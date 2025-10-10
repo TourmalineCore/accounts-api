@@ -9,72 +9,76 @@ namespace Tests.Accounts;
 
 public class AccountUnblockCommandHandlerTests
 {
-    private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
-    private readonly Mock<IHttpClient> _httpClientMock = new();
+  private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
+  private readonly Mock<IHttpClient> _httpClientMock = new();
 
-    public AccountUnblockCommandHandlerTests()
+  public AccountUnblockCommandHandlerTests()
+  {
+    _httpClientMock
+      .Setup(x => x.SendRequestToUnblockUserAsync(It.IsAny<long>()))
+      .Returns(Task.CompletedTask);
+  }
+
+  [Fact]
+  public async Task CanUnblockAccount()
+  {
+    var account = new Account
+    (
+      "test@tourmalinecore.com",
+      "test",
+      "test",
+      "test",
+      TestData.ValidAccountRoles,
+      1L
+    );
+
+    var command = new AccountUnblockCommand
     {
-        _httpClientMock
-            .Setup(x => x.SendRequestToUnblockUserAsync(It.IsAny<long>()))
-            .Returns(Task.CompletedTask);
-    }
+      Id = It.IsAny<long>(),
+    };
 
-    [Fact]
-    public async Task CanUnblockAccount()
+    account.Block("caller@tourmalinecore.com");
+
+    _accountRepositoryMock
+      .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
+      .ReturnsAsync(account);
+
+    var accountUnblockCommandHandler = new AccountUnblockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
+
+    await accountUnblockCommandHandler.HandleAsync(command);
+    Assert.False(account.IsBlocked);
+  }
+
+  [Fact]
+  public async Task CanUnblockAccountMultipleTimes()
+  {
+    var account = new Account
+    (
+      "test@tourmalinecore.com",
+      "test",
+      "test",
+      "test",
+      TestData.ValidAccountRoles,
+      1L
+    );
+
+    var command = new AccountUnblockCommand
     {
-        var account = new Account("test@tourmalinecore.com",
-                "test",
-                "test",
-                "test",
-                TestData.ValidAccountRoles,
-                1L
-            );
+      Id = It.IsAny<long>(),
+    };
 
-        var command = new AccountUnblockCommand
-        {
-            Id = It.IsAny<long>(),
-        };
+    account.Block("caller@tourmalinecore.com");
 
-        account.Block("caller@tourmalinecore.com");
+    _accountRepositoryMock
+      .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
+      .ReturnsAsync(account);
 
-        _accountRepositoryMock
-            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(account);
+    var accountUnblockCommandHandler = new AccountUnblockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
 
-        var accountUnblockCommandHandler = new AccountUnblockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
+    await accountUnblockCommandHandler.HandleAsync(command);
+    Assert.False(account.IsBlocked);
 
-        await accountUnblockCommandHandler.HandleAsync(command);
-        Assert.False(account.IsBlocked);
-    }
-
-    [Fact]
-    public async Task CanUnblockAccountMultipleTimes()
-    {
-        var account = new Account("test@tourmalinecore.com",
-                "test",
-                "test",
-                "test",
-                TestData.ValidAccountRoles,
-                1L
-            );
-
-        var command = new AccountUnblockCommand
-        {
-            Id = It.IsAny<long>(),
-        };
-
-        account.Block("caller@tourmalinecore.com");
-
-        _accountRepositoryMock
-            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(account);
-
-        var accountUnblockCommandHandler = new AccountUnblockCommandHandler(_accountRepositoryMock.Object, _httpClientMock.Object);
-
-        await accountUnblockCommandHandler.HandleAsync(command);
-        Assert.False(account.IsBlocked);
-
-        await accountUnblockCommandHandler.HandleAsync(command);
-        Assert.False(account.IsBlocked);
-    }
+    await accountUnblockCommandHandler.HandleAsync(command);
+    Assert.False(account.IsBlocked);
+  }
 }

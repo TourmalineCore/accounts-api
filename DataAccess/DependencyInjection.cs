@@ -8,26 +8,25 @@ namespace DataAccess;
 
 public static class DependencyInjection
 {
-    private const string DefaultConnection = "DefaultConnection";
+  private const string DefaultConnection = "DefaultConnection";
 
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+  public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+  {
+    var connectionString = configuration.GetConnectionString(DefaultConnection);
+
+    services.AddDbContext<AccountsDbContext>(options =>
     {
-        var connectionString = configuration.GetConnectionString(DefaultConnection);
+      options.UseNpgsql(connectionString,
+        o => o.UseNodaTime()
+      );
+    });
 
-        services.AddDbContext<AccountsDbContext>(options =>
-                {
-                    options.UseNpgsql(connectionString,
-                            o => o.UseNodaTime()
-                        );
-                }
-            );
+    services.AddScoped<AccountsDbContext>();
 
-        services.AddScoped<AccountsDbContext>();
+    services.AddTransient<IAccountsRepository, AccountsRepository>();
+    services.AddTransient<IRolesRepository, RolesRepository>();
+    services.AddTransient<ITenantsRepository, TenantsRepository>();
 
-        services.AddTransient<IAccountsRepository, AccountsRepository>();
-        services.AddTransient<IRolesRepository, RolesRepository>();
-        services.AddTransient<ITenantsRepository, TenantsRepository>();
-
-        return services;
-    }
+    return services;
+  }
 }
