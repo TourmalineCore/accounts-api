@@ -7,32 +7,33 @@ namespace Api.Controllers;
 [Route("internal")]
 public class InternalController : Controller
 {
-    private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
-    private readonly GetTenantByAccountIdQueryHandler _getTenantByAccountIdQueryHandler;
+  private readonly GetPermissionsByAccountIdQueryHandler _getPermissionsByAccountIdQueryHandler;
+  private readonly GetTenantByAccountIdQueryHandler _getTenantByAccountIdQueryHandler;
 
-    public InternalController(GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler,
-        GetTenantByAccountIdQueryHandler getTenantByAccountIdQueryHandler)
-    {
-        _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
-        _getTenantByAccountIdQueryHandler = getTenantByAccountIdQueryHandler;
-    }
+  public InternalController(
+    GetPermissionsByAccountIdQueryHandler getPermissionsByAccountIdQueryHandler,
+    GetTenantByAccountIdQueryHandler getTenantByAccountIdQueryHandler
+  )
+  {
+    _getPermissionsByAccountIdQueryHandler = getPermissionsByAccountIdQueryHandler;
+    _getTenantByAccountIdQueryHandler = getTenantByAccountIdQueryHandler;
+  }
 
-    [HttpGet("account-permissions/{accountId:long}")]
-    public async Task<IEnumerable<string>> GetPermissionsByAccountIdAsync(long accountId)
+  [HttpGet("account-permissions/{accountId:long}")]
+  public async Task<IEnumerable<string>> GetPermissionsByAccountIdAsync(long accountId)
+  {
+    return await _getPermissionsByAccountIdQueryHandler.HandleAsync(new GetPermissionsByAccountIdQuery
     {
-        return await _getPermissionsByAccountIdQueryHandler.HandleAsync(new GetPermissionsByAccountIdQuery
-        {
-            Id = accountId,
-        }
-            );
-    }
+      Id = accountId,
+    });
+  }
 
-    [HttpGet("get-tenantId-by-accountId/{accountId:long}")]
-    public async Task<long> GetTenantByAccountIdAsync(long accountId)
+  [HttpGet("get-tenantId-by-accountId/{accountId:long}")]
+  public async Task<long> GetTenantByAccountIdAsync(long accountId)
+  {
+    return await _getTenantByAccountIdQueryHandler.HandleAsync(new GetTenantByAccountIdQuery
     {
-        return await _getTenantByAccountIdQueryHandler.HandleAsync(new GetTenantByAccountIdQuery
-        {
-            AccountId = accountId,
-        });
-    }
+      AccountId = accountId,
+    });
+  }
 }

@@ -12,72 +12,77 @@ namespace Application.Accounts.Commands;
 
 public struct AccountCreationCommand
 {
-    public string FirstName { get; init; }
+  public string FirstName { get; init; }
 
-    public string LastName { get; init; }
+  public string LastName { get; init; }
 
-    public string? MiddleName { get; init; }
+  public string? MiddleName { get; init; }
 
-    public string CorporateEmail { get; init; }
+  public string CorporateEmail { get; init; }
 
-    public List<long> RoleIds { get; init; }
+  public List<long> RoleIds { get; init; }
 
-    public long TenantId { get; init; }
+  public long TenantId { get; init; }
 
-    public string AccessToken { get; set; }
+  public string AccessToken { get; set; }
 }
 
 public class AccountCreationCommandHandler : ICommandHandler<string, AccountCreationCommand, long>
 {
-    private readonly IAccountsRepository _accountsRepository;
-    private readonly IRolesRepository _rolesRepository;
-    private readonly AccountCreationCommandValidator _validator;
-    private readonly IHttpClient _httpClient;
+  private readonly IAccountsRepository _accountsRepository;
+  private readonly IRolesRepository _rolesRepository;
+  private readonly AccountCreationCommandValidator _validator;
+  private readonly IHttpClient _httpClient;
 
-    public AccountCreationCommandHandler(
-        IAccountsRepository accountsRepository,
-        AccountCreationCommandValidator validator,
-        IHttpClient httpClient,
-        IRolesRepository rolesRepository)
+  public AccountCreationCommandHandler(
+    IAccountsRepository accountsRepository,
+    AccountCreationCommandValidator validator,
+    IHttpClient httpClient,
+    IRolesRepository rolesRepository
+  )
+  {
+    _accountsRepository = accountsRepository;
+    _validator = validator;
+    _httpClient = httpClient;
+    _rolesRepository = rolesRepository;
+  }
+
+  public async Task<long> HandleAsync(string? accessToken, AccountCreationCommand command)
+  {
+    var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
+    var validationResult = await _validator.ValidateAsync(command);
+
+    if (!validationResult.IsValid)
     {
-        _accountsRepository = accountsRepository;
-        _validator = validator;
-        _httpClient = httpClient;
-        _rolesRepository = rolesRepository;
+      throw new ValidationException(validationResult.Errors[0].ErrorMessage);
     }
 
-    public async Task<long> HandleAsync(string? accessToken, AccountCreationCommand command)
-    {
-        var accountTest = await _accountsRepository.FindByCorporateEmailAsync(command.CorporateEmail);
-        var validationResult = await _validator.ValidateAsync(command);
+    var roles = await _rolesRepository.GetAllAsync();
+    var newAccountRoles = roles.Where(x => command.RoleIds.Contains(x.Id));
 
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors[0].ErrorMessage);
-        }
+    var account = new Account(
+      command.CorporateEmail,
+      command.FirstName,
+      command.LastName,
+      command.MiddleName,
+      newAccountRoles,
+      command.TenantId
+    );
 
-        var roles = await _rolesRepository.GetAllAsync();
-        var newAccountRoles = roles.Where(x => command.RoleIds.Contains(x.Id));
+    var accountId = await _accountsRepository.CreateAsync(account);
+    await _httpClient.SendRequestToRegisterNewAccountAsync(
+      accountId,
+      account.CorporateEmail,
+      accessToken
+    );
+    await _httpClient.SendRequestToCreateNewEmployeeAsync(
+      command.CorporateEmail,
+      command.FirstName,
+      command.LastName,
+      command.MiddleName,
+      command.TenantId
+    );
 
-        var account = new Account(
-                command.CorporateEmail,
-                command.FirstName,
-                command.LastName,
-                command.MiddleName,
-                newAccountRoles,
-                command.TenantId
-            );
-
-        var accountId = await _accountsRepository.CreateAsync(account);
-        await _httpClient.SendRequestToRegisterNewAccountAsync(accountId, account.CorporateEmail, accessToken);
-        await _httpClient.SendRequestToCreateNewEmployeeAsync(
-                command.CorporateEmail,
-                command.FirstName,
-                command.LastName,
-                command.MiddleName,
-                command.TenantId
-            );
-
-        return accountId;
-    }
+    return accountId;
+  }
 }

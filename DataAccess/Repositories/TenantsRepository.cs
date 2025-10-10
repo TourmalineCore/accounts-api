@@ -8,48 +8,48 @@ namespace DataAccess.Repositories;
 
 internal class TenantsRepository : ITenantsRepository
 {
-    private readonly AccountsDbContext _context;
+  private readonly AccountsDbContext _context;
 
-    public TenantsRepository(AccountsDbContext context)
-    {
-        _context = context;
-    }
+  public TenantsRepository(AccountsDbContext context)
+  {
+    _context = context;
+  }
 
-    public async Task<long> CreateAsync(Tenant tenant)
-    {
-        await _context.AddAsync(tenant);
-        await _context.SaveChangesAsync();
+  public async Task<long> CreateAsync(Tenant tenant)
+  {
+    await _context.AddAsync(tenant);
+    await _context.SaveChangesAsync();
 
-        return tenant.Id;
-    }
+    return tenant.Id;
+  }
 
-    public Task<Tenant> GetByIdAsync(long id)
-    {
-        return _context
-            .Queryable<Tenant>()
-            .Include(x => x.Accounts)
-            .SingleOrDefaultAsync(x => x.Id == id)!;
-    }
+  public Task<Tenant> GetByIdAsync(long id)
+  {
+    return _context
+      .Queryable<Tenant>()
+      .Include(x => x.Accounts)
+      .SingleOrDefaultAsync(x => x.Id == id)!;
+  }
 
-    public async Task<IEnumerable<Tenant>> GetAllAsync()
-    {
-        var tenants = await _context
-            .QueryableAsNoTracking<Tenant>()
-            .Include(x => x.Accounts)
-            .ToListAsync();
+  public async Task<IEnumerable<Tenant>> GetAllAsync()
+  {
+    var tenants = await _context
+      .QueryableAsNoTracking<Tenant>()
+      .Include(x => x.Accounts)
+      .ToListAsync();
 
-        return tenants;
-    }
+    return tenants;
+  }
 
-    public Task RemoveAsync(Tenant tenant)
-    {
-        _context.Remove(tenant);
-        return _context.SaveChangesAsync();
-    }
+  public Task RemoveAsync(Tenant tenant)
+  {
+    _context.Remove(tenant);
+    return _context.SaveChangesAsync();
+  }
 
-    public async Task UpdateAsync(Tenant tenant)
-    {
-        _context.Update(tenant);
-        await _context.SaveChangesAsync();
-    }
+  public async Task UpdateAsync(Tenant tenant)
+  {
+    _context.Update(tenant);
+    await _context.SaveChangesAsync();
+  }
 }

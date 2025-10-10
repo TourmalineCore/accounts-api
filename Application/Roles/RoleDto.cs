@@ -5,16 +5,16 @@ namespace Application.Roles;
 
 public struct RoleDto
 {
-    public RoleDto(Role role)
-    {
-        Id = role.Id;
-        Name = role.Name;
-        Permissions = role.Permissions;
-    }
+  public RoleDto(Role role)
+  {
+    Id = role.Id;
+    Name = role.Name;
+    Permissions = role.Permissions;
+  }
 
-    public long Id { get; }
+  public long Id { get; }
 
-    public string Name { get; }
+  public string Name { get; }
 
-    public IEnumerable<string> Permissions { get; }
+  public IEnumerable<string> Permissions { get; }
 }

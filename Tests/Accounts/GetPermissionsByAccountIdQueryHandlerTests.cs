@@ -9,57 +9,63 @@ namespace Tests.Accounts;
 
 public class GetPermissionsByAccountIdQueryHandlerTests
 {
-    private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
+  private readonly Mock<IAccountsRepository> _accountRepositoryMock = new();
 
-    [Fact]
-    public async Task PermissionListCannotHasDuplicates()
+  [Fact]
+  public async Task PermissionListCannotHasDuplicates()
+  {
+    var roles = new List<Role>
     {
-        var roles = new List<Role>
+      new Role
+      (
+        1,
+        TestData.RoleNames.Admin,
+        new List<Permission>
         {
-            new Role(1,
-                    TestData.RoleNames.Admin,
-                    new List<Permission>
-                    {
-                        new(Permissions.ViewAccounts),
-                        new(Permissions.ViewRoles),
-                        new(Permissions.ManageRoles),
-                    }
-                ),
-            new Role(2,
-                    TestData.RoleNames.Ceo,
-                    new List<Permission>
-                    {
-                        new(Permissions.ViewAccounts),
-                        new(Permissions.ViewRoles),
-                    }
-                ),
-        };
-
-        var account = new Account("test@tourmalinecore.com",
-                "test",
-                "test",
-                "test",
-                roles,
-                1L
-            );
-
-        var query = new GetPermissionsByAccountIdQuery
+          new(Permissions.ViewAccounts),
+          new(Permissions.ViewRoles),
+          new(Permissions.ManageRoles),
+        }
+      ),
+      new Role
+      (
+        2,
+        TestData.RoleNames.Ceo,
+        new List<Permission>
         {
-            Id = It.IsAny<long>(),
-        };
+          new(Permissions.ViewAccounts),
+          new(Permissions.ViewRoles),
+        }
+      ),
+    };
 
-        _accountRepositoryMock
-            .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
-            .ReturnsAsync(account);
+    var account = new Account
+    (
+      "test@tourmalinecore.com",
+      "test",
+      "test",
+      "test",
+      roles,
+      1L
+    );
 
-        var queryHandler = new GetPermissionsByAccountIdQueryHandler(_accountRepositoryMock.Object);
+    var query = new GetPermissionsByAccountIdQuery
+    {
+      Id = It.IsAny<long>(),
+    };
 
-        var permissions = await queryHandler.HandleAsync(query);
-        permissions = permissions.ToList();
+    _accountRepositoryMock
+      .Setup(x => x.GetByIdAsync(It.IsAny<long>()))
+      .ReturnsAsync(account);
 
-        Assert.Equal(3, permissions.Count());
-        Assert.Contains(Permissions.ViewAccounts, permissions);
-        Assert.Contains(Permissions.ViewRoles, permissions);
-        Assert.Contains(Permissions.ManageRoles, permissions);
-    }
+    var queryHandler = new GetPermissionsByAccountIdQueryHandler(_accountRepositoryMock.Object);
+
+    var permissions = await queryHandler.HandleAsync(query);
+    permissions = permissions.ToList();
+
+    Assert.Equal(3, permissions.Count());
+    Assert.Contains(Permissions.ViewAccounts, permissions);
+    Assert.Contains(Permissions.ViewRoles, permissions);
+    Assert.Contains(Permissions.ManageRoles, permissions);
+  }
 }

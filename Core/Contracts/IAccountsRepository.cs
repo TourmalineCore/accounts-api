@@ -5,5 +5,5 @@ namespace Core.Contracts;
 
 public interface IAccountsRepository : IRepository<Account>
 {
-    public Task<Account?> FindByCorporateEmailAsync(string corporateEmail);
+  public Task<Account?> FindByCorporateEmailAsync(string corporateEmail);
 }

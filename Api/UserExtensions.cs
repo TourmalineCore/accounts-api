@@ -4,10 +4,10 @@ namespace Api;
 
 public static class UserExtensions
 {
-    private const string CorporateEmailClaimType = "corporateEmail";
+  private const string CorporateEmailClaimType = "corporateEmail";
 
-    public static string GetCorporateEmail(this ClaimsPrincipal context)
-    {
-        return context.FindFirstValue(CorporateEmailClaimType);
-    }
+  public static string GetCorporateEmail(this ClaimsPrincipal context)
+  {
+    return context.FindFirstValue(CorporateEmailClaimType);
+  }
 }
