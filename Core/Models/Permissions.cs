@@ -30,6 +30,8 @@ public static class Permissions
   public const string CanManageBooks = "CanManageBooks";
   public const string IsBooksHardDeleteAllowed = "IsBooksHardDeleteAllowed";
 
+  public const string IsBookCopiesHardDeleteAllowed = "IsBookCopiesHardDeleteAllowed";
+
   public static bool IsPermissionExists(string permissionName)
   {
     var permissionNames = GetPermissionNames();
