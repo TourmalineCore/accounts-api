@@ -34,8 +34,6 @@ internal static class MappingData
     new Permission(Permissions.CanViewBooks),
     new Permission(Permissions.CanManageBooks),
     new Permission(Permissions.IsBooksHardDeleteAllowed),
-    new Permission(Permissions.IsBookCopiesHardDeleteAllowed),
-    new Permission(Permissions.IsBookCopiesReadingHistoryHardDeleteAllowed)
   };
 
   public static readonly DateTime AccountsCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
