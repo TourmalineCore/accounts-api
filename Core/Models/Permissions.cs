@@ -39,6 +39,9 @@ public static class Permissions
   public const string AUTO_TESTS_ONLY_IsItemsHardDeleteAllowed = "AUTO_TESTS_ONLY_IsItemsHardDeleteAllowed";
   public const string CanManageItems = "CanManageItems";
   public const string CanViewItems = "CanViewItems";
+
+  public const string AUTO_TESTS_ONLY_IsWorkEntriesHardDeleteAllowed = "AUTO_TESTS_ONLY_IsWorkEntriesHardDeleteAllowed";
+  public const string CanManagePersonalTimetracker = "CanManagePersonalTimetracker";
   
   public static bool IsPermissionExists(string permissionName)
   {
