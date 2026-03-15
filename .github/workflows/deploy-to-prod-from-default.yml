@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/fix_auth_client
 
 jobs:
   docker-build-and-push:
