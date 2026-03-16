@@ -19,7 +19,7 @@ public class AccountHttpClient : IHttpClient
 
   public async Task SendRequestToRegisterNewAccountAsync(long accountId, string corporateEmail, string token)
   {
-    var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/register")
+    var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/register")
     {
       Content = JsonContent.Create(new
       {
@@ -65,7 +65,7 @@ public class AccountHttpClient : IHttpClient
   }
   public async Task SendRequestToDeleteAccountAsync(string corporateEmail, string token)
   {
-    var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/api/auth/delete-user")
+    var request = new HttpRequestMessage(HttpMethod.Post, $"{_urls.AuthServiceUrl}/delete-user")
     {
       Content = JsonContent.Create(new
       {
