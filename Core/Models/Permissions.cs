@@ -42,6 +42,8 @@ public static class Permissions
 
   public const string AUTO_TESTS_ONLY_IsEntriesHardDeleteAllowed = "AUTO_TESTS_ONLY_IsEntriesHardDeleteAllowed";
   public const string CanManagePersonalTimeTracker = "CanManagePersonalTimeTracker";
+  public const string CanViewAllTimeTrackerEntries = "CanViewAllTimeTrackerEntries";
+  public const string CanViewAllProjects = "CanViewAllProjects"; 
 
   public const string CanViewInvoices = "CanViewInvoices";
 

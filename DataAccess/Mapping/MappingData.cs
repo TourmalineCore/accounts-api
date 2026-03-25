@@ -43,6 +43,8 @@ internal static class MappingData
     new Permission(Permissions.CanViewItems),
     new Permission(Permissions.AUTO_TESTS_ONLY_IsEntriesHardDeleteAllowed),
     new Permission(Permissions.CanManagePersonalTimeTracker),
+    new Permission(Permissions.CanViewAllTimeTrackerEntries),
+    new Permission(Permissions.CanViewAllProjects),
     new Permission(Permissions.CanViewInvoices),
   };
 
