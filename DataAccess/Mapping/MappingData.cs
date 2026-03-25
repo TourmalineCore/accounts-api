@@ -43,6 +43,7 @@ internal static class MappingData
     new Permission(Permissions.CanViewItems),
     new Permission(Permissions.AUTO_TESTS_ONLY_IsEntriesHardDeleteAllowed),
     new Permission(Permissions.CanManagePersonalTimeTracker),
+    new Permission(Permissions.CanViewInvoices),
   };
 
   public static readonly DateTime AccountsCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
