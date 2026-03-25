@@ -3,7 +3,7 @@ name: E2E Tests in PR
 on:
   pull_request:
     types: [opened, synchronize, reopened]
- 
+
 jobs:
   # this is needed to wait for the new docker image to be build and published to the registry
   # so that we can use the image to run the service of the needed commit related version as part of local-env
