@@ -45,6 +45,7 @@ internal static class MappingData
     new Permission(Permissions.CanManagePersonalTimeTracker),
     new Permission(Permissions.CanViewAllTimeTrackerEntries),
     new Permission(Permissions.CanViewAllProjects),
+    new Permission(Permissions.CanViewPersonalReport),
     new Permission(Permissions.CanViewInvoices),
   };
 
