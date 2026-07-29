@@ -16,7 +16,6 @@ const string loggingSectionKey = "Logging";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddCors();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -83,12 +82,13 @@ builder.Services.Configure<AccountValidationOptions>(configuration.GetSection(na
 
 var app = builder.Build();
 
+var corsOptions = configuration.GetSection(nameof(CorsOptions)).Get<CorsOptions>();
+
 app.UseCors(
-  corsPolicyBuilder => corsPolicyBuilder
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(_ => true)
-    .AllowAnyMethod()
-    .AllowAnyOrigin()
+    corsPolicyBuilder => corsPolicyBuilder
+        .WithOrigins(corsOptions!.AllowedOrigins)
+        .WithMethods("GET", "POST", "DELETE")
+        .WithHeaders("Authorization", "Content-Type")
 );
 
 if (builder.Environment.IsDevelopment())

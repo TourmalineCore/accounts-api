@@ -21,4 +21,5 @@ releases:
           HttpUrls__AuthServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__AuthServiceUrl }}"
           HttpUrls__EmployeesServiceUrl: "{{ .StateValues.extraSecretEnvVars.HttpUrls__EmployeesServiceUrl }}"
           AccountValidationOptions__CorporateEmailDomain: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__CorporateEmailDomain }}"
+          CorsOptions__AllowedOrigins: "{{ .StateValues.extraSecretEnvVars.CorsOptions__AllowedOrigins }}"
           AccountValidationOptions__IgnoreCorporateDomainValidationRule: "{{ .StateValues.extraSecretEnvVars.AccountValidationOptions__IgnoreCorporateDomainValidationRule }}"
