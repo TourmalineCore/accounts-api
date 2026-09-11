@@ -48,6 +48,19 @@ public static class Permissions
 
   public const string CanViewInvoices = "CanViewInvoices";
 
+  public const string CanViewAllWorkspaces = "CanViewAllWorkspaces";
+  public const string CanViewAllSources = "CanViewAllSources";
+  public const string CanManageSources = "CanManageSources";
+  public const string CanForceSyncSources = "CanForceSyncSources";
+  public const string CanInteractWithChats = "CanInteractWithChats";
+
+  public const string AUTO_TESTS_ONLY_IsWorkspacesAddAllowed = "AUTO_TESTS_ONLY_IsWorkspacesAddAllowed";
+  public const string AUTO_TESTS_ONLY_IsWorkspacesHardDeleteAllowed = "AUTO_TESTS_ONLY_IsWorkspacesHardDeleteAllowed";
+  public const string AUTO_TESTS_ONLY_IsSourcesHardDeleteAllowed = "AUTO_TESTS_ONLY_IsSourcesHardDeleteAllowed";
+  public const string AUTO_TESTS_ONLY_IsChatsSendMessageForEvaluationAllowed = "AUTO_TESTS_ONLY_IsChatsSendMessageForEvaluationAllowed";
+  public const string AUTO_TESTS_ONLY_IsChatFeedbackGetAllowed = "AUTO_TESTS_ONLY_IsChatFeedbackGetAllowed";
+  public const string AUTO_TESTS_ONLY_IsChatsHardDeleteAllowed = "AUTO_TESTS_ONLY_IsChatsHardDeleteAllowed";
+
   public static bool IsPermissionExists(string permissionName)
   {
     var permissionNames = GetPermissionNames();
