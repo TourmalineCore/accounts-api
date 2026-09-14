@@ -47,6 +47,17 @@ internal static class MappingData
     new Permission(Permissions.CanViewAllProjects),
     new Permission(Permissions.CanViewPersonalReport),
     new Permission(Permissions.CanViewInvoices),
+    new Permission(Permissions.CanViewAllWorkspaces),
+    new Permission(Permissions.CanViewAllSources),
+    new Permission(Permissions.CanManageSources),
+    new Permission(Permissions.CanForceSyncSources),
+    new Permission(Permissions.CanInteractWithChats),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsWorkspacesAddAllowed),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsWorkspacesHardDeleteAllowed),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsSourcesHardDeleteAllowed),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsChatsSendMessageForEvaluationAllowed),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsChatFeedbackGetAllowed),
+    new Permission(Permissions.AUTO_TESTS_ONLY_IsChatsHardDeleteAllowed),
   };
 
   public static readonly DateTime AccountsCreatedAtUtc = DateTime.SpecifyKind(new DateTime(2020,
